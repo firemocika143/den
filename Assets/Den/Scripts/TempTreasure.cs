@@ -26,7 +26,8 @@ public class TempTreasure : MonoBehaviour
             {
                 if (sign.transform.GetChild(0).TryGetComponent<TextMeshPro>(out TextMeshPro text))
                 {
-                    text.text = "Still...";
+                    text.text = "Stop";
+                    text.fontSize = 4;
                 }
                 status.stop = true;
                 open = true;
@@ -39,6 +40,7 @@ public class TempTreasure : MonoBehaviour
                 if (sign.transform.GetChild(0).TryGetComponent<TextMeshPro>(out TextMeshPro text))
                 {
                     text.text = "E";
+                    text.fontSize = 6;
                 }
                 status.stop = false;
                 open = false;
