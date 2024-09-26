@@ -49,6 +49,10 @@ public class PlayerStatus : MonoBehaviour, IDataPersistence
         isInLightSource = true;
         StartCoroutine(GainLight());
         lightSystem.LightOff();
+        //Called by the trigger of lightArea when the player lights on this lantern and when they enters the light area of this lantern
+        //Activatable only when this lantern is lightedOn
+        //TODO - show some particles or animations
+        //TODO - Call function in playerStatus to start adding their light energy
     }
 
     public void LeaveLightSource()
@@ -56,6 +60,11 @@ public class PlayerStatus : MonoBehaviour, IDataPersistence
         isInLightSource = false;
         StopCoroutine(GainLight());
         lightSystem.LightOn();
+        //Called by the trigger of lightArea when the player exits the light area
+        //Activatable only when this lantern is lightedOn
+        //TODO - show some particles or animations
+        //LightOff();
+        //TODO - Call function in playerStatus to stop adding their light energy
     }
 
     private IEnumerator GainLight()
