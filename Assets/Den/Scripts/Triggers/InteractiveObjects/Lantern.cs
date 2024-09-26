@@ -18,29 +18,6 @@ public class Lantern : MonoBehaviour
         lanternLight2d.enabled = false;
     }
 
-    private void Update()
-    {
-        //To light on this lantern
-        if (!lightedOn & closeEnough)
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                clickTimer = Time.time;
-                //TODO - stop player movement, or reset timer when the try to light on while leaving the lightable area 
-            }
-
-            if (Input.GetMouseButtonUp(0))
-            {
-                clickTimer = -1f;
-            }
-
-            if (clickTimer != -1f & Time.time - clickTimer >= clickTime)
-            {
-                LightOn();
-            }
-        }
-    }
-
     // Start is called before the first frame update
     public void IntoLightSource()
     {
@@ -83,5 +60,33 @@ public class Lantern : MonoBehaviour
     {
         //TODO - play animation
         lanternLight2d.enabled = false;
+    }
+
+    //This function would detect when the player hit on it
+    private void OnMouseDown()
+    {
+        //this function should detect when the player is clicking on the lantern (this is not working correctly currently)
+        //To light on this lantern
+        if (!lightedOn & closeEnough)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                //TODO - call game manager function to fix camera
+                clickTimer = Time.time;
+                //TODO - stop player movement, or reset timer when the try to light on while leaving the lightable area 
+            }
+
+            if (Input.GetMouseButtonUp(0))
+            {
+                clickTimer = -1f;
+                //TODO - call gamenager function to release camera to follow the player
+            }
+
+            if (clickTimer != -1f & Time.time - clickTimer >= clickTime)
+            {
+                LightOn();
+                //TODO - call gamenager function to release camera to follow the player
+            }
+        }
     }
 }

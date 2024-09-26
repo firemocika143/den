@@ -8,4 +8,9 @@ public class GameManager : MonoBehaviour
     //Player Respawn
     //Audio and Screen Settings
     //Game Progress
+
+    //Fix Camera
+    //Follow player
+    //Switch Camera
+    //zoom in and out (special skill)
 }
