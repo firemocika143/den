@@ -10,19 +10,26 @@ public class PlayerLightSystem : MonoBehaviour
     private Light2D lanternLight;
     [SerializeField]
     private Light2D backLight;
+    [SerializeField]
+    private AnimationHandler animHandler;
 
     public void LightOff()
     {
-        // TODO - play light off animation
         lanternLight.enabled = false;
         backLight.enabled = false;
     }
 
     public void LightOn()
     {
-        // TODO - play light off animation
+        // TODO - play light on animation
+        animHandler.ChangeAnimationState("LanternLightOn");
         lanternLight.enabled = true;
         backLight.enabled = true;
+    }
+
+    public void LowLightEnergyWarning()
+    {
+        animHandler.ChangeAnimationState("LanternTwinkle");
     }
 
     public bool Lighting()

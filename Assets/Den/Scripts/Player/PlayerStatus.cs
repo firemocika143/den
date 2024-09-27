@@ -17,7 +17,7 @@ public class PlayerStatus : MonoBehaviour, IDataPersistence
 
     //light
     [Header("Light")]
-    public int lowLight = 10;
+    public int lowLight = 5;
     [SerializeField]
     private int maxLightEnergy = 100;
     [SerializeField]
@@ -68,6 +68,11 @@ public class PlayerStatus : MonoBehaviour, IDataPersistence
         {
             LeaveLightSource();
         }
+    }
+
+    private void OnApplicationQuit()
+    {
+        StopAllCoroutines();
     }
 
     //light functions
@@ -134,7 +139,7 @@ public class PlayerStatus : MonoBehaviour, IDataPersistence
             {
                 if (lightEnergy < lowLight)
                 {
-                    Debug.Log("Danger, Low Light Energy");
+                    lightSystem.LowLightEnergyWarning();
                 }
 
                 lightEnergy -= 1;
