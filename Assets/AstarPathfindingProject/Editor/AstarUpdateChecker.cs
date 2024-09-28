@@ -221,7 +221,7 @@ namespace Pathfinding {
 
 #if UNITY_2018_1_OR_NEWER
 			updateCheckDownload = UnityWebRequest.Get(query);
-			updateCheckDownload.SendWebRequest();
+			updateCheckDownload.SendWebRequest();// why should we need this?, this seems to be used for new version of this scipt or package..., but why here?
 #else
 			updateCheckDownload = new WWW(query);
 #endif
