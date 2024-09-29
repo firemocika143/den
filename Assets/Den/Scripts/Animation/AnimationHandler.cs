@@ -24,4 +24,9 @@ public class AnimationHandler : MonoBehaviour
         animator.Play(newState);
         currentState = newState;
     }
+
+    public string CheckCurrentState()
+    {
+        return currentState; 
+    }
 }

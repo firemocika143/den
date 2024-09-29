@@ -22,6 +22,7 @@ public class PlayerLightSystem : MonoBehaviour
     public void LightOn()
     {
         // TODO - play light on animation
+        animHandler.ChangeAnimationState("");//enable the turn On light animation play again
         animHandler.ChangeAnimationState("LanternLightOn");
         lanternLight.enabled = true;
         backLight.enabled = true;
