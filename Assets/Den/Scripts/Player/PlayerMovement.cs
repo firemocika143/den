@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -18,6 +19,7 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D rb;
     private PlayerStatus status;
     private Vector3 size;
+    public Ladder ladder;
 
     private void Start()
     {
@@ -29,6 +31,7 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         Jump();
+        Climb();
     }
 
     void FixedUpdate()//Physics related updates
@@ -91,5 +94,15 @@ public class PlayerMovement : MonoBehaviour
     //    animator.Play(state);//I guess this function record the state by the current sprite
     //    currentState = state;
     //}
+
+    private void Climb()
+    {
+        float hDirection = Input.GetAxis("Horizontal");
+        if(status.climb && Mathf.Abs(Input.GetAxis("Vertical")) > .1f)
+        {
+            rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+            transform.position = new Vector3(ladder.transform.position.x, rb.position.y);
+        }
+    }
 }
 

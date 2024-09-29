@@ -9,6 +9,7 @@ public class PlayerStatus : MonoBehaviour, IDataPersistence
     //movement
     [Header("Movement State")]
     public bool stop = false;
+    public bool climb = false;
 
     //health
     [Header("Health")]

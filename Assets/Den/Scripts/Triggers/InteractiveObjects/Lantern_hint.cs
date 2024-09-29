@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.Rendering.Universal;
 
-public class Lantern : MonoBehaviour
+public class Lantern_hint : MonoBehaviour
 {
     private bool lightedOn = false;
     public bool closeEnough = false;
@@ -45,21 +45,5 @@ public class Lantern : MonoBehaviour
         closeEnough = false;
         //This function should be called by the trigger of the lantern in the inspector
         //TODO - Stop showing anything to player because they had left the detector
-    }
-
-    public void LightOn()
-    {
-        //TODO - play animation & set LightArea collider trigger active(hope this would trigger player OncollisionEnter2d but im not sure)
-        //TODO - set the detector game object inactive
-        //lanternLight2d.enabled = true;
-        lightedOn = true;
-    }
-
-    public void LightOff() 
-    {
-        //TODO - play animation & set LightArea collider trigger inactive
-        //TODO - set the detector game object active
-        //lanternLight2d.enabled = false;
-        lightedOn = false;
     }
 }
