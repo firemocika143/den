@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -44,11 +45,15 @@ public class PlayerController : MonoBehaviour, IDataPersistence
 
     private Coroutine gainLightCoroutine;
     private Coroutine loseLightCoroutine;
+
+    private PlayerMovement playerMovement;
     
     private void Start()
     {
         isInLightSource = false;
         loseLightCoroutine = StartCoroutine(LoseLight());
+
+        playerMovement = GetComponent<PlayerMovement>();
     }
 
     private void Update()

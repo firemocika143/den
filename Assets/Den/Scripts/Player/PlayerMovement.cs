@@ -17,13 +17,16 @@ public class PlayerMovement : MonoBehaviour
     private float horizontal;
     private bool isGrounded = false;
     private Rigidbody2D rb;
-    private PlayerController playerController;
     private Vector3 size;
-    public Ladder ladder;
+    //sorry for this note! I just tried to test the higher ladder and I find this have some problem unsolved, so I decided to note it first.
+    //if a ladder is here, this should mean that you would assign a ladder to it whenever the player starts to climb, just for sure
+    //public Ladder ladder;
+
+    private PlayerController playerController;
 
     private void Start()
     {
-        rb = GetComponent<Rigidbody2D>();  
+        rb = GetComponent<Rigidbody2D>();
         playerController = GetComponent<PlayerController>();
         size = GetComponent<Transform>().localScale;
     }
@@ -31,7 +34,9 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         Jump();
-        Climb();
+
+        //sorry for this note! I just tried to test the higher ladder and I find this have some problem unsolved, so I decided to note it first.
+        //Climb();
     }
 
     void FixedUpdate()//Physics related updates
@@ -40,6 +45,15 @@ public class PlayerMovement : MonoBehaviour
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
 
         GroundMovement();
+    }
+
+    private void OnTriggerStay2D(Collider2D col)
+    {
+        if (col.gameObject.CompareTag("Ladder"))
+        {
+            var tempLadder = col.gameObject.GetComponent<HigherLadder>();
+            Climbs(tempLadder);
+        }
     }
 
     private void GroundMovement()
@@ -89,12 +103,67 @@ public class PlayerMovement : MonoBehaviour
 
     private void Climb()
     {
-        float hDirection = Input.GetAxis("Horizontal");
-        if(playerController.state.climb && Mathf.Abs(Input.GetAxis("Vertical")) > .1f)
+        //sorry for this note! I just tried to test the higher ladder and I find this have some problem unsolved, so I decided to note it first.
+
+        //float hDirection = Input.GetAxis("Horizontal");
+        //if (playerController.state.climb && Mathf.Abs(Input.GetAxis("Vertical")) > .1f)
+        //{
+        //    rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+        //    transform.position = new Vector3(ladder.transform.position.x, rb.position.y, 0);
+        //}
+    }
+
+    public void ClimbLadder(float ladderX)
+    {
+        rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+        rb.gravityScale = 0;
+        transform.position = new Vector3(ladderX, rb.position.y, 0);
+    }
+
+    public void Climbing(float speed)
+    {
+        transform.position += new Vector3(0, speed * Time.deltaTime, 0);
+    }
+
+    public void Climbs(HigherLadder ladder)
+    {
+        if (Input.GetKey(KeyCode.W))
         {
-            rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
-            transform.position = new Vector3(ladder.transform.position.x, rb.position.y);
+            if (!playerController.state.climb)
+            {
+                playerController.state.climb = true;
+                ClimbLadder(ladder.transform.position.x);
+                ladder.Climbed(transform.position.y);
+            }
+            else
+            {
+                if (transform.position.y < ladder.range.high)
+                {
+                    Climbing(ladder.NextPosition(1f));
+                }
+            }
         }
+        else if (Input.GetKey(KeyCode.S))
+        {
+            if (!playerController.state.climb)
+            {
+                playerController.state.climb = true;
+                ClimbLadder(ladder.transform.position.x);
+                ladder.Climbed(transform.position.y);
+            }
+            else
+            {
+                if (transform.position.y > ladder.range.low)
+                {
+                    Climbing(ladder.NextPosition(-1f));
+                }
+            }
+        }
+
+        //if (state.climb && (transform.position.y - ladder.range.low > 2f))
+        //{
+        //    state.stop = true;
+        //}
     }
 }
 
