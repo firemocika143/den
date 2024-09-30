@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     public PlayerState state;
 
     //light
-    [Header("Light")]
+    [Header("Other Light Settings")]
     public int lowLight = 5;
     [SerializeField]
     private float gainLightTime = 0.2f;
