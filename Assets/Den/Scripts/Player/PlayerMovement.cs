@@ -17,14 +17,14 @@ public class PlayerMovement : MonoBehaviour
     private float horizontal;
     private bool isGrounded = false;
     private Rigidbody2D rb;
-    private PlayerStatus status;
+    private PlayerController playerController;
     private Vector3 size;
     public Ladder ladder;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();  
-        status = GetComponent<PlayerStatus>();
+        playerController = GetComponent<PlayerController>();
         size = GetComponent<Transform>().localScale;
     }
 
@@ -44,13 +44,13 @@ public class PlayerMovement : MonoBehaviour
 
     private void GroundMovement()
     {
-        if (status.stop)
+        if (playerController.state.stop)
         {
             // TODO - slow the player down smoothly
 
             rb.velocity = new Vector2(0, rb.velocity.y);
         }
-        else if (!status.stop)
+        else if (!playerController.state.stop)
         {
             horizontal = Input.GetAxisRaw("Horizontal");//-1->left, 1->right
 
@@ -67,7 +67,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Jump()
     {
-        if (!status.stop)
+        if (!playerController.state.stop)
         {
             // Jumping
             if (Input.GetButtonDown("Jump") && isGrounded)
@@ -87,18 +87,10 @@ public class PlayerMovement : MonoBehaviour
         transform.localScale = new Vector3(dir * size.x, 1 * size.y , 1);
     }
 
-    //void ChangeAnimationState(string state)
-    //{
-    //    if (currentState == state) return;
-
-    //    animator.Play(state);//I guess this function record the state by the current sprite
-    //    currentState = state;
-    //}
-
     private void Climb()
     {
         float hDirection = Input.GetAxis("Horizontal");
-        if(status.climb && Mathf.Abs(Input.GetAxis("Vertical")) > .1f)
+        if(playerController.state.climb && Mathf.Abs(Input.GetAxis("Vertical")) > .1f)
         {
             rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
             transform.position = new Vector3(ladder.transform.position.x, rb.position.y);

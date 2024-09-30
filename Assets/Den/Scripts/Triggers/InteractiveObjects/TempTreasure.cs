@@ -9,7 +9,7 @@ public class TempTreasure : MonoBehaviour
     private bool open = false;
 
     [SerializeField]
-    private PlayerStatus status;
+    private PlayerController playerController;
     [SerializeField]
     private GameObject sign;
 
@@ -29,7 +29,7 @@ public class TempTreasure : MonoBehaviour
                     text.text = "Stop";
                     text.fontSize = 4;
                 }
-                status.stop = true;
+                playerController.state.stop = true;
                 open = true;
             }
         }
@@ -42,7 +42,7 @@ public class TempTreasure : MonoBehaviour
                     text.text = "E";
                     text.fontSize = 6;
                 }
-                status.stop = false;
+                playerController.state.stop = false;
                 open = false;
             }
         }

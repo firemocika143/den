@@ -3,32 +3,40 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-public class PlayerStatus : MonoBehaviour, IDataPersistence
+public class PlayerController : MonoBehaviour, IDataPersistence
 {
-    //when should I use m_var like assignment?
-    //movement
-    [Header("Movement State")]
-    public bool stop = false;
-    public bool climb = false;
+    [System.Serializable]
+    public class PlayerState
+    {
+        [Header("Movement State")]
+        public bool stop = false;
+        public bool climb = false;
+        public bool Hittable;
 
-    //health
-    [Header("Health")]
-    public int maxHealth = 100;
-    private int health;
+        //health
+        [Header("Health")]
+        public int maxHealth = 100;
+        public int health;
+
+        //light
+        [Header("Light")]
+        public int maxLightEnergy = 100;
+        public int lightEnergy = 50;
+
+        [Header("Attack")]
+        public int attack = 1;
+    }
+
+    public PlayerState state;
 
     //light
     [Header("Light")]
     public int lowLight = 5;
     [SerializeField]
-    private int maxLightEnergy = 100;
-    [SerializeField]
-    private int lightEnergy = 50;
-    [SerializeField]
     private float gainLightTime = 0.2f;
     [SerializeField]
     private float loseLightTime = 1f;
     private bool isInLightSource = false;
-    
 
     [Header("Handlers")]
     [SerializeField]
@@ -45,11 +53,11 @@ public class PlayerStatus : MonoBehaviour, IDataPersistence
 
     private void Update()
     {
-        if (lightEnergy <= 0 && lightSystem.Lighting())
+        if (state.lightEnergy <= 0 && lightSystem.Lighting())
         {
             lightSystem.LightOff();
         }
-        else if (lightEnergy > 0 && !lightSystem.Lighting() && !isInLightSource)
+        else if (state.lightEnergy > 0 && !lightSystem.Lighting() && !isInLightSource)
         {
             lightSystem.LightOn();
         }
@@ -105,7 +113,7 @@ public class PlayerStatus : MonoBehaviour, IDataPersistence
         }
         loseLightCoroutine = StartCoroutine(LoseLight());
 
-        if (lightEnergy > 0)
+        if (state.lightEnergy > 0)
         {
             lightSystem.LightOn();
         }
@@ -118,10 +126,10 @@ public class PlayerStatus : MonoBehaviour, IDataPersistence
     {
         while (true)
         {
-            if (lightEnergy < maxLightEnergy & isInLightSource)
+            if (state.lightEnergy < state.maxLightEnergy & isInLightSource)
             {
-                lightEnergy += 1;
-                Debug.Log("Gain" + lightEnergy);
+                state.lightEnergy += 1;
+                Debug.Log("Gain" + state.lightEnergy);
                 yield return new WaitForSeconds(gainLightTime);
             }
             else
@@ -136,15 +144,15 @@ public class PlayerStatus : MonoBehaviour, IDataPersistence
     {
         while (true)
         {
-            if (lightEnergy > 0 & !isInLightSource)
+            if (state.lightEnergy > 0 & !isInLightSource)
             {
-                if (lightEnergy < lowLight)
+                if (state.lightEnergy < lowLight)
                 {
                     lightSystem.LowLightEnergyWarning();
                 }
 
-                lightEnergy -= 1;
-                Debug.Log("Lose" + lightEnergy);
+                state.lightEnergy -= 1;
+                Debug.Log("Lose" + state.lightEnergy);
                 yield return new WaitForSeconds(loseLightTime);
             }
             else
@@ -157,17 +165,17 @@ public class PlayerStatus : MonoBehaviour, IDataPersistence
 
     public void LoadData(GameData gameData)
     {
-        this.maxHealth = gameData.maxHealth;
-        this.health = gameData.health;
-        this.maxLightEnergy = gameData.maxLightEnergy;
-        this.lightEnergy = gameData.lightEnergy;
+        this.state.maxHealth = gameData.maxHealth;
+        this.state.health = gameData.health;
+        this.state.maxLightEnergy = gameData.maxLightEnergy;
+        this.state.lightEnergy = gameData.lightEnergy;
     }
 
     public void SaveData(ref GameData gameData)
     {
-        gameData.maxHealth = this.maxHealth;
-        gameData.health = this.health;
-        gameData.maxLightEnergy = this.maxLightEnergy;
-        gameData.lightEnergy = this.lightEnergy;
+        gameData.maxHealth = this.state.maxHealth;
+        gameData.health = this.state.health;
+        gameData.maxLightEnergy = this.state.maxLightEnergy;
+        gameData.lightEnergy = this.state.lightEnergy;
     }
 }

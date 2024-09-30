@@ -6,7 +6,9 @@ using UnityEngine;
 public class Ladder : MonoBehaviour
 {
     private enum ladderPart {complete, bottom, top};
-    [SerializeField] ladderPart part = ladderPart.complete;
+    [SerializeField] 
+    private ladderPart part = ladderPart.complete;
+    [SerializeField]
     private GameObject sign;
 
     private void Start()
@@ -17,11 +19,11 @@ public class Ladder : MonoBehaviour
     public void TouchLadder()
     {
         sign.SetActive(true);
-        PlayerStatus player = sign.GetComponent<PlayerStatus>();
+        PlayerController playerController = sign.GetComponent<PlayerController>();
         switch(part)
         {
             case ladderPart.complete:
-                player.climb = true;
+                playerController.state.climb = true;
                 break;
             case ladderPart.bottom:
                 break;
