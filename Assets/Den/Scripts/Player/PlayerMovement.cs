@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -44,9 +45,7 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         Jump();
-
-        //sorry for this note! I just tried to test the higher ladder and I find this have some problem unsolved, so I decided to note it first.
-        //Climb();
+        Climb();
     }
 
     void FixedUpdate()//Physics related updates
@@ -57,34 +56,6 @@ public class PlayerMovement : MonoBehaviour
 
         //Climb
         //the detecting area seems to be too small, or maybe it's the problem about the input timings?
-        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.up, distance, ladderLayer);
-        if (hitInfo.collider != null)
-        {
-            if (Input.GetKeyDown(KeyCode.W))
-            {
-                playerController.state.climb = true;
-                transform.position = new Vector3(hitInfo.collider.transform.position.x, transform.position.y, 0);
-            }
-            else if (isGrounded && Input.GetKeyDown(KeyCode.S))//this would take a long time to be detected too
-            {
-                playerController.state.climb = false;
-            }
-        }
-        else
-        {
-            playerController.state.climb = false;
-        }
-
-        if (playerController.state.climb)
-        {
-            vertical = Input.GetAxisRaw("Vertical");
-            rb.velocity = new Vector2(0, vertical * climbSpeed);
-            rb.gravityScale = 0;
-        }
-        else
-        {
-            rb.gravityScale = 2.5f;
-        }
     }
 
     private void GroundMovement()
@@ -134,54 +105,35 @@ public class PlayerMovement : MonoBehaviour
 
     private void Climb()
     {
-        //sorry for this note! I just tried to test the higher ladder and I find this have some problem unsolved, so I decided to note it first.
+        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.up, distance, ladderLayer);
+        if (hitInfo.collider != null)
+        {
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                playerController.state.climb = true;
+                //transform.position = new Vector3(hitInfo.collider.transform.position.x, transform.position.y, 0);
+            }
+            else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D))//this would take a long time to be detected too
+            {
+                playerController.state.climb = false;
+            }
+        }
+        else
+        {
+            playerController.state.climb = false;
+        }
 
-        //float hDirection = Input.GetAxis("Horizontal");
-        //if (playerController.state.climb && Mathf.Abs(Input.GetAxis("Vertical")) > .1f)
-        //{
-        //    rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
-        //    transform.position = new Vector3(ladder.transform.position.x, rb.position.y, 0);
-        //}
+        if (playerController.state.climb && hitInfo.collider != null)
+        {
+            vertical = Input.GetAxisRaw("Vertical");
+            rb.velocity = new Vector2(rb.velocity.x, vertical * climbSpeed);
+            rb.gravityScale = 0;
+        }
+        else
+        {
+            rb.gravityScale = 2.5f;
+        }
+
     }
-
-    //public void ClimbLadder(float ladderX)
-    //{
-    //    rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
-    //    rb.gravityScale = 0;
-    //    transform.position = new Vector3(ladderX, rb.position.y, 0);
-    //}
-
-    //public void Climbing(float speed)
-    //{
-    //    transform.position += new Vector3(0, speed * Time.deltaTime, 0);
-    //}
-
-    //public void Climbs(HigherLadder ladder)
-    //{
-    //    vertical = Input.GetAxisRaw("Vertical");
-    //    horizontal = Input.GetAxisRaw("Horizontal");
-
-    //    if (!playerController.state.climb)
-    //    {
-    //        playerController.state.climb = true;
-    //        ClimbLadder(ladder.transform.position.x);
-    //        ladder.Climbed();
-    //    }
-    //    if (transform.position.y < ladder.range.high)
-    //    {
-    //        Climbing(ladder.NextPosition(vertical));
-    //    }
-
-    //    Flip(horizontal);
-    //    if(Input.GetKey(KeyCode.Space) && playerController.state.climb)
-    //    {
-    //        Debug.Log("Space");
-    //    }
-
-    //    //if (state.climb && (transform.position.y - ladder.range.low > 2f))
-    //    //{
-    //    //    state.stop = true;
-    //    //}
-    //}
 }
 
