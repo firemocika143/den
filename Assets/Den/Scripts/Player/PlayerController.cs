@@ -42,6 +42,8 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     [Header("Handlers")]
     [SerializeField]
     private PlayerLightSystem lightSystem;
+    [SerializeField]
+    private PlayerUI playerUI;
 
     private Coroutine gainLightCoroutine;
     private Coroutine loseLightCoroutine;
@@ -87,6 +89,21 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     private void OnApplicationQuit()
     {
         StopAllCoroutines();
+    }
+
+    //Health Function
+    public void Damage(int damage)
+    {
+        state.health -= damage;
+        state.health = state.health >= 0 ? state.health : 0;
+        playerUI.UpdateHealth(state.health);
+    }
+
+    public void Recover(int recover)
+    {
+        state.health += recover;
+        state.health = state.health <= state.maxHealth ? state.health : state.maxHealth;
+        playerUI.UpdateHealth(state.health);
     }
 
     //light functions
@@ -135,6 +152,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
             {
                 state.lightEnergy += 1;
                 Debug.Log("Gain" + state.lightEnergy);
+                playerUI.UpdateLightEnergy(state.lightEnergy);
                 yield return new WaitForSeconds(gainLightTime);
             }
             else
@@ -158,6 +176,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
 
                 state.lightEnergy -= 1;
                 Debug.Log("Lose" + state.lightEnergy);
+                playerUI.UpdateLightEnergy(state.lightEnergy);
                 yield return new WaitForSeconds(loseLightTime);
             }
             else
@@ -165,7 +184,6 @@ public class PlayerController : MonoBehaviour, IDataPersistence
                 yield return null;
             }
         }
-        
     }
 
     public void LoadData(GameData gameData)
@@ -174,6 +192,11 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         this.state.health = gameData.health;
         this.state.maxLightEnergy = gameData.maxLightEnergy;
         this.state.lightEnergy = gameData.lightEnergy;
+
+        playerUI.UpdateMaxLightEnergy(state.maxLightEnergy);
+        playerUI.UpdateMaxHealth(state.maxHealth);
+        playerUI.UpdateLightEnergy(state.lightEnergy);
+        playerUI.UpdateHealth(state.health);
     }
 
     public void SaveData(ref GameData gameData)

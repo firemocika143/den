@@ -26,10 +26,10 @@ public class TempTreasure : MonoBehaviour
             {
                 if (sign.transform.GetChild(0).TryGetComponent<TextMeshPro>(out TextMeshPro text))
                 {
-                    text.text = "Stop";
+                    text.text = "hurt";
                     text.fontSize = 4;
                 }
-                playerController.state.stop = true;
+                playerController.Damage(20);
                 open = true;
             }
         }
@@ -42,7 +42,7 @@ public class TempTreasure : MonoBehaviour
                     text.text = "E";
                     text.fontSize = 6;
                 }
-                playerController.state.stop = false;
+                playerController.Recover(10);
                 open = false;
             }
         }

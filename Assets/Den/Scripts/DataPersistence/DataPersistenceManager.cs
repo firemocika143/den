@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
+[DefaultExecutionOrder(10000)]//the last to be executed
 public class DataPersistenceManager : MonoBehaviour
 {
     [Header("File Storage Config")]// this is a header attribute, which can add a header above some fields in the Inspector.
