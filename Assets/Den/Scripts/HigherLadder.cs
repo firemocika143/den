@@ -20,7 +20,6 @@ public class HigherLadder : MonoBehaviour
     public LadderRange range;
     public float climbSpeed;
 
-    private float playerVerticlePosition;
     private bool playerClimbing;
 
     private void Start()
@@ -33,9 +32,9 @@ public class HigherLadder : MonoBehaviour
         return climbSpeed * dir;
     }
 
-    public void Climbed(float playerY)
+    public void Climbed()
     {
-        playerVerticlePosition = playerY;
+        //playerVerticlePosition = playerY;
         playerClimbing = true;
     }
 }

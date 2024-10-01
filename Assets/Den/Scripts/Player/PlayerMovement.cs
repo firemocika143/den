@@ -5,19 +5,29 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [Header("Move Speed")]
     [SerializeField]
     private float speed = 8f;
     [SerializeField]
     private float jumpPower = 12f;
     [SerializeField]
+    private float climbSpeed = 1.3f;
+
+    [Header("Check Settings")]
+    [SerializeField]
     private Transform groundCheck;
     [SerializeField]
     private LayerMask groundLayer;
+    [SerializeField]
+    private LayerMask ladderLayer;
+    public float distance;
 
     private float horizontal;
+    private float vertical;
     private bool isGrounded = false;
     private Rigidbody2D rb;
     private Vector3 size;
+
     //sorry for this note! I just tried to test the higher ladder and I find this have some problem unsolved, so I decided to note it first.
     //if a ladder is here, this should mean that you would assign a ladder to it whenever the player starts to climb, just for sure
     //public Ladder ladder;
@@ -43,16 +53,37 @@ public class PlayerMovement : MonoBehaviour
     {
         // Movement
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
-
         GroundMovement();
-    }
 
-    private void OnTriggerStay2D(Collider2D col)
-    {
-        if (col.gameObject.CompareTag("Ladder"))
+        //Climb
+        //the detecting area seems to be too small, or maybe it's the problem about the input timings?
+        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.up, distance, ladderLayer);
+        if (hitInfo.collider != null)
         {
-            var tempLadder = col.gameObject.GetComponent<HigherLadder>();
-            Climbs(tempLadder);
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                playerController.state.climb = true;
+                transform.position = new Vector3(hitInfo.collider.transform.position.x, transform.position.y, 0);
+            }
+            else if (isGrounded && Input.GetKeyDown(KeyCode.S))//this would take a long time to be detected too
+            {
+                playerController.state.climb = false;
+            }
+        }
+        else
+        {
+            playerController.state.climb = false;
+        }
+
+        if (playerController.state.climb)
+        {
+            vertical = Input.GetAxisRaw("Vertical");
+            rb.velocity = new Vector2(0, vertical * climbSpeed);
+            rb.gravityScale = 0;
+        }
+        else
+        {
+            rb.gravityScale = 2.5f;
         }
     }
 
@@ -113,57 +144,44 @@ public class PlayerMovement : MonoBehaviour
         //}
     }
 
-    public void ClimbLadder(float ladderX)
-    {
-        rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
-        rb.gravityScale = 0;
-        transform.position = new Vector3(ladderX, rb.position.y, 0);
-    }
+    //public void ClimbLadder(float ladderX)
+    //{
+    //    rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+    //    rb.gravityScale = 0;
+    //    transform.position = new Vector3(ladderX, rb.position.y, 0);
+    //}
 
-    public void Climbing(float speed)
-    {
-        transform.position += new Vector3(0, speed * Time.deltaTime, 0);
-    }
+    //public void Climbing(float speed)
+    //{
+    //    transform.position += new Vector3(0, speed * Time.deltaTime, 0);
+    //}
 
-    public void Climbs(HigherLadder ladder)
-    {
-        if (Input.GetKey(KeyCode.W))
-        {
-            if (!playerController.state.climb)
-            {
-                playerController.state.climb = true;
-                ClimbLadder(ladder.transform.position.x);
-                ladder.Climbed(transform.position.y);
-            }
-            else
-            {
-                if (transform.position.y < ladder.range.high)
-                {
-                    Climbing(ladder.NextPosition(1f));
-                }
-            }
-        }
-        else if (Input.GetKey(KeyCode.S))
-        {
-            if (!playerController.state.climb)
-            {
-                playerController.state.climb = true;
-                ClimbLadder(ladder.transform.position.x);
-                ladder.Climbed(transform.position.y);
-            }
-            else
-            {
-                if (transform.position.y > ladder.range.low)
-                {
-                    Climbing(ladder.NextPosition(-1f));
-                }
-            }
-        }
+    //public void Climbs(HigherLadder ladder)
+    //{
+    //    vertical = Input.GetAxisRaw("Vertical");
+    //    horizontal = Input.GetAxisRaw("Horizontal");
 
-        //if (state.climb && (transform.position.y - ladder.range.low > 2f))
-        //{
-        //    state.stop = true;
-        //}
-    }
+    //    if (!playerController.state.climb)
+    //    {
+    //        playerController.state.climb = true;
+    //        ClimbLadder(ladder.transform.position.x);
+    //        ladder.Climbed();
+    //    }
+    //    if (transform.position.y < ladder.range.high)
+    //    {
+    //        Climbing(ladder.NextPosition(vertical));
+    //    }
+
+    //    Flip(horizontal);
+    //    if(Input.GetKey(KeyCode.Space) && playerController.state.climb)
+    //    {
+    //        Debug.Log("Space");
+    //    }
+
+    //    //if (state.climb && (transform.position.y - ladder.range.low > 2f))
+    //    //{
+    //    //    state.stop = true;
+    //    //}
+    //}
 }
 
