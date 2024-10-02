@@ -71,6 +71,7 @@ public class PlayerMovement : MonoBehaviour
             horizontal = Input.GetAxisRaw("Horizontal");//-1->left, 1->right
 
             // Moving left or right
+            //I should change this into transform.position to precisely control the player position
             rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
 
             // Flipping

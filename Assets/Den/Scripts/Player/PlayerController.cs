@@ -28,7 +28,23 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         public int attack = 1;
     }
 
+    [System.Serializable]
+    public class KeySettings
+    {
+        [Header("Movement Keys")]
+        public KeyCode Left = KeyCode.A;
+        public KeyCode Right = KeyCode.D;
+        public KeyCode Jump = KeyCode.Space;
+        public KeyCode Climb = KeyCode.W;
+
+        [Header("Interaction/Skill Keys")]
+        public KeyCode Attack = KeyCode.Mouse0;
+        public KeyCode Interaction = KeyCode.E;
+        public KeyCode FacePlayerTurnOnLight = KeyCode.S;
+    }
+
     public PlayerState state;
+    public KeySettings keySettings;
 
     //light
     [Header("Other Light Settings")]
