@@ -111,7 +111,7 @@ public class PlayerMovement : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.W))
             {
                 playerController.state.climb = true;
-                //transform.position = new Vector3(hitInfo.collider.transform.position.x, transform.position.y, 0);
+                transform.position = new Vector3(hitInfo.collider.transform.position.x, transform.position.y, 0);
             }
             else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D))//this would take a long time to be detected too
             {
