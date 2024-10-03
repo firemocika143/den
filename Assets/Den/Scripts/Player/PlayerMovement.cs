@@ -23,6 +23,7 @@ public class PlayerMovement : MonoBehaviour
     private LayerMask ladderLayer;
     public float distance;
 
+
     private float horizontal;
     private float vertical;
     private bool isGrounded = false;
@@ -143,7 +144,6 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.gravityScale = 2.5f;
         }
-
     }
 }
 
