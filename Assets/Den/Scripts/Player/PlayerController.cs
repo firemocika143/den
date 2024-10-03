@@ -135,7 +135,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         }
         gainLightCoroutine = StartCoroutine(GainLight());
 
-        lightSystem.LightOff();
+        lightSystem.IntoLightSourceLightOff();
         //TODO - show some particles or animations
     }
 

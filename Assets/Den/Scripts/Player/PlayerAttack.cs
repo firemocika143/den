@@ -12,7 +12,7 @@ public class PlayerAttack : MonoBehaviour
     {
         //TODO - detect if the player is clicking in the attack trigger zone
         //TODO - if they are, while they drag the mouse, cost light energy and move attacking point position
-        // TODO - once they stop dragging(GetMouseButtonUp) reset the attack point's position
+        //TODO - once they stop dragging(GetMouseButtonUp) reset the attack point's position
         if (Input.GetMouseButtonDown(0))
         {
             Attack();
