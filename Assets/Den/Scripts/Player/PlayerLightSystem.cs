@@ -18,6 +18,12 @@ public class PlayerLightSystem : MonoBehaviour
         lanternLight.enabled = false;
         backLight.enabled = false;
     }
+    public void IntoLightSourceLightOff()
+    {
+        lanternLight.enabled = false;
+
+        if (!backLight.enabled) backLight.enabled = true;
+    }
 
     public void LightOn()
     {

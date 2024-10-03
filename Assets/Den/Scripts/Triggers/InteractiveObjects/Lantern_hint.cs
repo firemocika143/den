@@ -1,17 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
-using UnityEngine.Rendering.Universal;
+using UnityEngine.EventSystems;
 
 public class Lantern_hint : MonoBehaviour
 {
-    private bool lightedOn = false;
     public bool closeEnough = false;
 
-    [SerializeField]
     // private Light2D lanternLight2d;
+    [SerializeField]
     private GameObject sign;
+    [SerializeField]
+    private Material original;
+    [SerializeField]
+    private Material outline;
 
     private void Start()
     {
@@ -22,11 +24,11 @@ public class Lantern_hint : MonoBehaviour
     {
         if (closeEnough)
         {
-            /*if (sign.transform.GetChild(0).TryGetComponent<TextMeshPro>(out TextMeshPro text))
-                {
-                    text.text = "E";
-                    text.fontSize = 6;
-                }*/
+            GetComponent<SpriteRenderer>().material = outline;
+        }
+        else
+        {
+            GetComponent<SpriteRenderer>().material = original;
         }
     }
 

@@ -71,6 +71,7 @@ public class PlayerMovement : MonoBehaviour
             horizontal = Input.GetAxisRaw("Horizontal");//-1->left, 1->right
 
             // Moving left or right
+            //I should change this into transform.position to precisely control the player position
             rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
 
             // Flipping
@@ -90,11 +91,20 @@ public class PlayerMovement : MonoBehaviour
             {
                 rb.velocity = new Vector2(rb.velocity.x, jumpPower);
             }
+            else if (Input.GetButtonDown("Jump") && playerController.state.climb)
+            {
+                //you can jump while you are climbing
+                //this is dangerous
+                playerController.state.climb = false;
+                rb.velocity = new Vector2(rb.velocity.x, jumpPower);
+            }
 
             if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
             {
                 rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
             }
+
+            
         }
     }
 
@@ -111,7 +121,7 @@ public class PlayerMovement : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.W))
             {
                 playerController.state.climb = true;
-                //transform.position = new Vector3(hitInfo.collider.transform.position.x, transform.position.y, 0);
+                transform.position = new Vector3(hitInfo.collider.transform.position.x, transform.position.y, 0);
             }
             else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D))//this would take a long time to be detected too
             {
