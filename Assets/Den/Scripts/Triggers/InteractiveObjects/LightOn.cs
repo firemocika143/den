@@ -1,24 +1,37 @@
     using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
 public class LightOn : MonoBehaviour
 {
-	public GameObject light2d;
+	[SerializeField]
+    private Light2D light;
+    private bool trigger = false;
 
 	// Use this for initialization
-	void Start() {
-		light2d.GetComponent<Light2D>().enabled = false;
+	void Start() 
+    {
+		light.enabled = false;
 	}
 
-	private void OnTriggerEnter2D(Collider2D other)
+    void Update()
     {
-        light2d.GetComponent<Light2D>().enabled = true;
+        // When the player is closed enough, press e will change the state of light (on -> off; off -> on)
+        if(trigger && Input.GetKeyDown(KeyCode.E))
+        {
+            light.enabled = !light.enabled;
+        }
     }
 
-    private void OnTriggerExit2D(Collider2D other)
+	public void OnTrigger()
     {
-        light2d.GetComponent<Light2D>().enabled = false;
+        trigger = true;
+    }
+
+    public void OffTrigger()
+    {
+        trigger = false;
     }
 }

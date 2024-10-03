@@ -9,16 +9,9 @@ public class Lantern_hint : MonoBehaviour
 
     // private Light2D lanternLight2d;
     [SerializeField]
-    private GameObject sign;
-    [SerializeField]
     private Material original;
     [SerializeField]
     private Material outline;
-
-    private void Start()
-    {
-        sign.SetActive(false);
-    }
 
     private void Update()
     {
@@ -33,8 +26,7 @@ public class Lantern_hint : MonoBehaviour
     }
 
     public void IntoDetector()
-    {
-        sign.SetActive(true);     
+    {    
         closeEnough = true;
         Debug.Log("Triggered (light)");
         //This function should be called by the trigger of the lantern in the inspector
@@ -43,7 +35,6 @@ public class Lantern_hint : MonoBehaviour
 
     public void OutOfDetector()
     {
-        sign.SetActive(false);  
         closeEnough = false;
         //This function should be called by the trigger of the lantern in the inspector
         //TODO - Stop showing anything to player because they had left the detector
