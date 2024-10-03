@@ -91,11 +91,20 @@ public class PlayerMovement : MonoBehaviour
             {
                 rb.velocity = new Vector2(rb.velocity.x, jumpPower);
             }
+            else if (Input.GetButtonDown("Jump") && playerController.state.climb)
+            {
+                //you can jump while you are climbing
+                //this is dangerous
+                playerController.state.climb = false;
+                rb.velocity = new Vector2(rb.velocity.x, jumpPower);
+            }
 
             if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
             {
                 rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
             }
+
+            
         }
     }
 
