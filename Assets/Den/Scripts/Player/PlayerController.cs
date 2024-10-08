@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     private float gainLightTime = 0.2f;
     [SerializeField]
     private float loseLightTime = 1f;
-    private bool isInLightSource = false;
+    public bool isInLightSource = false;
 
     [Header("Handlers")]
     [SerializeField]

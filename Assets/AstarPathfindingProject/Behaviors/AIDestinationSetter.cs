@@ -16,10 +16,12 @@ namespace Pathfinding {
 	public class AIDestinationSetter : VersionedMonoBehaviour {
 		/// <summary>The object that the AI should move to</summary>
 		public Transform target;
-		public Transform idlePoint;
-		public Transform lightAreaPoint;
+		//public Transform idlePoint;
+		//public Transform lightAreaPoint;
 
-        IAstarAI ai;
+		//PlayerController playerController;
+
+		IAstarAI ai;
 
 		void OnEnable () {
 			ai = GetComponent<IAstarAI>();
@@ -36,22 +38,23 @@ namespace Pathfinding {
 
 		/// <summary>Updates the AI's destination every frame</summary>
 		void Update () {
-            
             if (target != null && ai != null)
 			{
-                float distanceForTargetToLightAreaPoint = Vector3.Distance(target.position, lightAreaPoint.position - new Vector3(0 , 0 , 3f));
-                if (distanceForTargetToLightAreaPoint < 6.5f)
-                {
-                    ai.destination = idlePoint.position;
-                } else
-				{
-					ai.destination = target.position;
-				}
-			}
-			else
-			{
-                ai.destination = idlePoint.position;
+    //            float distanceForTargetToLightAreaPoint = Vector3.Distance(target.position, lightAreaPoint.position - new Vector3(0 , 0 , 3f));
+				//if (distanceForTargetToLightAreaPoint < 6.5f)
+				////if (PlayerController.isInLightSource)
+				//{
+    //                ai.destination = idlePoint.position;
+    //            } else
+				//{
+				//	ai.destination = target.position;
+				//}
+                ai.destination = target.position;
             }
+			//else
+			//{
+   //             ai.destination = idlePoint.position;
+   //         }
 		}
 	}
 }
