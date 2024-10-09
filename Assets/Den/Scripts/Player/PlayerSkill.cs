@@ -10,7 +10,6 @@ public class PlayerSkill : MonoBehaviour
     public bool isNewClick = false;
     public Transform AttackPoint;
 
-    [SerializeField]
     private LineRenderer lineRenderer;
 
     void Start()
