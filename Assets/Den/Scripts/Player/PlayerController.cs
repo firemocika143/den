@@ -167,7 +167,6 @@ public class PlayerController : MonoBehaviour, IDataPersistence
             if (state.lightEnergy < state.maxLightEnergy & isInLightSource)
             {
                 state.lightEnergy += 1;
-                Debug.Log("Gain" + state.lightEnergy);
                 playerUI.UpdateLightEnergy(state.lightEnergy);
                 yield return new WaitForSeconds(gainLightTime);
             }
@@ -191,7 +190,6 @@ public class PlayerController : MonoBehaviour, IDataPersistence
                 }
 
                 state.lightEnergy -= 1;
-                Debug.Log("Lose" + state.lightEnergy);
                 playerUI.UpdateLightEnergy(state.lightEnergy);
                 yield return new WaitForSeconds(loseLightTime);
             }

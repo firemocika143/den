@@ -5,41 +5,34 @@ using UnityEngine;
 public class PlayerSkill : MonoBehaviour
 {
     public float minDistanceToStart = 0.1f;
-    public float maxDistanceToStart = 10f;
     public Vector3 previousPosition;
-    public bool isNewClick = false;
-    public Transform AttackPoint;
 
     private LineRenderer lineRenderer;
 
     void Start()
     {
-        previousPosition = transform.position;
         lineRenderer = GetComponent<LineRenderer>();
-        lineRenderer.positionCount = 1;
     }
 
-    private void Update()
+    // LightDraw(showing track of light here)
+    public void LightDrawStart(Vector2 startPos)
     {
-        if (Input.GetMouseButton(0))
-        {
-            Vector3 currentPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            currentPosition.z = 0;
-            float distance = Vector3.Distance(previousPosition, currentPosition);
+        lineRenderer.positionCount = 1;
+        lineRenderer.SetPosition(0, startPos);
+        previousPosition = startPos;
+    }
 
-            if (distance > minDistanceToStart && distance < maxDistanceToStart)
-            {
-                if (previousPosition == transform.position)//this is really a bad way
-                {
-                    lineRenderer.SetPosition(0, currentPosition);
-                }
-                else
-                {
-                    lineRenderer.positionCount++;
-                    lineRenderer.SetPosition(lineRenderer.positionCount - 1, currentPosition);
-                    previousPosition = currentPosition;
-                }
-            }
+    public void LightDrawUpdate()
+    {
+        Vector3 currentPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        currentPosition.z = 0;
+        float distance = Vector3.Distance(previousPosition, currentPosition);
+
+        if (distance > minDistanceToStart)
+        {
+            lineRenderer.positionCount++;
+            lineRenderer.SetPosition(lineRenderer.positionCount - 1, currentPosition);
+            previousPosition = currentPosition;
         }
     }
 }
