@@ -61,15 +61,19 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     [SerializeField]
     private PlayerUI playerUI;
 
-    private Coroutine gainLightCoroutine;
-    private Coroutine loseLightCoroutine;
+    //private Coroutine gainLightCoroutine;
+    //private Coroutine loseLightCoroutine;
+    private float gainLightTimer; 
+    private float loseLightTimer;
 
     private PlayerMovement playerMovement;
     
     private void Start()
     {
         isInLightSource = false;
-        loseLightCoroutine = StartCoroutine(LoseLight());
+        gainLightTimer = Time.time;
+        loseLightTimer = Time.time;
+        //loseLightCoroutine = StartCoroutine(LoseLight());
 
         playerMovement = GetComponent<PlayerMovement>();
     }
@@ -84,6 +88,8 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         {
             lightSystem.LightOn();
         }
+
+        UpdatePlayerLightEnergy();
     }
 
     private void OnTriggerEnter2D(Collider2D col)
@@ -94,17 +100,13 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         }
     }
 
+    //what if we leave one and enter the other one immediately?
     private void OnTriggerExit2D(Collider2D col)
     {
         if (col.gameObject.CompareTag("LightSource"))
         {
             LeaveLightSource();
         }
-    }
-
-    private void OnApplicationQuit()
-    {
-        StopAllCoroutines();
     }
 
     //Health Function
@@ -127,13 +129,8 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     {
         //Called in OnCollisionEnter2D when the player lights on this lantern and when they enters the light area of this lantern
         isInLightSource = true;
-        //TODO - Call function in playerStatus to start adding their light energy
-        if (loseLightCoroutine != null)
-        {
-            StopCoroutine(loseLightCoroutine);
-            loseLightCoroutine = null;
-        }
-        gainLightCoroutine = StartCoroutine(GainLight());
+        gainLightTimer = Time.time;
+        //TODO - Call function in playerStatus to start adding their light energy, but I don't know how to use coroutine
 
         lightSystem.IntoLightSourceLightOff();
         //TODO - show some particles or animations
@@ -143,13 +140,8 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     {
         //Called by OnCollisionExit2D when the player exits the light area
         isInLightSource = false;
-        //TODO - Call function in playerStatus to stop adding their light energy
-        if (gainLightCoroutine != null)
-        {
-            StopCoroutine(gainLightCoroutine);
-            gainLightCoroutine = null;
-        }
-        loseLightCoroutine = StartCoroutine(LoseLight());
+        loseLightTimer = Time.time;
+        //TODO - Call function in playerStatus to stop adding their light energy, but I don't know how to use coroutine
 
         if (state.lightEnergy > 0)
         {
@@ -157,48 +149,35 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         }
 
         //TODO - show some particles or animations
-        
     }
 
-    private IEnumerator GainLight()
+    private void UpdatePlayerLightEnergy()
     {
-        while (true)
+        if (isInLightSource)
         {
-            if (state.lightEnergy < state.maxLightEnergy & isInLightSource)
+            if (Time.time - gainLightTimer >= gainLightTime && state.lightEnergy < state.maxLightEnergy)
             {
-                state.lightEnergy += 1;
-                playerUI.UpdateLightEnergy(state.lightEnergy);
-                yield return new WaitForSeconds(gainLightTime);
-            }
-            else
-            {
-                yield return null;
-            }
-            
-        }
-    }
-
-    private IEnumerator LoseLight()
-    {
-        while (true)
-        {
-            if (state.lightEnergy > 0 & !isInLightSource)
-            {
-                if (state.lightEnergy < lowLight)
-                {
-                    lightSystem.LowLightEnergyWarning();
-                }
-
-                state.lightEnergy -= 1;
-                playerUI.UpdateLightEnergy(state.lightEnergy);
-                yield return new WaitForSeconds(loseLightTime);
-            }
-            else
-            {
-                yield return null;
+                state.lightEnergy++;
+                gainLightTimer = Time.time;
             }
         }
+        else
+        {
+            if (Time.time - loseLightTimer >= loseLightTime && state.lightEnergy > 0)
+            {
+                state.lightEnergy--;
+                loseLightTimer = Time.time;
+            }
+            if (state.lightEnergy < lowLight)
+            {
+                lightSystem.LowLightEnergyWarning();
+            }
+        }
+
+        playerUI.UpdateLightEnergy(state.lightEnergy);
     }
+
+    //UI
 
     public void LoadData(GameData gameData)
     {
