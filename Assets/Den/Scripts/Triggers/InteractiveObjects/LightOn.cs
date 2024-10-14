@@ -3,27 +3,45 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.UI;
 
 public class LightOn : MonoBehaviour
 {
     [SerializeField]
-    private Light2D light;
+    private Light2D lanternLight;
     [SerializeField]
     private GameObject lightAreaForEnemy;
+    [SerializeField]
+    private GameObject lightArea;
+
+    [SerializeField]
+    private Material original;
+    [SerializeField]
+    private Material outline;
+
     private bool trigger = false;
+    private PlayerController playerController;
+    private SpriteRenderer lanternSprite;
 
     // Use this for initialization
     void Start()
     {
-        light.enabled = false;
+        playerController = FindObjectOfType<PlayerController>();//can this find the script for other objects in the same scene? 
+        lanternSprite = GetComponent<SpriteRenderer>();
+
+        lanternLight.enabled = false;
+        lightAreaForEnemy.SetActive(false);
+        lightArea.SetActive(false);
     }
 
     void Update()
     {
         // When the player is closed enough, press e will change the state of light (on -> off; off -> on)
-        if (trigger && Input.GetKeyDown(KeyCode.E))
+        if (trigger & !lanternLight.enabled && Input.GetKeyDown(KeyCode.E) && playerController.state.lightEnergy > 0)
         {
-            light.enabled = !light.enabled;
+            lanternLight.enabled = true;
+            lightAreaForEnemy.SetActive(true);
+            lightArea.SetActive(true);
 
             //// Adjust layers based on light state
             //if (light.enabled)
@@ -43,15 +61,28 @@ public class LightOn : MonoBehaviour
             //    Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("LightArea"), LayerMask.NameToLayer("Enemy"), true);
             //}
         }
+        
+        if (trigger && !(lanternLight.enabled || playerController.state.lightEnergy <= 0))
+        {
+            lanternSprite.material = outline;
+        }
+        else
+        {
+            lanternSprite.material = original;
+        }
     }
 
     public void OnTrigger()
     {
         trigger = true;
+        //This function should be called by the trigger of the lantern in the inspector
+        //TODO - when the player touched the trigger, and if they still have their light on them, show them there is a lantern here
     }
 
     public void OffTrigger()
     {
         trigger = false;
+        //This function should be called by the trigger of the lantern in the inspector
+        //TODO - Stop showing anything to player because they had left the detector
     }
 }

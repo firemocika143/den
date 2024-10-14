@@ -75,6 +75,7 @@ public class PlayerAttack : MonoBehaviour
     {
         attackPoint.position = transform.position;
         drawLight.enabled = false;
+        skill.LightDrawEnd();
     }
 
     private void OnDrawGizmosSelected()

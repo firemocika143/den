@@ -17,7 +17,7 @@ public class PlayerSkill : MonoBehaviour
     // LightDraw(showing track of light here)
     public void LightDrawStart(Vector2 startPos)
     {
-        lineRenderer.positionCount = 1;
+        lineRenderer.positionCount = 0;
         lineRenderer.SetPosition(0, startPos);
         previousPosition = startPos;
     }
@@ -34,5 +34,10 @@ public class PlayerSkill : MonoBehaviour
             lineRenderer.SetPosition(lineRenderer.positionCount - 1, currentPosition);
             previousPosition = currentPosition;
         }
+    }
+
+    public void LightDrawEnd()
+    {
+        lineRenderer.positionCount = 0;
     }
 }
