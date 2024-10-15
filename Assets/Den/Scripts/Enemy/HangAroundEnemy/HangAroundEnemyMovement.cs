@@ -12,6 +12,9 @@ public class HangAroundEnemyMovement : MonoBehaviour
     private LayerMask groundLayer;
     
     public Rigidbody2D rb;
+    public GameObject lightSourceDetector;
+    private bool reachLight;
+    private int dir;
 
     private float horizontal;
     
@@ -23,14 +26,18 @@ public class HangAroundEnemyMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         Debug.Log(gameObject.name);
         size = GetComponent<Transform>().localScale;
+        reachLight = lightSourceDetector.GetComponent<HangAroundEnemyLightSourceDetector>().reachLight;
+        dir = lightSourceDetector.GetComponent<HangAroundEnemyLightSourceDetector>().dir;
 
         float num = Random.Range(0.0f, 1.0f);
         if (num > 0.5f)
         {
             rb.velocity = new Vector2(-speed, rb.velocity.y);
+            horizontal = -1;
         } else
         {
             rb.velocity = new Vector2(speed, rb.velocity.y);
+            horizontal = 1;
         }
         
     }
@@ -38,28 +45,47 @@ public class HangAroundEnemyMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        reachLight = lightSourceDetector.GetComponent<HangAroundEnemyLightSourceDetector>().reachLight;
         GroundMovement();
     }
 
     private void GroundMovement()
     {
-        if(rb.velocity.x < 0)
+        if(reachLight)
         {
-            horizontal = -1;
+            if (rb.velocity.x < 0)
+            {
+                horizontal = -1;
+            }
+            else
+            {
+                horizontal = 1;
+            }
+            horizontal *= dir;
+            // Moving left or right
+            rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
         }
-        float num = Random.Range(0.0f, 1.0f);
-        if (num > 0.99f )
+        else
         {
-            horizontal *= -1;
+            if (rb.velocity.x < 0)
+            {
+                horizontal = -1;
+            }
+            float num = Random.Range(0.0f, 1.0f);
+            if (num > 0.99f)
+            {
+                horizontal *= -1;
+            }
+            // Moving left or right
+            rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
         }
-        // Moving left or right
-        rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
 
         // Flipping
         if (horizontal != 0)
         {
             Flip(horizontal);
         }
+
     }
 
     private void Flip(float dir)
