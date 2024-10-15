@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Pathfinding;
 
-public class test : MonoBehaviour
+public class AStarChase: MonoBehaviour
 {
     public Transform targetPoint;
     public Transform idlePoint;

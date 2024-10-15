@@ -8,6 +8,7 @@ public class PlayerAttack : MonoBehaviour
     public float attackRange;
     public LayerMask enemyLayer;
     public float maxDistanceToStart = 10f;
+    public int attack;
 
     [SerializeField]
     private PlayerSkill skill;
@@ -36,6 +37,11 @@ public class PlayerAttack : MonoBehaviour
         {
             Debug.Log("hitting an enemy");
             //TODO - give damage to target enemy
+
+            if (enemy.TryGetComponent<IEnemy>(out var e))
+            {
+                e.Damage(attack);
+            }
         }
     }
 

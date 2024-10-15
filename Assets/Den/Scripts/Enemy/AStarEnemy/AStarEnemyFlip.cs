@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Pathfinding;
 
-public class Enemy1Flip : MonoBehaviour
+public class AStarEnemyFlip : MonoBehaviour
 {
     public AIPath aipath;
 

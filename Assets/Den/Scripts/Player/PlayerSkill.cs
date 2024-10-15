@@ -8,18 +8,29 @@ public class PlayerSkill : MonoBehaviour
     public Vector3 previousPosition;
 
     private LineRenderer lineRenderer;
+    private bool drawing = false;
 
     void Start()
     {
         lineRenderer = GetComponent<LineRenderer>();
     }
 
+    private void Update()
+    {
+        if (!drawing)
+        {
+            lineRenderer.positionCount = 0;
+            lineRenderer.SetPosition(0, transform.position);
+        }
+    }
+
     // LightDraw(showing track of light here)
-    public void LightDrawStart(Vector2 startPos)
+    public void LightDrawStart(Vector3 startPos)
     {
         lineRenderer.positionCount = 0;
         lineRenderer.SetPosition(0, startPos);
         previousPosition = startPos;
+        drawing = true;
     }
 
     public void LightDrawUpdate()
@@ -39,5 +50,6 @@ public class PlayerSkill : MonoBehaviour
     public void LightDrawEnd()
     {
         lineRenderer.positionCount = 0;
+        drawing = false;
     }
 }

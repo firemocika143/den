@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class status : MonoBehaviour
+public class AStarEnemy : MonoBehaviour, IEnemy
 {
     //health
     [Header("Health")]
@@ -18,14 +18,9 @@ public class status : MonoBehaviour
         health = maxHealth;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void OnTriggerEnter2D(Collider2D other)
     {
+        Debug.Log(other.gameObject.name);
         // if I touch player
         if (other.CompareTag("Player"))
         {
@@ -44,18 +39,14 @@ public class status : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        
-    }
-
     //Damage Function for Player to Call
-    public void Damage(int damage)
+    public void Damage(int d)
     {
-        health -= damage;
-        if (health < 0)
+        health = health - d >= 0 ? health - d : 0;
+
+        if (health <= 0)
         {
-            health = 0;
+            Destroy(gameObject);
         }
     }
 }

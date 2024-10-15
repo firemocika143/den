@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PatroEnemyStatus : MonoBehaviour
+public class PatroEnemy : MonoBehaviour, IEnemy
 {
     //health
     [Header("Health")]
@@ -15,9 +15,14 @@ public class PatroEnemyStatus : MonoBehaviour
         this.health = this.maxHealth;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Damage(int d)
     {
-        
+        health = health - d >= 0 ? health - d : 0;
+        Debug.Log("damaging enemy");
+
+        if (health <= 0)
+        {
+            Destroy(gameObject);//well, maybe we wouldn't do this later
+        }
     }
 }
