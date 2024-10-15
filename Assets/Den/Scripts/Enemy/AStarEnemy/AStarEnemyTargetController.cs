@@ -10,80 +10,59 @@ public class test : MonoBehaviour
     public PlayerController pc;
     private AIDestinationSetter ai;
 
-    private bool chase;
-    private bool safe;
+    public GameObject playerDetector;
+    public GameObject lightSourceDetector;
+    public bool chase;
+    public bool safe;
     private string playerTag;
     private string lightSourceTag;
 
     void Start()
     {
         ai = GetComponent<AIDestinationSetter>();
-        chase = false;
-        safe = true;
+        chase = playerDetector.GetComponent<AStarEnemyPlayerDetector>().chase;
+        safe = lightSourceDetector.GetComponent<AStarEnemyLightSourceDetector>().safe;
         playerTag = "Player";
         lightSourceTag = "LightSorce";
     }
     
     void Update()
     {
-        if (chase)
+        chase = playerDetector.GetComponent<AStarEnemyPlayerDetector>().chase;
+        safe = lightSourceDetector.GetComponent<AStarEnemyLightSourceDetector>().safe;
+        if (ai.target != null && chase) // if can chase
         {
-            if (ai.target != null)
+            //Debug.Log("chase")
+            if (pc.isInLightSource) // player is in light source
             {
-                if (pc.isInLightSource)
-                {
-                    if (safe)
-                    {
-                        ai.target = transform;
-                    }
-                    else
-                    {
-                        // find destination
-                    }
-                    
-                }
-                else
-                {
-                    ai.target = targetPoint;
-                }
-            }
-            //else
-            //{
-            //    if (safe)
-            //    {
-            //        ai.target = transform;
-            //    }
-            //    else
-            //    {
+                SafeOrNot(safe);
 
-            //    }
-                
-            //}
+            }
+            else
+            {
+                ai.target = targetPoint;
+            }
         }
         else
         {
-
+            //Debug.Log("don't chase");
+            SafeOrNot(safe);
         }
         
     }
 
-    public void PlayerEnter()
+    private void SafeOrNot(bool safe)
     {
-        chase = true;
-    }
-
-    public void PlayerLeave()
-    {
-        chase = false;
-    }
-
-    public void LightEnter()
-    {
-        safe = false;
-    }
-
-    public void LightLeave()
-    {
-        safe = true;
+        if (safe) // if is safe
+        {
+            ai.target = transform;
+            //Debug.Log("safe");
+        }
+        else
+        {
+            // find destination
+            ai.target = idlePoint;
+            //Debug.Log("unsafe");
+        }
     }
 }
