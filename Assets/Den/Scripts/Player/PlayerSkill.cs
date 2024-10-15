@@ -19,7 +19,7 @@ public class PlayerSkill : MonoBehaviour
     {
         if (!drawing)
         {
-            lineRenderer.positionCount = 0;
+            lineRenderer.positionCount = 1;
             lineRenderer.SetPosition(0, transform.position);
         }
     }
@@ -27,7 +27,7 @@ public class PlayerSkill : MonoBehaviour
     // LightDraw(showing track of light here)
     public void LightDrawStart(Vector3 startPos)
     {
-        lineRenderer.positionCount = 0;
+        lineRenderer.positionCount = 1;
         lineRenderer.SetPosition(0, startPos);
         previousPosition = startPos;
         drawing = true;
@@ -49,7 +49,7 @@ public class PlayerSkill : MonoBehaviour
 
     public void LightDrawEnd()
     {
-        lineRenderer.positionCount = 0;
+        lineRenderer.positionCount = 1;
         drawing = false;
     }
 }
