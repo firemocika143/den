@@ -50,7 +50,7 @@ public class PlayerAttack : MonoBehaviour
         pos = Input.mousePosition;
         pos.z = 0;
         //TODO - detect if the player is clicking in the attack trigger zone
-        if (Input.GetMouseButton(0) && Vector2.Distance(transform.position, Camera.main.ScreenToWorldPoint(pos)) < maxDistanceToStart)//  -> but I can also use the collider to restrict the range
+        if (Input.GetMouseButtonDown(0) && Vector2.Distance(transform.position, Camera.main.ScreenToWorldPoint(pos)) < maxDistanceToStart)//  -> but I can also use the collider to restrict the range
         {
             attackPoint.position = Camera.main.ScreenToWorldPoint(pos);
             Attack();
@@ -60,7 +60,7 @@ public class PlayerAttack : MonoBehaviour
         }
     }
 
-    
+
     private void OnMouseDrag()
     {
         //TODO - if they are, while they drag the mouse, cost light energy and move attacking point position
@@ -71,13 +71,13 @@ public class PlayerAttack : MonoBehaviour
             pos = Input.mousePosition;
             pos.z = 0;
             attackPoint.position = Camera.main.ScreenToWorldPoint(pos);
-            drawLight.transform.position = attackPoint.position;
+            drawLight.transform.position = new Vector3(attackPoint.position.x, attackPoint.position.y, 0);
 
             Attack();
         }
     }
 
-    
+
     private void OnMouseUp()
     {
         //TODO - once they stop dragging(GetMouseButtonUp) reset the attack point's position

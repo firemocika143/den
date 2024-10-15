@@ -12,7 +12,6 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         [Header("Movement State")]
         public bool stop = false;
         public bool climb = false;
-        public bool Hittable;
 
         //health
         [Header("Health")]
@@ -26,6 +25,10 @@ public class PlayerController : MonoBehaviour, IDataPersistence
 
         [Header("Attack")]
         public int attack = 1;
+
+        [Header("Other Player State Settings")]
+        public bool isHittable = true;
+        public float unhittableTime = 1f;
     }
 
     [System.Serializable]
@@ -67,6 +70,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     private float loseLightTimer;
 
     private PlayerMovement playerMovement;
+    private float unhittableTimer;
     
     private void Start()
     {
@@ -90,6 +94,11 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         }
 
         UpdatePlayerLightEnergy();
+
+        if (!state.isHittable && Time.time - unhittableTimer > state.unhittableTime)
+        {
+            state.isHittable = true;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D col)
@@ -112,9 +121,20 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     //Health Function
     public void Damage(int damage)
     {
-        state.health -= damage;
-        state.health = state.health >= 0 ? state.health : 0;
-        playerUI.UpdateHealth(state.health);
+        if (state.isHittable)
+        {
+            state.health -= damage;
+            state.health = state.health >= 0 ? state.health : 0;
+            playerUI.UpdateHealth(state.health);
+            state.isHittable = false;
+            unhittableTimer = Time.time;
+        }
+
+        if (state.health <= 0)
+        {
+            PlayerKilled();
+            PlayerReturn();//this maybe should be a function in GameManager?
+        }
     }
 
     public void Recover(int recover)
@@ -124,7 +144,23 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         playerUI.UpdateHealth(state.health);
     }
 
+    private void PlayerKilled()
+    {
+        Debug.Log("You died");
+    }
+
+    private void PlayerReturn()
+    {
+        Debug.Log("Respawned");
+    }
+
     //light functions
+    public void UseLightEnergy(int val)
+    {
+        state.lightEnergy = state.lightEnergy - val >= 0 ? state.lightEnergy - val : 0;
+        playerUI.UpdateLightEnergy(state.lightEnergy);
+    }
+
     public void GetIntoLightSource()
     {
         //Called in OnCollisionEnter2D when the player lights on this lantern and when they enters the light area of this lantern
@@ -151,6 +187,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         //TODO - show some particles or animations
     }
 
+    //UI
     private void UpdatePlayerLightEnergy()
     {
         if (isInLightSource)
@@ -176,8 +213,6 @@ public class PlayerController : MonoBehaviour, IDataPersistence
 
         playerUI.UpdateLightEnergy(state.lightEnergy);
     }
-
-    //UI
 
     public void LoadData(GameData gameData)
     {

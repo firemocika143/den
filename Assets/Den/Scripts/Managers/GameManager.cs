@@ -44,8 +44,35 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
         }
     }
+
+    private class SpawnPointInfo
+    {
+        public Vector3 position;
+        public int numberOfSpawnPoint;
+    }
+
+    private SpawnPointInfo lastSpawnPoint;
+
+    [SerializeField]
+    private GameObject playerPrefab;
+
+
+
+
+
+
+
+
     //Player Dead Animation
+
     //Player Respawn
+    /// <summary>
+    /// Called in PlayerController? Instantiating a new player object with some same max values, also put the player to the last saved position
+    /// </summary>
+    public void PlayerRespawn()
+    {
+
+    }
     //Audio and Screen Settings
     //Game Progress
 
