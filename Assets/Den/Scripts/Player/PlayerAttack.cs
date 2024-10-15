@@ -15,13 +15,13 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField]
     private Transform attackPoint;
     [SerializeField]
-    private Light2D drawLight;// why isn't this working?
+    private GameObject drawLight;// why isn't this working?
 
     private Vector3 pos;
 
     private void Start()
     {
-        drawLight.enabled = false;
+        drawLight.SetActive(false);
     }
 
     private void Update()
@@ -54,7 +54,7 @@ public class PlayerAttack : MonoBehaviour
         {
             attackPoint.position = Camera.main.ScreenToWorldPoint(pos);
             Attack();
-            drawLight.enabled = true;
+            drawLight.SetActive(true);
             skill.LightDrawStart(attackPoint.position);
             //TODO - cost light energy with time
         }
@@ -71,6 +71,7 @@ public class PlayerAttack : MonoBehaviour
             pos = Input.mousePosition;
             pos.z = 0;
             attackPoint.position = Camera.main.ScreenToWorldPoint(pos);
+            drawLight.transform.position = attackPoint.position;
 
             Attack();
         }
@@ -83,7 +84,7 @@ public class PlayerAttack : MonoBehaviour
         //if (Input.GetMouseButton(0))
         //{
         attackPoint.position = transform.position;
-        drawLight.enabled = false;
+        drawLight.SetActive(false);
         skill.LightDrawEnd();
         //}
     }
