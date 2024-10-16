@@ -45,13 +45,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private class SpawnPointInfo
+    public class SpawnPointInfo
     {
-        public Vector3 position;
-        public int numberOfSpawnPoint;
+        public Vector3 respawnPosition;
+        public int respawnPointNumber;
     }
 
-    private SpawnPointInfo lastSpawnPoint;
+    public SpawnPointInfo lastRespawnPoint;
 
     [SerializeField]
     private GameObject playerPrefab;
