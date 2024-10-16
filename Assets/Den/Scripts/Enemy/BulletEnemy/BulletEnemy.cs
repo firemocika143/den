@@ -12,54 +12,30 @@ public class BulletEnemy : MonoBehaviour, IEnemy
     [Header("Attack")]
     public int attack = 1;
 
-    [Header("Bullet Speed")]
+    [Header("Bullet Settings")]
+    public GameObject bulletPrefab;
     public float bulletSpeed = 1.0f;
+    public float cooldown = 2f;
+    private bool iscooldown = false;
 
-    [Header("Bullet")]
-    public GameObject bullet;
-    public float cooldown = 80.0f;
-    private bool iscooldown;
-
-    [Header("Player Detector")]
-    public GameObject playerDetector;
-    private bool shoot;
+    [Header("Detector")]
+    public BulletEnemyDetector BEDetector;
 
     [Header("Invincible Time")]
     public float invincibleTime = 1.0f;
-    private bool invincible;
+    private bool invincible = false;
 
     // Start is called before the first frame update
     void Start()
     {
         health = maxHealth;
-        invincible = false;
-        iscooldown = false;
-        shoot = playerDetector.GetComponent<BulletEnemyPlayerDetector>().shoot;
     }
 
     void Update()
     {
-        shooting();
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        //Debug.Log(other.gameObject.name);
-        // if I touch player
-        if (other.CompareTag("Player"))
+        if (BEDetector.shoot)
         {
-            PlayerController playerController = other.GetComponent<PlayerController>();
-            playerController.Damage(attack);
-        }
-    }
-
-    private void OnTriggerStay2D(Collider2D other)
-    {
-        // if I stay with player
-        if (other.CompareTag("Player"))
-        {
-            PlayerController playerController = other.GetComponent<PlayerController>();
-            playerController.Damage(attack);
+            shooting();
         }
     }
 
@@ -75,12 +51,29 @@ public class BulletEnemy : MonoBehaviour, IEnemy
                 Destroy(gameObject);
             }
 
-            StartCoroutine(invincibleTimeCount());
+            StartCoroutine(InvincibleTimeCount());
         }
 
     }
 
-    private IEnumerator invincibleTimeCount()
+    private void shooting()
+    {
+        //Debug.Log("iscooldown: " + iscooldown);
+        //Debug.Log("shoot: " + shoot);
+        if (!iscooldown && BEDetector.target != null)
+        {
+            //Debug.Log("shoot2: " + BEDetector.shoot);
+            GameObject bullet = GameObject.Instantiate(bulletPrefab);
+                
+            bullet.transform.position = transform.position;
+            bullet.GetComponent<Bullet>().attack = attack;
+            bullet.GetComponent<Rigidbody2D>().velocity = (BEDetector.target.position - transform.position) * bulletSpeed;
+
+            StartCoroutine(CooldownCount());
+        }
+    }
+
+    private IEnumerator InvincibleTimeCount()
     {
         invincible = true;
 
@@ -89,30 +82,7 @@ public class BulletEnemy : MonoBehaviour, IEnemy
         invincible = false;
     }
 
-    private void shooting()
-    {
-        Debug.Log("iscooldown: " + iscooldown);
-        //Debug.Log("shoot: " + shoot);
-        if (!iscooldown)
-        {
-            //Debug.Log("iscooldown2: " + iscooldown);
-            shoot = playerDetector.GetComponent<BulletEnemyPlayerDetector>().shoot;
-
-            if (shoot)
-            {
-                Debug.Log("shoot2: " + shoot);
-                GameObject newBullet = GameObject.Instantiate(bullet);
-                newBullet.transform.position = transform.position;
-                newBullet.GetComponent<Rigidbody2D>().velocity = new Vector2(bulletSpeed, 0f);
-
-                StartCoroutine(cooldownCount());
-
-                shoot = false;
-            }
-        }
-    }
-
-    private IEnumerator cooldownCount()
+    private IEnumerator CooldownCount()
     {
         iscooldown = true;
 

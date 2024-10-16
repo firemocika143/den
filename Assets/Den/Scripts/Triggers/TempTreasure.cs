@@ -6,7 +6,7 @@ using UnityEngine;
 public class TempTreasure : MonoBehaviour
 {
     private bool usable = false;
-    private bool open = false;
+    //private bool open = false;
 
     [SerializeField]
     private PlayerController playerController;
@@ -20,30 +20,27 @@ public class TempTreasure : MonoBehaviour
 
     private void Update()
     {
-        if (usable && !open)
+        //if (usable && !open)
+        //{
+        //    if (Input.GetKeyDown(KeyCode.E))
+        //    {
+        //        playerController.Recover(1000);
+        //        open = true;
+        //    }
+        //}
+        //else if (usable && open)
+        //{
+        //    if (Input.GetKeyDown(KeyCode.E))
+        //    {
+        //        Debug.Log("Second press, and nothing happens");
+        //        open = false;
+        //    }
+        //}
+        if (usable)
         {
             if (Input.GetKeyDown(KeyCode.E))
             {
-                if (sign.transform.GetChild(0).TryGetComponent<TextMeshPro>(out TextMeshPro text))
-                {
-                    text.text = "hurt";
-                    text.fontSize = 4;
-                }
-                playerController.Damage(20);
-                open = true;
-            }
-        }
-        else if (usable && open)
-        {
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                if (sign.transform.GetChild(0).TryGetComponent<TextMeshPro>(out TextMeshPro text))
-                {
-                    text.text = "E";
-                    text.fontSize = 6;
-                }
-                playerController.Recover(10);
-                open = false;
+                playerController.Recover(1000);
             }
         }
     }

@@ -128,12 +128,12 @@ public class PlayerController : MonoBehaviour, IDataPersistence
             playerUI.UpdateHealth(state.health);
             state.isHittable = false;
             unhittableTimer = Time.time;
-        }
 
-        if (state.health <= 0)
-        {
-            PlayerKilled();
-            PlayerReturn();//this maybe should be a function in GameManager?
+            if (state.health <= 0)
+            {
+                PlayerKilled();
+                PlayerReturn();//this maybe should be a function in GameManager?
+            }
         }
     }
 
@@ -146,12 +146,12 @@ public class PlayerController : MonoBehaviour, IDataPersistence
 
     private void PlayerKilled()
     {
-        Debug.Log("You died");
+        // TODO - player dying
     }
 
     private void PlayerReturn()
     {
-        Debug.Log("Respawned");
+        // TODO - Respawn Player, but maybe not here
     }
 
     //light functions

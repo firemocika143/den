@@ -15,8 +15,7 @@ public class PatroEnemyMovement : MonoBehaviour
     [SerializeField]
     private GameObject rightTarget;
 
-    public Rigidbody2D rb;
-
+    private Rigidbody2D rb;
     private float horizontal;
     private Vector3 size;
     private Transform currentTarget;
@@ -55,10 +54,12 @@ public class PatroEnemyMovement : MonoBehaviour
         else if (currentTarget.position.x - transform.position.x < 0.5f)
         {
             FaceLeft();
-        } else if (currentTarget == leftTarget.transform)
+        } 
+        else if (currentTarget == leftTarget.transform)
         {
             rb.velocity = new Vector2(-speed, rb.velocity.y);
-        } else if (currentTarget == rightTarget.transform)
+        } 
+        else if (currentTarget == rightTarget.transform)
         {
             rb.velocity = new Vector2(speed, rb.velocity.y);
         }

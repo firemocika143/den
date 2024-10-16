@@ -1,3 +1,4 @@
+using Pathfinding;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,20 +16,31 @@ public class AStarEnemy : MonoBehaviour, IEnemy
     public float invincibleTime = 1.0f;
     private bool invincible;
 
+    private AIPath aipath;
+
     // Start is called before the first frame update
     void Start()
     {
         health = maxHealth;
         invincible = false;
+
+        aipath = GetComponent<AIPath>();
     }
     void Update()
     {
-
+        if (aipath.desiredVelocity.x >= 0.01f) // change direction
+        {
+            transform.localScale = new Vector3(-1f, 1f, 1f);
+        }
+        else if (aipath.desiredVelocity.x <= -0.01f)
+        {
+            transform.localScale = new Vector3(1f, 1f, 1f); ;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log(other.gameObject.name);
+        //Debug.Log(other.gameObject.name);
         // if I touch player
         if (other.CompareTag("Player"))
         {
@@ -61,7 +73,7 @@ public class AStarEnemy : MonoBehaviour, IEnemy
 
             StartCoroutine(invincibleTimeCount());
         }
-        
+
     }
 
     private IEnumerator invincibleTimeCount()
@@ -73,3 +85,4 @@ public class AStarEnemy : MonoBehaviour, IEnemy
         invincible = false;
     }
 }
+

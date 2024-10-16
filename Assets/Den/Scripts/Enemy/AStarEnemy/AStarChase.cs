@@ -5,55 +5,46 @@ using Pathfinding;
 
 public class AStarChase: MonoBehaviour
 {
-    public Transform targetPoint;
-    public Transform idlePoint;
+    public Transform target;
+    public Transform idlePos;
     public PlayerController pc;
+    public string playerTag = "Player";
+
     private AIDestinationSetter ai;
 
-    public GameObject playerDetector;
-    public GameObject lightSourceDetector;
-    public bool chase;
-    public bool safe;
-    private string playerTag;
-    private string lightSourceTag;
+    [SerializeField]
+    private AStarEnemyDetector ASEDetector;
 
     void Start()
     {
         ai = GetComponent<AIDestinationSetter>();
-        chase = playerDetector.GetComponent<AStarEnemyPlayerDetector>().chase;
-        safe = lightSourceDetector.GetComponent<AStarEnemyLightSourceDetector>().safe;
-        playerTag = "Player";
-        lightSourceTag = "LightSorce";
     }
     
     void Update()
     {
-        chase = playerDetector.GetComponent<AStarEnemyPlayerDetector>().chase;
-        safe = lightSourceDetector.GetComponent<AStarEnemyLightSourceDetector>().safe;
-        if (ai.target != null && chase) // if can chase
+        if (ai.target != null && ASEDetector.chase) // if can chase
         {
             //Debug.Log("chase")
             if (pc.isInLightSource) // player is in light source
             {
-                SafeOrNot(safe);
-
+                SafeOrNot();
             }
             else
             {
-                ai.target = targetPoint;
+                ai.target = target;
             }
         }
         else
         {
             //Debug.Log("don't chase");
-            SafeOrNot(safe);
+            SafeOrNot();
         }
         
     }
 
-    private void SafeOrNot(bool safe)
+    private void SafeOrNot()
     {
-        if (safe) // if is safe
+        if (ASEDetector.safe) // if is safe
         {
             ai.target = transform;
             //Debug.Log("safe");
@@ -61,7 +52,7 @@ public class AStarChase: MonoBehaviour
         else
         {
             // find destination
-            ai.target = idlePoint;
+            ai.target = idlePos;
             //Debug.Log("unsafe");
         }
     }

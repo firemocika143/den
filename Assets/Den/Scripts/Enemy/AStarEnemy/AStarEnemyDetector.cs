@@ -2,22 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AStarEnemyPlayerDetector : MonoBehaviour
+public class AStarEnemyDetector : MonoBehaviour
 {
+    [HideInInspector]
+    public bool safe = true;
+    [HideInInspector]
     public bool chase = false;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // if player gets in the range
-        if (other.CompareTag("Player"))
+        // if I enter light soruce
+        if (other.CompareTag("LightSource"))
         {
-            chase = true;
+            safe = false;
         }
-    }
 
-    private void OnTriggerStay2D(Collider2D other)
-    {
-        // if player is in the range
         if (other.CompareTag("Player"))
         {
             chase = true;
@@ -26,7 +25,12 @@ public class AStarEnemyPlayerDetector : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        // if player Exit the range
+        // if I exit from the light Source
+        if (other.CompareTag("LightSource"))
+        {
+            safe = true;
+        }
+        
         if (other.CompareTag("Player"))
         {
             chase = false;

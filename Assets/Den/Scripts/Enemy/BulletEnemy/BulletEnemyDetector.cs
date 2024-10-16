@@ -2,9 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BulletEnemyLightSourceDetector : MonoBehaviour
+public class BulletEnemyDetector : MonoBehaviour
 {
-    public bool safe;
+    public bool safe = true;
+    public bool shoot = false;
+    public Transform target = null;//you know, the better way may be putting into BulletEnemy Script directly
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -13,14 +15,11 @@ public class BulletEnemyLightSourceDetector : MonoBehaviour
         {
             safe = false;
         }
-    }
 
-    private void OnTriggerStay2D(Collider2D other)
-    {
-        // if I am in the light source
-        if (other.CompareTag("LightSource"))
+        if (other.CompareTag("Player"))
         {
-            safe = false;
+            shoot = true;
+            target = other.transform;
         }
     }
 
@@ -30,6 +29,12 @@ public class BulletEnemyLightSourceDetector : MonoBehaviour
         if (other.CompareTag("LightSource"))
         {
             safe = true;
+        }
+
+        if (other.CompareTag("Player"))
+        {
+            shoot = false;
+            target = null;
         }
     }
 }

@@ -31,7 +31,7 @@ public class HangAroundEnemy : MonoBehaviour, IEnemy
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log(other.gameObject.name);
+        //Debug.Log(other.gameObject.name);
         // if I touch player
         if (other.CompareTag("Player"))
         {
