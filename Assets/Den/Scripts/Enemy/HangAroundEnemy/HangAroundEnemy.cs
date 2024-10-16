@@ -13,10 +13,14 @@ public class HangAroundEnemy : MonoBehaviour, IEnemy
     [Header("Attack")]
     public int attack = 1;
 
+    public float invincibleTime = 1.0f;
+    private bool invincible;
+
     // Start is called before the first frame update
     void Start()
     {
         health = maxHealth;
+        invincible = false;
     }
 
     // Update is called once per frame
@@ -25,14 +29,50 @@ public class HangAroundEnemy : MonoBehaviour, IEnemy
         
     }
 
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        Debug.Log(other.gameObject.name);
+        // if I touch player
+        if (other.CompareTag("Player"))
+        {
+            PlayerController playerController = other.GetComponent<PlayerController>();
+            playerController.Damage(attack);
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        // if I stay with player
+        if (other.CompareTag("Player"))
+        {
+            PlayerController playerController = other.GetComponent<PlayerController>();
+            playerController.Damage(attack);
+        }
+    }
+
     //Damage Function for Player to Call
     public void Damage(int d)
     {
-        health = health - d >= 0 ? health - d : 0;
-
-        if (health <= 0)
+        if (!invincible)
         {
-            Destroy(gameObject);
+            health = health - d >= 0 ? health - d : 0;
+
+            if (health <= 0)
+            {
+                Destroy(gameObject);
+            }
+
+            StartCoroutine(invincibleTimeCount());
         }
+
+    }
+
+    private IEnumerator invincibleTimeCount()
+    {
+        invincible = true;
+
+        yield return new WaitForSeconds(invincibleTime);
+
+        invincible = false;
     }
 }
