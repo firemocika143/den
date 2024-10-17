@@ -19,8 +19,8 @@ public class PlayerSkill : MonoBehaviour
         public float costTimer;
     }
 
-    [SerializeField]
-    private LightDraw lightDraw = null;
+    [HideInInspector]
+    public LightDraw lightDraw = null;
 
     private PlayerController playerController;
 
@@ -80,7 +80,7 @@ public class PlayerSkill : MonoBehaviour
 
         if (Time.time - lightDraw.costTimer > lightDraw.costTime)
         {
-            playerController.state.lightEnergy -= lightDraw.costPerTime;
+            playerController.UseLightEnergy(lightDraw.costPerTime);
             lightDraw.costTimer = Time.time;
         }
     }

@@ -26,7 +26,18 @@ public class PlayerAttack : MonoBehaviour
 
     private void Update()
     {
-
+        if (!(skill.lightDraw == null))
+        {
+            if (skill.lightDraw.isDrawing)
+            {
+                UpdateDraw();
+                DetectEndDraw();
+            }
+            else
+            {
+                DetectDrawStart();
+            }
+        }
     }
 
     void Attack()
@@ -45,7 +56,7 @@ public class PlayerAttack : MonoBehaviour
         }
     }
 
-    private void OnMouseDown()
+    private void DetectDrawStart()
     {
         pos = Input.mousePosition;
         pos.z = 0;
@@ -60,8 +71,7 @@ public class PlayerAttack : MonoBehaviour
         }
     }
 
-
-    private void OnMouseDrag()
+    private void UpdateDraw()
     {
         //TODO - if they are, while they drag the mouse, cost light energy and move attacking point position
         if (Input.GetMouseButton(0))
@@ -77,16 +87,14 @@ public class PlayerAttack : MonoBehaviour
         }
     }
 
-
-    private void OnMouseUp()
+    private void DetectEndDraw()
     {
-        //TODO - once they stop dragging(GetMouseButtonUp) reset the attack point's position
-        //if (Input.GetMouseButton(0))
-        //{
-        attackPoint.position = transform.position;
-        drawLight.SetActive(false);
-        skill.LightDrawEnd();
-        //}
+        if (Input.GetMouseButtonUp(0))
+        {
+            attackPoint.position = transform.position;
+            drawLight.SetActive(false);
+            skill.LightDrawEnd();
+        }
     }
 
     private void OnDrawGizmosSelected()
