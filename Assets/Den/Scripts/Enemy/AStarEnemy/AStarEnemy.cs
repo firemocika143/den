@@ -10,9 +10,6 @@ public class AStarEnemy : MonoBehaviour, IEnemy
     public int maxHealth = 10;
     private int health;
 
-    [Header("Attack")]
-    public int attack = 1;
-
     public float invincibleTime = 1.0f;
     private bool invincible;
 
@@ -35,27 +32,6 @@ public class AStarEnemy : MonoBehaviour, IEnemy
         else if (aipath.desiredVelocity.x <= -0.01f)
         {
             transform.localScale = new Vector3(1f, 1f, 1f); ;
-        }
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        //Debug.Log(other.gameObject.name);
-        // if I touch player
-        if (other.CompareTag("Player"))
-        {
-            PlayerController playerController = other.GetComponent<PlayerController>();
-            playerController.Damage(attack);
-        }
-    }
-
-    private void OnTriggerStay2D(Collider2D other)
-    {
-        // if I stay with player
-        if (other.CompareTag("Player"))
-        {
-            PlayerController playerController = other.GetComponent<PlayerController>();
-            playerController.Damage(attack);
         }
     }
 
