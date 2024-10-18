@@ -38,7 +38,11 @@ public class PlayerOneWayPlatform : MonoBehaviour
         Physics2D.IgnoreCollision(playerCollider, platformCollider);
         yield return new WaitForSeconds(0.25f);
         Physics2D.IgnoreCollision(playerCollider, platformCollider, false);
-        playerController = GetComponent<PlayerController>();
-        playerController.state.climb = true;
+
+        PlayerController pc = FindFirstObjectByType<PlayerController>();
+        if (pc!= null)
+        {
+            playerController.state.climb = true;
+        }
     }
 }
