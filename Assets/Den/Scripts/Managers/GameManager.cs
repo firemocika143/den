@@ -48,10 +48,29 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private PlayerUI playerUI;
 
+    [System.Serializable]
+    public class KeySettings
+    {
+        [Header("Movement Keys")]
+        public KeyCode Left = KeyCode.A;
+        public KeyCode Right = KeyCode.D;
+        public KeyCode Jump = KeyCode.Space;
+        public KeyCode Climb = KeyCode.W;
+
+        [Header("Interaction/Skill Keys")]
+        public KeyCode Attack = KeyCode.Mouse0;
+        public KeyCode Interaction = KeyCode.E;
+        public KeyCode FacePlayerTurnOnLight = KeyCode.S;
+    }
+
+    public KeySettings keySettings;
+
     public void ManualSave()
     {
-        
+        PlayerController pc = FindFirstObjectByType<PlayerController>();
+        if (pc != null) pc.AllRecover();
 
+        DataPersistenceManager.instance.SaveGame();
     }
 
 
@@ -73,11 +92,7 @@ public class GameManager : MonoBehaviour
 
     public void RecoverPlayer()
     {
-        PlayerController pc = FindFirstObjectByType<PlayerController>();
-        if (pc != null)
-        {
-            pc.state.health = pc.state.maxHealth;
-        }
+        
     }
     //Audio and Screen Settings
     //Game Progress

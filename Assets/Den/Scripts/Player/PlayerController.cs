@@ -31,23 +31,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         public float unhittableTime = 1f;
     }
 
-    [System.Serializable]
-    public class KeySettings
-    {
-        [Header("Movement Keys")]
-        public KeyCode Left = KeyCode.A;
-        public KeyCode Right = KeyCode.D;
-        public KeyCode Jump = KeyCode.Space;
-        public KeyCode Climb = KeyCode.W;
-
-        [Header("Interaction/Skill Keys")]
-        public KeyCode Attack = KeyCode.Mouse0;
-        public KeyCode Interaction = KeyCode.E;
-        public KeyCode FacePlayerTurnOnLight = KeyCode.S;
-    }
-
     public PlayerState state;
-    public KeySettings keySettings;
 
     //light
     [Header("Other Light Settings")]
@@ -61,15 +45,12 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     [Header("Handlers")]
     [SerializeField]
     private PlayerLightSystem lightSystem;
-    [SerializeField]
-    private PlayerUI playerUI;
-
-    //private Coroutine gainLightCoroutine;
-    //private Coroutine loseLightCoroutine;
+    
     private float gainLightTimer; 
     private float loseLightTimer;
 
     private PlayerMovement playerMovement;
+    private PlayerUI playerUI;
     private float unhittableTimer;
     
     private void Start()
@@ -80,6 +61,11 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         //loseLightCoroutine = StartCoroutine(LoseLight());
 
         playerMovement = GetComponent<PlayerMovement>();
+        playerUI = FindFirstObjectByType<PlayerUI>();//this is not good..., nut how to set UI Manager?
+        if (TryGetComponent<LineRenderer>(out var lineRenderer))
+        {
+            lineRenderer.enabled = false;
+        }
     }
 
     private void Update()
@@ -118,7 +104,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         }
     }
 
-    //Health Function
+    //Player State Functions
     public void Damage(int damage)
     {
         if (state.isHittable)
@@ -144,23 +130,32 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         playerUI.UpdateHealth(state.health);
     }
 
-    private void PlayerKilled()
+    public void AllRecover()
     {
-        // TODO - player dying
+        state.health = state.maxHealth;
+        state.lightEnergy = state.maxLightEnergy;
+
+        playerUI.UpdateMaxHealth(state.maxHealth);
+        playerUI.UpdateHealth(state.health);
+        playerUI.UpdateMaxLightEnergy(state.maxLightEnergy);
+        playerUI.UpdateLightEnergy(state.lightEnergy);
     }
 
-    private void PlayerReturn()
-    {
-        // TODO - Respawn Player, but maybe not here
-    }
-
-    //light functions
     public void UseLightEnergy(int val)
     {
         state.lightEnergy = state.lightEnergy - val >= 0 ? state.lightEnergy - val : 0;
         playerUI.UpdateLightEnergy(state.lightEnergy);
     }
 
+    //Events functions
+    private void PlayerKilled()
+    {
+        // TODO - player dying
+    }
+    private void PlayerReturn()
+    {
+        // TODO - Respawn Player, but maybe not here
+    }
     public void GetIntoLightSource()
     {
         //Called in OnCollisionEnter2D when the player lights on this lantern and when they enters the light area of this lantern
@@ -171,7 +166,6 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         lightSystem.IntoLightSourceLightOff();
         //TODO - show some particles or animations
     }
-
     public void LeaveLightSource()
     {
         //Called by OnCollisionExit2D when the player exits the light area
@@ -217,21 +211,14 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     public void LoadData(GameData gameData)
     {
         this.state.maxHealth = gameData.maxHealth;
-        this.state.health = gameData.health;
         this.state.maxLightEnergy = gameData.maxLightEnergy;
-        this.state.lightEnergy = gameData.lightEnergy;
 
-        playerUI.UpdateMaxLightEnergy(state.maxLightEnergy);
-        playerUI.UpdateMaxHealth(state.maxHealth);
-        playerUI.UpdateLightEnergy(state.lightEnergy);
-        playerUI.UpdateHealth(state.health);
+        AllRecover();
     }
 
     public void SaveData(ref GameData gameData)
     {
         gameData.maxHealth = this.state.maxHealth;
-        gameData.health = this.state.health;
         gameData.maxLightEnergy = this.state.maxLightEnergy;
-        gameData.lightEnergy = this.state.lightEnergy;
     }
 }

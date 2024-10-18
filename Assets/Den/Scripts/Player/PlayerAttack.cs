@@ -65,6 +65,7 @@ public class PlayerAttack : MonoBehaviour
 
         skill.LightDrawInit(); 
     }
+
     private void DetectDrawStart()
     {
         pos = Input.mousePosition;
@@ -78,6 +79,7 @@ public class PlayerAttack : MonoBehaviour
             //TODO - cost light energy with time
         }
     }
+
     private void UpdateDraw()
     {
         //TODO - if they are, while they drag the mouse, cost light energy and move attacking point position
@@ -101,6 +103,7 @@ public class PlayerAttack : MonoBehaviour
             }
         }
     }
+
     private void DetectEndDraw()
     {
         if (Input.GetMouseButtonUp(0))

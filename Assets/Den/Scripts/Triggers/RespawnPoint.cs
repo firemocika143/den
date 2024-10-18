@@ -23,21 +23,15 @@ public class RespawnPoint : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.E))
             {
-                SetRespawnPoint();
-                DataPersistenceManager.instance.SaveGame();
+                GameManager.Instance.ManualSave();
+
                 //change sign appearance
+                if (!sign.activeSelf) StartCoroutine(ShowSaveSign());
             }
         }
     }
 
-    public void SetRespawnPoint()
-    {
-        //GameManager.Instance.
-
-        sign.SetActive(true);
-    }
-
-    void EnterTrigger()
+    public void EnterTrigger()
     {
         onTrigger = true;
 
@@ -45,11 +39,18 @@ public class RespawnPoint : MonoBehaviour
         //camera zoom out, focusing on the respawnPoint 
     }
 
-    void ExitTrigger()
+    public void ExitTrigger()
     {
         onTrigger = false;
 
         //camera zoom in, focusing on the player
         //camera follow player
+    }
+
+    private IEnumerator ShowSaveSign()
+    {
+        sign.SetActive(true);
+        yield return new WaitForSeconds(3);
+        sign.SetActive(false);
     }
 }

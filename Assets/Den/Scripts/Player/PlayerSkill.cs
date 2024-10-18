@@ -14,7 +14,7 @@ public class PlayerSkill : MonoBehaviour
     void Start()
     {
         playerController = GetComponent<PlayerController>();
-        LightDrawInit();
+        //LightDrawInit();
     }
 
     private void Update()
@@ -37,5 +37,6 @@ public class PlayerSkill : MonoBehaviour
 
         lightDraw = new LightDraw();
         lightDraw.lineRenderer = GetComponent<LineRenderer>();
+        lightDraw.lineRenderer.enabled = true;
     }
 }
