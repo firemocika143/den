@@ -10,7 +10,6 @@ public class Boss1LeftUpperArmMovementTest : MonoBehaviour
     public float rightUpperArmSpeed = 50f;   // Speed at which upper arm rotates
     public float rightUpperArmMaxAngle = 60f;   // Maximum raising angle for upper arm (positive for right hand)
     public float rightUpperArmMinAngle = -10f;  // Minimum lowering angle for upper arm (negative for right hand)
-    private RigidbodyConstraints2D rightUpperArmOriginalConstrains;
 
     [Header("Right Lower Arm")]
     public Rigidbody2D rightLowerArmRigidbody;
@@ -18,7 +17,6 @@ public class Boss1LeftUpperArmMovementTest : MonoBehaviour
     public float rightLowerArmSpeed = 50f;   // Speed at which lower arm rotates
     public float rightLowerArmMaxAngle = 120f;  // Maximum raising angle for lower arm (positive for right hand)
     public float rightLowerArmMinAngle = 30f;   // Minimum angle for lower arm (when hand is down, positive for right hand)
-    private RigidbodyConstraints2D rightLowerArmOriginalConstrains;
 
     private bool raising = true;  // Control whether arm is raising or lowering
     
@@ -31,14 +29,12 @@ public class Boss1LeftUpperArmMovementTest : MonoBehaviour
         rightUpperArmLimits.min = rightUpperArmMinAngle;
         rightUpperArmJoint.limits = rightUpperArmLimits;
         rightUpperArmJoint.useLimits = true;
-        rightUpperArmOriginalConstrains = rightUpperArmRigidbody.constraints;
 
         JointAngleLimits2D rightLowerArmLimits = new JointAngleLimits2D();
         rightLowerArmLimits.max = rightLowerArmMaxAngle;
         rightLowerArmLimits.min = rightLowerArmMinAngle;
         rightLowerArmJoint.limits = rightLowerArmLimits;
         rightLowerArmJoint.useLimits = true;
-        rightLowerArmOriginalConstrains = rightLowerArmRigidbody.constraints;
 
         // Make sure motor is enabled on both joints
         rightUpperArmJoint.useMotor = true;
@@ -69,8 +65,6 @@ public class Boss1LeftUpperArmMovementTest : MonoBehaviour
             else
             {
                 rightUpperMotor.motorSpeed = 0;  // Stop when max angle reached
-                //rightUpperArmJoint.useMotor = false;
-                //rightUpperArmRigidbody.constraints = RigidbodyConstraints2D.FreezeRotation;
             }
 
             if (rightLowerArmAngle < rightLowerArmMaxAngle)
@@ -80,18 +74,12 @@ public class Boss1LeftUpperArmMovementTest : MonoBehaviour
             else
             {
                 rightLowerMotor.motorSpeed = 0;
-                //rightLowerArmJoint.useMotor = false;
-                //rightLowerArmRigidbody.constraints = RigidbodyConstraints2D.FreezeRotation;
             }
 
             // If both arms reach their max angles, switch to lowering
             if (rightUpperArmAngle >= rightUpperArmMaxAngle && rightLowerArmAngle >= rightLowerArmMaxAngle)
             {
                 raising = false;
-                //rightUpperArmRigidbody.constraints = rightUpperArmOriginalConstrains;
-                //rightLowerArmRigidbody.constraints = rightLowerArmOriginalConstrains;
-                //rightUpperArmJoint.useMotor = true;
-                //rightLowerArmJoint.useMotor = true;
             }
         }
         else
@@ -104,8 +92,6 @@ public class Boss1LeftUpperArmMovementTest : MonoBehaviour
             else
             {
                 rightUpperMotor.motorSpeed = 0;
-                //rightUpperArmJoint.useMotor = false;
-                //rightUpperArmRigidbody.constraints = RigidbodyConstraints2D.FreezeRotation;
             }
 
             if (rightLowerArmAngle > rightLowerArmMinAngle)
@@ -115,60 +101,17 @@ public class Boss1LeftUpperArmMovementTest : MonoBehaviour
             else
             {
                 rightLowerMotor.motorSpeed = 0;
-                //rightLowerArmJoint.useMotor = false;
-                //rightLowerArmRigidbody.constraints = RigidbodyConstraints2D.FreezeRotation;
             }
 
             // If both arms reach their min angles, switch to raising
             if (rightUpperArmAngle <= rightUpperArmMinAngle && rightLowerArmAngle <= rightLowerArmMinAngle)
             {
                 raising = true;
-                //rightUpperArmRigidbody.constraints = rightUpperArmOriginalConstrains;
-                //rightLowerArmRigidbody.constraints = rightLowerArmOriginalConstrains;
-                ////rightUpperArmJoint.useMotor = true;
-                //rightLowerArmJoint.useMotor = true;
             }
         }
-
-        //// Explicitly stop the motor if the angles exceed the limits (safety check)
-        //if (rightUpperArmAngle >= rightUpperArmMaxAngle || rightUpperArmAngle <= rightUpperArmMinAngle)
-        //{
-        //    rightUpperMotor.motorSpeed = 0;
-        //}
-
-        //if (rightLowerArmAngle >= rightLowerArmMaxAngle || rightLowerArmAngle <= rightLowerArmMinAngle)
-        //{
-        //    rightLowerMotor.motorSpeed = 0;
-        //}
 
         // Apply motor settings back to the joints
         rightUpperArmJoint.motor = rightUpperMotor;
         rightLowerArmJoint.motor = rightLowerMotor;
     }
-
-    //private bool rotateAutomatic(HingeJoint2D hingeJoint, float motorSpeed, float lowerAngle, float upperAngle, bool rotatingToUpper)
-    //{
-    //    float currentAngle = hingeJoint.jointAngle;
-
-    //    // 判斷是否達到上限角度，改變旋轉方向
-    //    if (rotatingToUpper && currentAngle >= upperAngle - tolerance)
-    //    {
-    //        rotatingToUpper = false;
-    //    }
-    //    else if (!rotatingToUpper && currentAngle <= lowerAngle + tolerance)
-    //    {
-    //        rotatingToUpper = true;
-    //    }
-
-    //    // 設置馬達的速度方向
-    //    JointMotor2D motor = hingeJoint.motor;
-    //    motor.motorSpeed = rotatingToUpper ? motorSpeed : -motorSpeed;
-    //    hingeJoint.motor = motor;
-
-    //    // 啟用馬達
-    //    hingeJoint.useMotor = true;
-
-
-    //    return rotatingToUpper;
-    //}
 }
