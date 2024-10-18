@@ -43,18 +43,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public class SpawnPointInfo
-    {
-        public Vector3 respawnPosition;
-        public int respawnPointNumber;
-    }
-
-    public SpawnPointInfo lastRespawnPoint;
-
     [SerializeField]
     private GameObject playerPrefab;
+    [SerializeField]
+    private PlayerUI playerUI;
 
+    public void ManualSave()
+    {
+        
 
+    }
 
 
 
@@ -69,7 +67,17 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void PlayerRespawn()
     {
+        GameObject player = Instantiate(playerPrefab);
+        //set player transform.position
+    }
 
+    public void RecoverPlayer()
+    {
+        PlayerController pc = FindFirstObjectByType<PlayerController>();
+        if (pc != null)
+        {
+            pc.state.health = pc.state.maxHealth;
+        }
     }
     //Audio and Screen Settings
     //Game Progress

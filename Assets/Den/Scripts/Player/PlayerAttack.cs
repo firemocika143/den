@@ -11,17 +11,19 @@ public class PlayerAttack : MonoBehaviour
     public int attack;
 
     [SerializeField]
-    private PlayerSkill skill;
-    [SerializeField]
     private Transform attackPoint;
     [SerializeField]
     private GameObject drawLight;// why isn't this working?
 
     private Vector3 pos;
+    private PlayerController playerController;
+    private PlayerSkill skill;
 
     private void Start()
     {
         drawLight.SetActive(false);
+        playerController = GetComponent<PlayerController>();
+        skill = GetComponent<PlayerSkill>();
     }
 
     private void Update()
@@ -56,6 +58,13 @@ public class PlayerAttack : MonoBehaviour
         }
     }
 
+    //LightDraw
+    public void ObtainLightDraw()
+    {
+        if (skill.lightDraw != null) return;
+
+        skill.LightDrawInit(); 
+    }
     private void DetectDrawStart()
     {
         pos = Input.mousePosition;
@@ -65,35 +74,40 @@ public class PlayerAttack : MonoBehaviour
         {
             attackPoint.position = Camera.main.ScreenToWorldPoint(pos);
             Attack();
-            drawLight.SetActive(true);
-            skill.LightDrawStart(attackPoint.position);
+            skill.lightDraw.LightDrawStart(attackPoint.position);
             //TODO - cost light energy with time
         }
     }
-
     private void UpdateDraw()
     {
         //TODO - if they are, while they drag the mouse, cost light energy and move attacking point position
         if (Input.GetMouseButton(0))
         {
-            skill.LightDrawUpdate();
+            skill.lightDraw.LightDrawUpdate();
 
             pos = Input.mousePosition;
             pos.z = 0;
             attackPoint.position = Camera.main.ScreenToWorldPoint(pos);
+
+            if (!drawLight.activeSelf) drawLight.SetActive(true);
             drawLight.transform.position = new Vector3(attackPoint.position.x, attackPoint.position.y, 0);
 
             Attack();
+
+            if (Time.time - skill.lightDraw.costTimer > skill.lightDraw.costTime)
+            {
+                playerController.UseLightEnergy(skill.lightDraw.costPerTime);
+                skill.lightDraw.costTimer = Time.time;
+            }
         }
     }
-
     private void DetectEndDraw()
     {
         if (Input.GetMouseButtonUp(0))
         {
             attackPoint.position = transform.position;
             drawLight.SetActive(false);
-            skill.LightDrawEnd();
+            skill.lightDraw.LightDrawEnd();
         }
     }
 

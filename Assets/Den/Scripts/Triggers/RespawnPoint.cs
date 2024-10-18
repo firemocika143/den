@@ -24,7 +24,7 @@ public class RespawnPoint : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.E))
             {
                 SetRespawnPoint();
-
+                DataPersistenceManager.instance.SaveGame();
                 //change sign appearance
             }
         }
@@ -32,8 +32,7 @@ public class RespawnPoint : MonoBehaviour
 
     public void SetRespawnPoint()
     {
-        GameManager.Instance.lastRespawnPoint.respawnPointNumber = RespawnPointNumber;
-        GameManager.Instance.lastRespawnPoint.respawnPosition = respawnPosition;
+        //GameManager.Instance.
 
         sign.SetActive(true);
     }
