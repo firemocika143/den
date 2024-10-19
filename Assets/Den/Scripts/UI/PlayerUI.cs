@@ -28,4 +28,12 @@ public class PlayerUI : MonoBehaviour
     {
         lightEnergyBar.SetMax(max);
     }
+    
+    //public void UpdateAll(int m_h, int h, int m_l, int l)
+    //{
+    //    healthBar.SetMax(m_h);
+    //    healthBar.SetValue(h);
+    //    lightEnergyBar.SetMax(m_l);
+    //    lightEnergyBar.SetValue(l);
+    //}
 }

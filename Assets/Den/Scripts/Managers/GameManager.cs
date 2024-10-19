@@ -1,7 +1,11 @@
+using Cinemachine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
+[DefaultExecutionOrder(-9999)]
 public class GameManager : MonoBehaviour
 {
     private static bool s_IsShuttingDown = false;
@@ -47,6 +51,20 @@ public class GameManager : MonoBehaviour
     private GameObject playerPrefab;
     [SerializeField]
     private PlayerUI playerUI;
+    [SerializeField]
+    private GameObject spawnPoint;
+    [SerializeField]
+    private CinemachineVirtualCamera v_cm;
+
+    [Serializable]
+    public class SkillItems
+    {
+        [Header("Skill Items")]
+        public GameObject lightDrawItem;
+    }
+
+    [SerializeField]
+    private SkillItems skillItems;
 
     [System.Serializable]
     public class KeySettings
@@ -65,6 +83,13 @@ public class GameManager : MonoBehaviour
 
     public KeySettings keySettings;
 
+    public void Start()
+    {
+        //if everything is done, respawn the character(player)
+        //StartCoroutine(WaitToRespawn(2.5f));
+        //if (!FindAnyObjectByType<PlayerController>()) PlayerRespawn();
+    }
+
     public void ManualSave()
     {
         PlayerController pc = FindFirstObjectByType<PlayerController>();
@@ -73,26 +98,35 @@ public class GameManager : MonoBehaviour
         DataPersistenceManager.instance.SaveGame();
     }
 
-
-
-
-
-
-    //Player Dead Animation
-
+    //Player Dead CutScene
     //Player Respawn
     /// <summary>
-    /// Called in PlayerController? Instantiating a new player object with some same max values, also put the player to the last saved position
+    /// Called in PlayerController if a player is dying. Instantiating a new player object with some same max values, also put the player to the spawn point
+    /// actually this should be run at the start of every game and every respawn
     /// </summary>
-    public void PlayerRespawn()
+    public void PlayerRespawn(GameObject player)//passing in a game object is usually bad, this is a temp solution
     {
-        GameObject player = Instantiate(playerPrefab);
-        //set player transform.position
+        // Maybe I need to find if destroying the player is the correct decision, and also the way to controll the progress and the camera
+        //GameObject player = Instantiate(playerPrefab, spawnPoint.transform.position, Quaternion.identity);
+        player.transform.position = spawnPoint.transform.position;
+        if (player != null) v_cm.Follow = player.transform;
+        DataPersistenceManager.instance.LoadGame();//something work weird here
+
+        if (player.TryGetComponent<PlayerController>(out PlayerController pc))
+        {
+            if (pc.state.getLightDraw && skillItems.lightDrawItem != null)
+            {
+                //this is not a good way, there will not only this item needed to be controlled in the future
+                skillItems.lightDrawItem.SetActive(false);
+            }
+        }
+
     }
 
-    public void RecoverPlayer()
+    public IEnumerator WaitToRespawn(float t)
     {
-        
+        yield return new WaitForSeconds(t);
+        //if (!FindAnyObjectByType<PlayerController>()) PlayerRespawn();
     }
     //Audio and Screen Settings
     //Game Progress

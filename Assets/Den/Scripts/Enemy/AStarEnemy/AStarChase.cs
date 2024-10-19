@@ -7,10 +7,10 @@ public class AStarChase: MonoBehaviour
 {
     public Transform target;
     public Transform idlePos;
-    public PlayerController pc;
     public string playerTag = "Player";
 
     private AIDestinationSetter ai;
+    private PlayerController pc;
 
     [SerializeField]
     private AStarEnemyDetector ASEDetector;
@@ -18,6 +18,8 @@ public class AStarChase: MonoBehaviour
     void Start()
     {
         ai = GetComponent<AIDestinationSetter>();
+        pc = FindFirstObjectByType<PlayerController>();
+        target = pc.transform;//ugh... this is not actually good, I hope it wouldn't be restricted to pc only
     }
     
     void Update()

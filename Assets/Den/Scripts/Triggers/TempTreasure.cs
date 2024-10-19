@@ -8,8 +8,7 @@ public class TempTreasure : MonoBehaviour
     private bool usable = false;
     //private bool open = false;
 
-    [SerializeField]
-    private PlayerController playerController;
+    private PlayerController pc;
     [SerializeField]
     private GameObject sign;
 
@@ -36,12 +35,34 @@ public class TempTreasure : MonoBehaviour
         //        open = false;
         //    }
         //}
-        if (usable)
+        if (usable && pc != null)
         {
             if (Input.GetKeyDown(KeyCode.E))
             {
-                playerController.Recover(1000);
+                pc.Recover(1000);
             }
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.CompareTag("Player"))
+        {
+            sign.SetActive(true);
+            usable = true;
+            Debug.Log("Triggered");
+            pc = col.GetComponent<PlayerController>();
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D col)
+    {
+        if (col.CompareTag("Player"))
+        {
+            sign.SetActive(false);
+            usable = false;
+            Debug.Log("Exited");
+            pc = null;
         }
     }
 
@@ -59,5 +80,7 @@ public class TempTreasure : MonoBehaviour
         usable = false;
         Debug.Log("Exited");
     }
+
+    
 
 }

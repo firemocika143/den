@@ -19,7 +19,7 @@ public class PlayerOneWayPlatform : MonoBehaviour
         {
             if (currOneWayPlatform != null)
             {
-                StartCoroutine(DisableCollision());
+                StartCoroutine(DisableCollision());//there poped out an error message when I am climbing but not colliding on the top platform of the ladder and press S
             }
         }
     }

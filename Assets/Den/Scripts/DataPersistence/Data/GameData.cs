@@ -6,11 +6,9 @@ public class GameData
 {
     //Player
     public int maxHealth;
-    public int health;
     public int maxLightEnergy;
-    public int lightEnergy;
+    public bool getLightDraw;
     
 
     //Game
-    public int playerSpawnPoint;
 }

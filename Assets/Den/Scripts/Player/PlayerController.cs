@@ -29,6 +29,9 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         [Header("Other Player State Settings")]
         public bool isHittable = true;
         public float unhittableTime = 1f;
+
+        [Header("Skill Obtaining States")]
+        public bool getLightDraw = false;
     }
 
     public PlayerState state;
@@ -51,6 +54,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
 
     private PlayerMovement playerMovement;
     private PlayerUI playerUI;
+    private PlayerAttack playerAttack;
     private float unhittableTimer;
     
     private void Start()
@@ -61,6 +65,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         //loseLightCoroutine = StartCoroutine(LoseLight());
 
         playerMovement = GetComponent<PlayerMovement>();
+        playerAttack = GetComponent<PlayerAttack>();
         playerUI = FindFirstObjectByType<PlayerUI>();//this is not good..., nut how to set UI Manager?
         if (TryGetComponent<LineRenderer>(out var lineRenderer))
         {
@@ -95,9 +100,9 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         }
     }
 
-    //what if we leave one and enter the other one immediately?
     private void OnTriggerExit2D(Collider2D col)
     {
+        //what if we leave one and enter the other one immediately?
         if (col.gameObject.CompareTag("LightSource"))
         {
             LeaveLightSource();
@@ -118,7 +123,6 @@ public class PlayerController : MonoBehaviour, IDataPersistence
             if (state.health <= 0)
             {
                 PlayerKilled();
-                PlayerReturn();//this maybe should be a function in GameManager?
             }
         }
     }
@@ -150,12 +154,13 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     //Events functions
     private void PlayerKilled()
     {
-        // TODO - player dying
+        // TODO - player dying Animation
+        GameManager.Instance.PlayerRespawn(this.gameObject);
+
+        // Actually, most things went wrong if I really destroy the player, maybe this is not a good solution
+        //Destroy(gameObject);
     }
-    private void PlayerReturn()
-    {
-        // TODO - Respawn Player, but maybe not here
-    }
+
     public void GetIntoLightSource()
     {
         //Called in OnCollisionEnter2D when the player lights on this lantern and when they enters the light area of this lantern
@@ -166,6 +171,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         lightSystem.IntoLightSourceLightOff();
         //TODO - show some particles or animations
     }
+
     public void LeaveLightSource()
     {
         //Called by OnCollisionExit2D when the player exits the light area
@@ -179,6 +185,13 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         }
 
         //TODO - show some particles or animations
+    }
+
+    //Player skill
+    public void ObtainLightDraw()
+    {
+        state.getLightDraw = true;
+        playerAttack.ObtainLightDraw();
     }
 
     //UI
@@ -212,13 +225,16 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     {
         this.state.maxHealth = gameData.maxHealth;
         this.state.maxLightEnergy = gameData.maxLightEnergy;
+        this.state.getLightDraw = gameData.getLightDraw;
 
         AllRecover();
+        if (this.state.getLightDraw) ObtainLightDraw();
     }
 
     public void SaveData(ref GameData gameData)
     {
         gameData.maxHealth = this.state.maxHealth;
         gameData.maxLightEnergy = this.state.maxLightEnergy;
+        gameData.getLightDraw = this.state.getLightDraw;
     }
 }

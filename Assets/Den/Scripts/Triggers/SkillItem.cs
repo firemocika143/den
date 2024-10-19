@@ -7,7 +7,7 @@ public class SkillItem : MonoBehaviour
     [SerializeField]
     private GameObject sign;
 
-    private PlayerAttack pa = null;
+    private PlayerController pc = null;
 
     private void Start()
     {
@@ -16,11 +16,11 @@ public class SkillItem : MonoBehaviour
 
     private void Update()
     {
-        if (pa != null)
+        if (pc != null)
         {
             if (Input.GetKeyDown(KeyCode.E))
             {
-                pa.ObtainLightDraw();
+                pc.ObtainLightDraw();
                 Destroy(gameObject);
             }
         }
@@ -31,7 +31,7 @@ public class SkillItem : MonoBehaviour
         if (col.CompareTag("Player"))
         {
             sign.SetActive(true);
-            pa = col.GetComponent<PlayerAttack>();
+            pc = col.GetComponent<PlayerController>();
         }
     }
 
@@ -40,7 +40,7 @@ public class SkillItem : MonoBehaviour
         if (col.CompareTag("Player"))
         {
             sign.SetActive(false);
-            pa = null;
+            pc = null;
         }
     }
 }
