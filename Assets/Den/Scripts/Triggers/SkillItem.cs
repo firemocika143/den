@@ -7,33 +7,40 @@ public class SkillItem : MonoBehaviour
     [SerializeField]
     private GameObject sign;
 
+    private PlayerAttack pa = null;
+
     private void Start()
     {
         sign.SetActive(false);
     }
 
-    void OnTriggerEnter2D()
+    private void Update()
     {
-        sign.SetActive(true);
-    }
-
-    private void OnTriggerStay2D(Collider2D col)
-    {
-        if (col.CompareTag("Player"))
+        if (pa != null)
         {
             if (Input.GetKeyDown(KeyCode.E))
             {
-                if (col.TryGetComponent<PlayerAttack>(out PlayerAttack pa))
-                {
-                    pa.ObtainLightDraw();
-                    Destroy(gameObject);
-                }
+                pa.ObtainLightDraw();
+                Destroy(gameObject);
             }
         }
     }
 
-    void OnTriggerExit2D()
+    void OnTriggerEnter2D(Collider2D col)
     {
-        sign.SetActive(false);
+        if (col.CompareTag("Player"))
+        {
+            sign.SetActive(true);
+            pa = col.GetComponent<PlayerAttack>();
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D col)
+    {
+        if (col.CompareTag("Player"))
+        {
+            sign.SetActive(false);
+            pa = null;
+        }
     }
 }

@@ -7,6 +7,8 @@ public class PlayerOneWayPlatform : MonoBehaviour
 
     [SerializeField]
     private GameObject currOneWayPlatform;
+
+    //note: these 2 objects are not allowed to be set in the ladder prefab because they are not parts included by the prefab, we'll need to fix this later
     [SerializeField]
     private BoxCollider2D playerCollider;
     [SerializeField]
@@ -40,7 +42,7 @@ public class PlayerOneWayPlatform : MonoBehaviour
         Physics2D.IgnoreCollision(playerCollider, platformCollider, false);
 
         PlayerController pc = FindFirstObjectByType<PlayerController>();
-        if (pc!= null)
+        if (pc != null)
         {
             playerController.state.climb = true;
         }

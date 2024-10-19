@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class RespawnPoint : MonoBehaviour
 {
-    public int RespawnPointNumber;
     private Vector3 respawnPosition;
     private bool onTrigger;
 
