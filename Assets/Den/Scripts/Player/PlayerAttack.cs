@@ -7,6 +7,7 @@ public class PlayerAttack : MonoBehaviour
 {
     public float attackRange;
     public LayerMask enemyLayer;
+    public LayerMask triggerLayer;
     public float maxDistanceToStart = 10f;
     public int attack;
 
@@ -30,14 +31,21 @@ public class PlayerAttack : MonoBehaviour
     {
         if (!(skill.lightDraw == null))
         {
-            if (skill.lightDraw.isDrawing)
+            if (playerController.state.lightEnergy <= 0)
             {
-                UpdateDraw();
-                DetectEndDraw();
+                if (skill.lightDraw.isDrawing) EndDraw();
             }
             else
             {
-                DetectDrawStart();
+                if (skill.lightDraw.isDrawing)
+                {
+                    UpdateDraw();
+                    DetectEndDraw();
+                }
+                else
+                {
+                    DetectDrawStart();
+                }
             }
         }
     }
@@ -54,6 +62,19 @@ public class PlayerAttack : MonoBehaviour
             if (enemy.TryGetComponent<IEnemy>(out var e))
             {
                 e.Damage(attack);
+            }
+        }
+
+        Collider2D[] hitTriggers = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, triggerLayer);//what about using Raycast here?
+
+        foreach (Collider2D trigger in hitTriggers)
+        {
+            Debug.Log("hitting a light trigger");
+            //TODO - give damage to target enemy
+
+            if (trigger.TryGetComponent<LightTrigger>(out var lt))
+            {
+                lt.Triggered();
             }
         }
     }
@@ -108,10 +129,15 @@ public class PlayerAttack : MonoBehaviour
     {
         if (Input.GetMouseButtonUp(0))
         {
-            attackPoint.position = transform.position;
-            drawLight.SetActive(false);
-            skill.lightDraw.LightDrawEnd();
+            EndDraw();
         }
+    }
+
+    private void EndDraw()
+    {
+        attackPoint.position = transform.position;
+        drawLight.SetActive(false);
+        skill.lightDraw.LightDrawEnd();
     }
 
     private void OnDrawGizmosSelected()
