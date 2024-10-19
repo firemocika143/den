@@ -6,12 +6,15 @@ public class SkillItem : MonoBehaviour
 {
     [SerializeField]
     private GameObject sign;
+    [SerializeField]
+    private GameObject tutorialSign;
 
     private PlayerController pc = null;
 
     private void Start()
     {
         sign.SetActive(false);
+        tutorialSign.SetActive(false);
     }
 
     private void Update()
@@ -21,6 +24,7 @@ public class SkillItem : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.E))
             {
                 pc.ObtainLightDraw();
+                tutorialSign.SetActive(true);
                 Destroy(gameObject);
             }
         }

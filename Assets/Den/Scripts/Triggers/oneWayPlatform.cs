@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using UnityEngine;
 
-public class PlayerOneWayPlatform : MonoBehaviour
+public class OneWayPlatform : MonoBehaviour
 {
 
     [SerializeField]
@@ -11,15 +12,14 @@ public class PlayerOneWayPlatform : MonoBehaviour
     //note: these 2 objects are not allowed to be set in the ladder prefab because they are not parts included by the prefab, we'll need to fix this later
     [SerializeField]
     private BoxCollider2D playerCollider;
-    [SerializeField]
-    private PlayerController playerController;
+    //private PlayerController playerController;
 
     void Update() {
         if (Input.GetKeyDown(KeyCode.S))
         {
-            if (currOneWayPlatform != null)
+            if (currOneWayPlatform != null && playerCollider != null)
             {
-                StartCoroutine(DisableCollision());//there poped out an error message when I am climbing but not colliding on the top platform of the ladder and press S
+                StartCoroutine(DisableCollision());
             }
         }
     }
@@ -41,10 +41,26 @@ public class PlayerOneWayPlatform : MonoBehaviour
         yield return new WaitForSeconds(0.25f);
         Physics2D.IgnoreCollision(playerCollider, platformCollider, false);
 
-        PlayerController pc = FindFirstObjectByType<PlayerController>();
-        if (pc != null)
-        {
-            playerController.state.climb = true;
-        }
+        //PlayerController pc = FindFirstObjectByType<PlayerController>();
+        //if (pc != null)
+        //{
+        //    playerController.state.climb = true;
+        //}
     }
+
+    //private void OnCollisionEnter2D(Collision2D col)
+    //{
+    //    if (col.gameObject.CompareTag("Player"))
+    //    {
+    //        playerCollider = col.gameObject.GetComponent<BoxCollider2D>();
+    //    }
+    //}
+
+    //private void OnCollisionExit2D(Collision2D col)
+    //{
+    //    if (col.gameObject.CompareTag("Player"))
+    //    {
+    //        playerCollider = null;
+    //    }
+    //}
 }
