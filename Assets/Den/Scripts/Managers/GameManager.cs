@@ -53,8 +53,9 @@ public class GameManager : MonoBehaviour
     private PlayerUI playerUI;
     [SerializeField]
     private GameObject spawnPoint;
+
     [SerializeField]
-    private CinemachineVirtualCamera v_cm;
+    private CinemachineVirtualCamera v_cm;// maybe I should call camera manager to do this
 
     [Serializable]
     public class SkillItems
@@ -83,6 +84,8 @@ public class GameManager : MonoBehaviour
 
     public KeySettings keySettings;
 
+    public bool gamePaused = false;// Can utilize this variable to adjust some settings when game is paused
+
     public void Start()
     {
         //if everything is done, respawn the character(player)
@@ -96,6 +99,20 @@ public class GameManager : MonoBehaviour
         if (pc != null) pc.AllRecover();
 
         DataPersistenceManager.instance.SaveGame();
+    }
+
+    public void PauseGame()
+    {
+        Time.timeScale = 0f;
+        gamePaused = true;
+        // TODO - lower volume of music and SFX
+    }
+
+    public void ResumeGame()
+    {
+        Time.timeScale = 1f;
+        gamePaused = false;
+        // TODO - restore volume of music and SFX
     }
 
     //Player Dead CutScene

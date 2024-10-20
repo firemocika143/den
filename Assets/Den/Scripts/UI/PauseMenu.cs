@@ -5,39 +5,34 @@ using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
-    // Can utilize this variable to adjust some settings when game is paused
-    public static bool GamePaused = false;
+    //public GameObject PauseMenuUI;
 
-    public GameObject PauseMenuUI;
+    //void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.Escape))
+    //    {
+    //        if (GameManager.Instance.gamePaused)
+    //        {
+    //            Resume();
+    //        }
+    //        else
+    //        {
+    //            Pause();
+    //        }
+    //    }
+    //}
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            if (GamePaused)
-            {
-                Resume();
-            }
-            else
-            {
-                Pause();
-            }
-        }
-    }
+    //public void Resume()
+    //{
+    //    PauseMenuUI.SetActive(false);
+    //    GameManager.Instance.ResumeGame();
+    //}
 
-    public void Resume()
-    {
-        PauseMenuUI.SetActive(false);
-        Time.timeScale = 1f;
-        GamePaused = false;
-    }
-
-    void Pause()
-    {
-        PauseMenuUI.SetActive(true);
-        Time.timeScale = 0f;
-        GamePaused = true;
-    }
+    //void Pause()
+    //{
+    //    PauseMenuUI.SetActive(true);
+    //    GameManager.Instance.PauseGame();
+    //}
 
     public void LoadMenu()
     {
