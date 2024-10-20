@@ -9,6 +9,8 @@ public class CameraManager : MonoBehaviour
 
     [SerializeField]
     private CinemachineVirtualCamera v_cm;
+    [SerializeField]
+    private CinemachineConfiner2D confiner;
 
     private void Start()
     {
@@ -28,5 +30,12 @@ public class CameraManager : MonoBehaviour
         if (v_cm == null) return;
 
         v_cm.Follow = target;
+    }
+
+    public void SwitchBound(PolygonCollider2D bound)
+    {
+        v_cm.PreviousStateIsValid = false;
+        confiner.m_BoundingShape2D = bound;
+        confiner.InvalidateCache();
     }
 }
