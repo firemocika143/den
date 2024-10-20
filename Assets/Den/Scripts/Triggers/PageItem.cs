@@ -32,7 +32,7 @@ public class PageItem : MonoBehaviour
 
     private void Update()
     {
-        if (onTrigger && Input.GetKeyDown(KeyCode.E))
+        if (onTrigger && Input.GetKeyDown(KeyCode.E) && !UIManager.Instance.PauseMenuOpened())// I don't think check if game paused here is good though 
         {
             if (!beingRead)
             {

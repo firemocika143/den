@@ -20,7 +20,7 @@ public class UIManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (GameManager.Instance.gamePaused) Resume();
+            if (GameManager.Instance.gamePaused && pauseMenuPanel.activeSelf) Resume();
             else Pause();
         }
     }
@@ -50,6 +50,11 @@ public class UIManager : MonoBehaviour
     public void Resume()
     {
         pauseMenuPanel.SetActive(false);
-        GameManager.Instance.ResumeGame();
+        if (!pagePanel.activeSelf) GameManager.Instance.ResumeGame();
+    }
+
+    public bool PauseMenuOpened()
+    {
+        return pauseMenuPanel.activeSelf; 
     }
 }
