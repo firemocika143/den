@@ -10,14 +10,17 @@ public class PageItem : MonoBehaviour
     public class Page
     {
         public Sprite graph;
+
+        //page resolution
+        [Header("Resolution")]
+        public float width;
+        public float height;
     }
 
     public Page page; 
 
     [SerializeField]
     private GameObject sign;
-    [SerializeField]
-    private Light2D backLight;
 
     private bool onTrigger;
     private bool beingRead = false;
@@ -29,10 +32,18 @@ public class PageItem : MonoBehaviour
 
     private void Update()
     {
-        if (onTrigger && Input.GetKeyDown(KeyCode.E) && !beingRead)
+        if (onTrigger && Input.GetKeyDown(KeyCode.E))
         {
-            UIManager.Instance.ReadPage(page);// this is a little bit inefficient
-            beingRead = true;
+            if (!beingRead)
+            {
+                UIManager.Instance.ReadPage(page);// this is a little bit inefficient
+                beingRead = true;
+            }
+            else
+            {
+                UIManager.Instance.ClosePage();// this is a little bit inefficient
+                beingRead = false;
+            }
         }
     }
 

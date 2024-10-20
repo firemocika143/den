@@ -29,6 +29,8 @@ public class PlayerAttack : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.Instance.gamePaused) return;
+
         if (!(skill.lightDraw == null))
         {
             if (playerController.state.lightEnergy <= 0)

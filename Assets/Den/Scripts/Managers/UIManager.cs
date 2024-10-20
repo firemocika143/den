@@ -37,8 +37,8 @@ public class UIManager : MonoBehaviour
 
     public void ClosePage()
     {
-        GameManager.Instance.ResumeGame();
         pagePanel.SetActive(false);
+        GameManager.Instance.ResumeGame();
     }
 
     private void Pause()
@@ -47,7 +47,7 @@ public class UIManager : MonoBehaviour
         GameManager.Instance.PauseGame();
     }
 
-    private void Resume()
+    public void Resume()
     {
         pauseMenuPanel.SetActive(false);
         GameManager.Instance.ResumeGame();
