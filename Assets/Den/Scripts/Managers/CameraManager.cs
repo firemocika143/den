@@ -8,9 +8,16 @@ public class CameraManager : MonoBehaviour
     public static CameraManager Instance { get; private set; }
 
     [SerializeField]
-    private CinemachineVirtualCamera v_cm;
+    private CinemachineVirtualCamera fst_vcam;
     [SerializeField]
-    private CinemachineConfiner2D confiner;
+    private List<CinemachineVirtualCamera> vcams;
+
+    private CinemachineVirtualCamera curr_vcam;
+
+    private void Awake()
+    {
+        SwitchVirtualCamera(fst_vcam);
+    }
 
     private void Start()
     {
@@ -19,23 +26,25 @@ public class CameraManager : MonoBehaviour
 
     public void FixCamera(Transform target)
     {
-        if (v_cm == null) return;
+        if (curr_vcam == null) return;
 
-        v_cm.Follow = null;
-        v_cm.Follow = target;
+        curr_vcam.Follow = null;
+        curr_vcam.Follow = target;
     }
 
     public void Follow(Transform target)
     {
-        if (v_cm == null) return;
+        if (curr_vcam == null) return;
 
-        v_cm.Follow = target;
+        curr_vcam.Follow = target;
     }
 
-    public void SwitchBound(PolygonCollider2D bound)
+    public void SwitchVirtualCamera(CinemachineVirtualCamera vcam)
     {
-        v_cm.PreviousStateIsValid = false;
-        confiner.m_BoundingShape2D = bound;
-        confiner.InvalidateCache();
+        foreach (var c in vcams)
+        {
+            c.enabled = c == vcam;
+            if (c == vcam) curr_vcam = c;
+        }
     }
 }
