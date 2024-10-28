@@ -28,7 +28,6 @@ public class CameraManager : MonoBehaviour
     {
         if (curr_vcam == null) return;
 
-        curr_vcam.Follow = null;
         curr_vcam.Follow = target;
     }
 

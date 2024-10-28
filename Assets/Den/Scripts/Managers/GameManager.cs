@@ -54,9 +54,6 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject spawnPoint;
 
-    [SerializeField]
-    private CinemachineVirtualCamera v_cm;// maybe I should call camera manager to do this
-
     [Serializable]
     public class SkillItems
     {
@@ -126,17 +123,17 @@ public class GameManager : MonoBehaviour
         // Maybe I need to find if destroying the player is the correct decision, and also the way to controll the progress and the camera
         //GameObject player = Instantiate(playerPrefab, spawnPoint.transform.position, Quaternion.identity);
         player.transform.position = spawnPoint.transform.position;
-        if (player != null) v_cm.Follow = player.transform;
+        if (player != null) CameraManager.Instance.Follow(player.transform);
         DataPersistenceManager.instance.LoadGame();//something work weird here
 
-        if (player.TryGetComponent<PlayerController>(out PlayerController pc))
-        {
-            if (pc.state.getLightDraw && skillItems.lightDrawItem != null)
-            {
-                //this is not a good way, there will not only this item needed to be controlled in the future
-                skillItems.lightDrawItem.SetActive(false);
-            }
-        }
+        //if (player.TryGetComponent<PlayerController>(out PlayerController pc))
+        //{
+        //    if (pc.state.getLightDraw && skillItems.lightDrawItem != null)
+        //    {
+        //        //this is not a good way, there will not only this item needed to be controlled in the future
+        //        skillItems.lightDrawItem.SetActive(false);
+        //    }
+        //}
 
     }
 

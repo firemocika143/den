@@ -30,8 +30,8 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         public bool isHittable = true;
         public float unhittableTime = 1f;
 
-        [Header("Skill Obtaining States")]
-        public bool getLightDraw = false;
+        //[Header("Skill Obtaining States")]
+        //public bool getLightDraw = false;
     }
 
     public PlayerState state;
@@ -71,6 +71,8 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         {
             lineRenderer.enabled = false;
         }
+
+        LeaveLightSource();
     }
 
     private void Update()
@@ -139,6 +141,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         state.health = state.maxHealth;
         state.lightEnergy = state.maxLightEnergy;
 
+        if (playerUI == null) return;
         playerUI.UpdateMaxHealth(state.maxHealth);
         playerUI.UpdateHealth(state.health);
         playerUI.UpdateMaxLightEnergy(state.maxLightEnergy);
@@ -190,7 +193,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     //Player skill
     public void ObtainLightDraw()
     {
-        state.getLightDraw = true;
+        //state.getLightDraw = true;
         playerAttack.ObtainLightDraw();
     }
 
@@ -218,23 +221,23 @@ public class PlayerController : MonoBehaviour, IDataPersistence
             }
         }
 
-        playerUI.UpdateLightEnergy(state.lightEnergy);
+        if (playerUI != null) playerUI.UpdateLightEnergy(state.lightEnergy);
     }
 
     public void LoadData(GameData gameData)
     {
         this.state.maxHealth = gameData.maxHealth;
         this.state.maxLightEnergy = gameData.maxLightEnergy;
-        this.state.getLightDraw = gameData.getLightDraw;
+        //this.state.getLightDraw = gameData.getLightDraw;
 
         AllRecover();
-        if (this.state.getLightDraw) ObtainLightDraw();
+        //if (this.state.getLightDraw) ObtainLightDraw();
     }
 
     public void SaveData(ref GameData gameData)
     {
         gameData.maxHealth = this.state.maxHealth;
         gameData.maxLightEnergy = this.state.maxLightEnergy;
-        gameData.getLightDraw = this.state.getLightDraw;
+        //gameData.getLightDraw = this.state.getLightDraw;
     }
 }
