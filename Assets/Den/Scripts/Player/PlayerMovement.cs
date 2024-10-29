@@ -47,6 +47,18 @@ public class PlayerMovement : MonoBehaviour
     {
         Jump();
         Climb();
+
+        if (!playerController.state.climb)
+        {
+            if (rb.velocity.y > 0) playerController.state.movingUp = true;
+            else if (rb.velocity.y < 0) playerController.state.movingDown = true;
+            else
+            {
+                playerController.state.movingUp = false;
+                playerController.state.movingDown = false;
+            }
+            //an anim for climb would be great
+        }
     }
 
     void FixedUpdate()//Physics related updates
@@ -79,6 +91,11 @@ public class PlayerMovement : MonoBehaviour
             if (horizontal != 0)
             {
                 Flip(horizontal);
+                playerController.state.horMoving = true;
+            }
+            else
+            {
+                playerController.state.horMoving = false;
             }
         }
     }
@@ -104,8 +121,6 @@ public class PlayerMovement : MonoBehaviour
             {
                 rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
             }
-
-            
         }
     }
 

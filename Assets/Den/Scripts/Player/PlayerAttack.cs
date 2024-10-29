@@ -99,6 +99,7 @@ public class PlayerAttack : MonoBehaviour
             attackPoint.position = Camera.main.ScreenToWorldPoint(pos);
             Attack();
             skill.lightDraw.LightDrawStart(attackPoint.position);
+            playerController.state.attacking = true;
             //TODO - cost light energy with time
         }
     }
@@ -137,6 +138,8 @@ public class PlayerAttack : MonoBehaviour
 
     private void EndDraw()
     {
+        //playerController.state.attacking = false;//uh... now this should be in playeranimation for deciding the animation for player controller, that's bad
+        playerController.state.attackEnd = true;
         attackPoint.position = transform.position;
         drawLight.SetActive(false);
         skill.lightDraw.LightDrawEnd();

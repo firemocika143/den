@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using static PlayerAnimation;
 
 public class PlayerController : MonoBehaviour, IDataPersistence
 {
@@ -12,6 +13,9 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         [Header("Movement State")]
         public bool stop = false;
         public bool climb = false;
+        public bool horMoving = false;
+        public bool movingUp;
+        public bool movingDown;
 
         //health
         [Header("Health")]
@@ -25,16 +29,20 @@ public class PlayerController : MonoBehaviour, IDataPersistence
 
         [Header("Attack")]
         public int attack = 1;
+        public bool attacking = false;
+        public bool attackEnd = false;
 
         [Header("Other Player State Settings")]
         public bool isHittable = true;
         public float unhittableTime = 1f;
+        public bool dying = false;
 
         //[Header("Skill Obtaining States")]
         //public bool getLightDraw = false;
     }
 
     public PlayerState state;
+    public PlayerAnimationState currState;
 
     //light
     [Header("Other Light Settings")]
@@ -48,6 +56,8 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     [Header("Handlers")]
     [SerializeField]
     private PlayerLightSystem lightSystem;
+    [SerializeField]
+    private PlayerAnimation playerAnimation;
     
     private float gainLightTimer; 
     private float loseLightTimer;
@@ -81,7 +91,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         {
             lightSystem.LightOff();
         }
-        else if (state.lightEnergy > 0 && !lightSystem.Lighting() && !isInLightSource)
+        else if (state.lightEnergy > 0 && !lightSystem.Lighting() && !isInLightSource && !state.dying)
         {
             lightSystem.LightOn();
         }
@@ -92,6 +102,8 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         {
             state.isHittable = true;
         }
+
+        DecidePlayerAnimation();
     }
 
     private void OnTriggerEnter2D(Collider2D col)
@@ -155,10 +167,29 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     }
 
     //Events functions
+    public void StopPlayer()
+    {
+        state.stop = true;
+        state.movingUp = false;
+        state.movingDown = false;
+        state.horMoving = false;
+        state.attacking = false;
+        state.attackEnd = false;
+    }
+
     private void PlayerKilled()
     {
         // TODO - player dying Animation
-        GameManager.Instance.PlayerRespawn(this.gameObject);
+        state.dying = true;
+        StopPlayer();
+        lightSystem.CenterLightOff();
+        StartCoroutine(playerAnimation.PlayerDieAnimation(() => 
+        { 
+            GameManager.Instance.PlayerRespawn(this.gameObject);
+            playerAnimation.PlayerRespawnAnimation();
+            state.dying = false;
+            state.stop = false;
+        }));
 
         // Actually, most things went wrong if I really destroy the player, maybe this is not a good solution
         //Destroy(gameObject);
@@ -171,7 +202,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         gainLightTimer = Time.time;
         //TODO - Call function in playerStatus to start adding their light energy, but I don't know how to use coroutine
 
-        lightSystem.IntoLightSourceLightOff();
+        lightSystem.CenterLightOff();
         //TODO - show some particles or animations
     }
 
@@ -195,6 +226,39 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     {
         //state.getLightDraw = true;
         playerAttack.ObtainLightDraw();
+    }
+
+    //PlayerAnimation
+    private void DecidePlayerAnimation()
+    {
+        if (state.dying)
+        {
+            return;
+        }
+        else if (state.attacking)
+        {
+            if (state.attackEnd && currState != PlayerAnimationState.ATTACKEND)
+            {
+                currState = PlayerAnimationState.ATTACKEND;
+            }
+            else if (currState != PlayerAnimationState.ATTACK && currState != PlayerAnimationState.ATTACKEND) currState = PlayerAnimationState.ATTACK;
+        }
+        else
+        {
+            if (state.movingDown)
+            {
+                currState = PlayerAnimationState.FALL;
+            }
+            else if (state.movingUp)
+            {
+                currState = PlayerAnimationState.JUMP;
+            }
+            else if (state.horMoving)
+            {
+                currState = PlayerAnimationState.WALK;
+            }
+            else currState = PlayerAnimationState.IDLE;
+        }
     }
 
     //UI
