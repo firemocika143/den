@@ -124,6 +124,8 @@ public class GameManager : MonoBehaviour
         //GameObject player = Instantiate(playerPrefab, spawnPoint.transform.position, Quaternion.identity);
         player.transform.position = spawnPoint.transform.position;
         if (player != null) CameraManager.Instance.Follow(player.transform);
+        PlayerController pc = player.GetComponent<PlayerController>();
+        pc.state.resting = true;
         DataPersistenceManager.instance.LoadGame();//something work weird here
 
         //if (player.TryGetComponent<PlayerController>(out PlayerController pc))

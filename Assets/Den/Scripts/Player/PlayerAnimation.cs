@@ -22,8 +22,9 @@ public class PlayerAnimation : MonoBehaviour
         ATTACK,
         ATTACKEND,
         DIE,
-        dieTime,
-        DOWN
+        DOWN,
+        REST,
+        STAND
     }
 
     // movement(last)
@@ -46,6 +47,9 @@ public class PlayerAnimation : MonoBehaviour
     public float dieTime;
     public string DOWN;
     public float downTime;
+    public string STAND;
+    public float standTime;
+    public string REST;
     //---------------------animation states-----------------------//
 
     
@@ -91,6 +95,20 @@ public class PlayerAnimation : MonoBehaviour
         }
     }
 
+    public IEnumerator PlayerStandAnimation()
+    {
+        if (animHandler.CheckCurrentState() == STAND) yield return null;
+        else
+        {
+            playerController.state.stop = true;
+            animHandler.ChangeAnimationState(STAND);
+            yield return new WaitForSeconds(standTime);
+            playerController.state.stop = false;//I admit that this is quite stupid
+            playerController.state.standing = false;
+            playerController.state.resting = false;
+        }
+    }
+
     private void ChangeTo()
     {
         switch (playerController.currState)
@@ -118,6 +136,12 @@ public class PlayerAnimation : MonoBehaviour
                 break;
             case PlayerAnimationState.DOWN:
                 animHandler.ChangeAnimationState(DOWN);
+                break;
+            case PlayerAnimationState.REST:
+                animHandler.ChangeAnimationState(REST);
+                break;
+            case PlayerAnimationState.STAND:
+                StartCoroutine(PlayerStandAnimation());
                 break;
         }
     }

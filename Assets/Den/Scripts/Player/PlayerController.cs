@@ -33,6 +33,8 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         public bool attackEnd = false;
 
         [Header("Other Player State Settings")]
+        public bool resting = true;
+        public bool standing = false;
         public bool isHittable = true;
         public float unhittableTime = 1f;
         public bool dying = false;
@@ -163,6 +165,8 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     public void UseLightEnergy(int val)
     {
         state.lightEnergy = state.lightEnergy - val >= 0 ? state.lightEnergy - val : 0;
+
+        if (playerUI == null) return;
         playerUI.UpdateLightEnergy(state.lightEnergy);
     }
 
@@ -239,15 +243,15 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         {
             if (!state.attackEnd) currState = PlayerAnimationState.ATTACK;
             else currState = PlayerAnimationState.ATTACKEND;
-            //if (state.attackEnd && currState != PlayerAnimationState.ATTACKEND)
-            //{
-            //    currState = PlayerAnimationState.ATTACKEND;
-            //}
-            //else if (currState != PlayerAnimationState.ATTACK && !state.attackEnd) currState = PlayerAnimationState.ATTACK;
         }
         else
         {
-            if (state.movingDown)
+            if (state.resting)
+            {
+                if (state.standing) currState = PlayerAnimationState.STAND;
+                else currState = PlayerAnimationState.REST;
+            }
+            else if (state.movingDown)
             {
                 currState = PlayerAnimationState.FALL;
             }

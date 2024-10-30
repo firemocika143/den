@@ -88,8 +88,14 @@ public class PlayerMovement : MonoBehaviour
         {
             horizontal = Input.GetAxisRaw("Horizontal");//-1->left, 1->right
 
+            if (playerController.state.resting && horizontal != 0)
+            {
+                playerController.state.standing = true;
+                return;
+            }
+
             // Moving left or right
-            //I should change this into transform.position to precisely control the player position
+            // I should change this into transform.position to precisely control the player position
             rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
 
             // Flipping
@@ -110,16 +116,22 @@ public class PlayerMovement : MonoBehaviour
         if (!playerController.state.stop)
         {
             // Jumping
-            if (Input.GetButtonDown("Jump") && isGrounded)
+            if (Input.GetButtonDown("Jump"))
             {
-                rb.velocity = new Vector2(rb.velocity.x, jumpPower);
-            }
-            else if (Input.GetButtonDown("Jump") && playerController.state.climb)
-            {
-                //you can jump while you are climbing
-                //this is dangerous
-                playerController.state.climb = false;
-                rb.velocity = new Vector2(rb.velocity.x, jumpPower);
+                if (playerController.state.resting)
+                {
+                    playerController.state.standing = true;
+                    return;
+                }
+
+                if (isGrounded) rb.velocity = new Vector2(rb.velocity.x, jumpPower);
+                else if (playerController.state.climb)
+                {
+                    //you can jump while you are climbing
+                    //this is dangerous
+                    playerController.state.climb = false;
+                    rb.velocity = new Vector2(rb.velocity.x, jumpPower);
+                }
             }
 
             if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)

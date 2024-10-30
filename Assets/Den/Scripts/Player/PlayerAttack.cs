@@ -33,11 +33,11 @@ public class PlayerAttack : MonoBehaviour
 
         if (!(skill.lightDraw == null))
         {
-            if (playerController.state.lightEnergy <= 0)
+            if (playerController.state.lightEnergy <= 0 || playerController.state.stop)
             {
                 if (skill.lightDraw.isDrawing) EndDraw();
             }
-            else
+            else if (!playerController.state.stop)
             {
                 if (skill.lightDraw.isDrawing)
                 {
