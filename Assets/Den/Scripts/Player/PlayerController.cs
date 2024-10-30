@@ -237,11 +237,13 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         }
         else if (state.attacking)
         {
-            if (state.attackEnd && currState != PlayerAnimationState.ATTACKEND)
-            {
-                currState = PlayerAnimationState.ATTACKEND;
-            }
-            else if (currState != PlayerAnimationState.ATTACK && currState != PlayerAnimationState.ATTACKEND) currState = PlayerAnimationState.ATTACK;
+            if (!state.attackEnd) currState = PlayerAnimationState.ATTACK;
+            else currState = PlayerAnimationState.ATTACKEND;
+            //if (state.attackEnd && currState != PlayerAnimationState.ATTACKEND)
+            //{
+            //    currState = PlayerAnimationState.ATTACKEND;
+            //}
+            //else if (currState != PlayerAnimationState.ATTACK && !state.attackEnd) currState = PlayerAnimationState.ATTACK;
         }
         else
         {

@@ -59,6 +59,11 @@ public class PlayerMovement : MonoBehaviour
             }
             //an anim for climb would be great
         }
+        else
+        {
+            playerController.state.movingUp = false;
+            playerController.state.movingDown = false;
+        }
     }
 
     void FixedUpdate()//Physics related updates

@@ -81,10 +81,14 @@ public class PlayerAnimation : MonoBehaviour
 
     public IEnumerator PlayerAttackEndAnimation()
     {
-        animHandler.ChangeAnimationState(ATTACKEND);
-        yield return new WaitForSeconds(endTime);
-        playerController.state.attackEnd = false;//I admit that this is quite stupid
-        playerController.state.attacking = false;
+        if (animHandler.CheckCurrentState() == ATTACKEND) yield return null;
+        else
+        {
+            animHandler.ChangeAnimationState(ATTACKEND);
+            yield return new WaitForSeconds(endTime);
+            playerController.state.attackEnd = false;//I admit that this is quite stupid
+            if (animHandler.CheckCurrentState() == ATTACKEND) playerController.state.attacking = false;
+        }
     }
 
     private void ChangeTo()

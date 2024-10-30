@@ -100,6 +100,7 @@ public class PlayerAttack : MonoBehaviour
             Attack();
             skill.lightDraw.LightDrawStart(attackPoint.position);
             playerController.state.attacking = true;
+            playerController.state.attackEnd = false;
             //TODO - cost light energy with time
         }
     }
