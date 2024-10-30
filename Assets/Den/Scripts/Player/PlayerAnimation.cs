@@ -52,13 +52,6 @@ public class PlayerAnimation : MonoBehaviour
     public string REST;
     //---------------------animation states-----------------------//
 
-    
-
-    private void Start()
-    {
-        animHandler.ChangeAnimationState(IDLE);
-    }
-
     void Update()
     {
         if (!playerController.state.dying) ChangeTo();
@@ -137,9 +130,9 @@ public class PlayerAnimation : MonoBehaviour
             case PlayerAnimationState.DOWN:
                 animHandler.ChangeAnimationState(DOWN);
                 break;
-            case PlayerAnimationState.REST:
-                animHandler.ChangeAnimationState(REST);
-                break;
+            //case PlayerAnimationState.REST:
+            //    animHandler.ChangeAnimationState(REST);
+            //    break;
             case PlayerAnimationState.STAND:
                 StartCoroutine(PlayerStandAnimation());
                 break;
