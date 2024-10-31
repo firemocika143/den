@@ -8,6 +8,8 @@ public class SkillItem : MonoBehaviour
     private GameObject sign;
     [SerializeField]
     private GameObject tutorialSign;
+    [SerializeField]
+    private GameObject blocker;
 
     private PlayerController pc = null;
 
@@ -15,6 +17,7 @@ public class SkillItem : MonoBehaviour
     {
         sign.SetActive(false);
         tutorialSign.SetActive(false);
+        blocker.SetActive(true);
     }
 
     private void Update()
@@ -25,6 +28,7 @@ public class SkillItem : MonoBehaviour
             {
                 pc.ObtainLightDraw();
                 tutorialSign.SetActive(true);
+                blocker.SetActive(false);
                 Destroy(gameObject);
             }
         }

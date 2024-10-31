@@ -19,7 +19,7 @@ public class AnimationHandler : MonoBehaviour
 
     public void ChangeAnimationState(string newState)
     {
-        if (currentState == newState) return;
+        if (currentState == newState || animator == null) return;
 
         animator.Play(newState);
         currentState = newState;

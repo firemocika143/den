@@ -24,7 +24,6 @@ public class PatroEnemyMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        Debug.Log(gameObject.name);
         size = GetComponent<Transform>().localScale;
 
         float num = Random.Range(0.0f, 1.0f);

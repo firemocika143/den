@@ -8,14 +8,6 @@ public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager Instance { get; private set; }
 
-    private void Start()
-    {
-        Instance = this;
-
-        player = FindFirstObjectByType<PlayerController>().gameObject;// does anyone really do this?
-        PlayerRespawn();
-    }
-
     [SerializeField]
     private GameObject playerPrefab;
     [SerializeField]
@@ -24,6 +16,14 @@ public class PlayerManager : MonoBehaviour
     private Transform spawnPoint;
     [SerializeField]
     private GameObject player;
+
+    private void Start()
+    {
+        Instance = this;
+
+        player = FindFirstObjectByType<PlayerController>().gameObject;// does anyone really do this?
+        PlayerRespawn();
+    }
 
     public void PlayerRespawn()//passing in a game object is usually bad, this is a temp solution
     {
@@ -36,8 +36,7 @@ public class PlayerManager : MonoBehaviour
 
         player.transform.position = spawnPoint.position;
         CameraManager.Instance.Follow(player.transform);
-        PlayerController pc = player.GetComponent<PlayerController>();
-        pc.state.resting = true;
+        StartCoroutine(WaitToStart(1f));
         //something work weird here
         DataPersistenceManager.instance.LoadGame();
     }
@@ -78,6 +77,19 @@ public class PlayerManager : MonoBehaviour
         if (player.TryGetComponent<PlayerController>(out var pc))
         {
             playerUI.UpdateAll(pc.state.maxHealth, pc.state.health, pc.state.maxLightEnergy, pc.state.lightEnergy);
+        }
+    }
+
+    private IEnumerator WaitToStart(float time)
+    {
+        yield return null;
+
+        if (player.TryGetComponent<PlayerController>(out var pc))
+        {
+            pc.state.resting = true;
+            pc.StopPlayer();
+            yield return new WaitForSeconds(time);
+            pc.state.stop = false;
         }
     }
 }
