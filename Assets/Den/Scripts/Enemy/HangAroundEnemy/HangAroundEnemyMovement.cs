@@ -24,7 +24,6 @@ public class HangAroundEnemyMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        Debug.Log(gameObject.name);
         size = GetComponent<Transform>().localScale;
         reachLight = lightSourceDetector.GetComponent<HangAroundEnemyLightSourceDetector>().reachLight;
         escaping = false;

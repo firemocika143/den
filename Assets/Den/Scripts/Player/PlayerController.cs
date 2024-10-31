@@ -39,8 +39,8 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         public float unhittableTime = 1f;
         public bool dying = false;
 
-        //[Header("Skill Obtaining States")]
-        //public bool getLightDraw = false;
+        [Header("Skill Obtaining States")]
+        public bool getLightDraw = false;
     }
 
     public PlayerState state;
@@ -65,9 +65,13 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     private float loseLightTimer;
 
     private PlayerMovement playerMovement;
-    private PlayerUI playerUI;
     private PlayerAttack playerAttack;
     private float unhittableTimer;
+
+    void Awake()
+    {
+        DontDestroyOnLoad(this.gameObject);
+    }
     
     private void Start()
     {
@@ -78,7 +82,6 @@ public class PlayerController : MonoBehaviour, IDataPersistence
 
         playerMovement = GetComponent<PlayerMovement>();
         playerAttack = GetComponent<PlayerAttack>();
-        playerUI = FindFirstObjectByType<PlayerUI>();//this is not good..., nut how to set UI Manager?
         if (TryGetComponent<LineRenderer>(out var lineRenderer))
         {
             lineRenderer.enabled = false;
@@ -132,7 +135,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         {
             state.health -= damage;
             state.health = state.health >= 0 ? state.health : 0;
-            playerUI.UpdateHealth(state.health);
+            PlayerManager.Instance.UpdateHealth();
             state.isHittable = false;
             unhittableTimer = Time.time;
 
@@ -147,7 +150,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     {
         state.health += recover;
         state.health = state.health <= state.maxHealth ? state.health : state.maxHealth;
-        playerUI.UpdateHealth(state.health);
+        PlayerManager.Instance.UpdateHealth();
     }
 
     public void AllRecover()
@@ -155,19 +158,15 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         state.health = state.maxHealth;
         state.lightEnergy = state.maxLightEnergy;
 
-        if (playerUI == null) return;
-        playerUI.UpdateMaxHealth(state.maxHealth);
-        playerUI.UpdateHealth(state.health);
-        playerUI.UpdateMaxLightEnergy(state.maxLightEnergy);
-        playerUI.UpdateLightEnergy(state.lightEnergy);
+        if (PlayerManager.Instance != null) PlayerManager.Instance.UpdateAll();
     }
 
     public void UseLightEnergy(int val)
     {
         state.lightEnergy = state.lightEnergy - val >= 0 ? state.lightEnergy - val : 0;
 
-        if (playerUI == null) return;
-        playerUI.UpdateLightEnergy(state.lightEnergy);
+        if (PlayerManager.Instance == null) return;
+        PlayerManager.Instance.UpdateLight();
     }
 
     //Events functions
@@ -189,7 +188,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         lightSystem.CenterLightOff();
         StartCoroutine(playerAnimation.PlayerDieAnimation(() => 
         { 
-            GameManager.Instance.PlayerRespawn(this.gameObject);
+            PlayerManager.Instance.PlayerRespawn();
             playerAnimation.PlayerRespawnAnimation();
             state.dying = false;
             state.stop = false;
@@ -291,7 +290,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
             }
         }
 
-        if (playerUI != null) playerUI.UpdateLightEnergy(state.lightEnergy);
+        if (PlayerManager.Instance != null) PlayerManager.Instance.UpdateLight();
     }
 
     public void LoadData(GameData gameData)

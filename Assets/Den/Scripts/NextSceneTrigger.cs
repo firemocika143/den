@@ -12,6 +12,7 @@ public class NextSceneTrigger : MonoBehaviour
         if (col.CompareTag("Player"))
         {
             //LoadSceneMode scene after a light
+            if (col.TryGetComponent<PlayerController>(out var pc)) pc.state.resting = true;
             SceneManager.LoadScene(sceneName);
         }
     }

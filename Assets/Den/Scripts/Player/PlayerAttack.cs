@@ -58,7 +58,6 @@ public class PlayerAttack : MonoBehaviour
 
         foreach (Collider2D enemy in hitEnemies)
         {
-            Debug.Log("hitting an enemy");
             //TODO - give damage to target enemy
 
             if (enemy.TryGetComponent<IEnemy>(out var e))
@@ -121,7 +120,7 @@ public class PlayerAttack : MonoBehaviour
 
             Attack();
 
-            if (Time.time - skill.lightDraw.costTimer > skill.lightDraw.costTime)
+            if (Time.time - skill.lightDraw.costTimer > skill.lightDraw.costTime)// this should be changed into cost by distance
             {
                 playerController.UseLightEnergy(skill.lightDraw.costPerTime);
                 skill.lightDraw.costTimer = Time.time;

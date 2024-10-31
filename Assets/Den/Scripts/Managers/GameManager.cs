@@ -47,13 +47,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    [SerializeField]
-    private GameObject playerPrefab;
-    [SerializeField]
-    private PlayerUI playerUI;
-    [SerializeField]
-    private GameObject spawnPoint;
-
     [Serializable]
     public class SkillItems
     {
@@ -83,13 +76,6 @@ public class GameManager : MonoBehaviour
 
     public bool gamePaused = false;// Can utilize this variable to adjust some settings when game is paused
 
-    public void Start()
-    {
-        //if everything is done, respawn the character(player)
-        //StartCoroutine(WaitToRespawn(2.5f));
-        //if (!FindAnyObjectByType<PlayerController>()) PlayerRespawn();
-    }
-
     public void ManualSave()
     {
         PlayerController pc = FindFirstObjectByType<PlayerController>();
@@ -112,32 +98,23 @@ public class GameManager : MonoBehaviour
         // TODO - restore volume of music and SFX
     }
 
+    public void SlowDown()
+    {
+        Time.timeScale = 0.3f;
+    }
+
+    public void BackToNormalSpeed()
+    {
+        Time.timeScale = 1f;
+    }
+
     //Player Dead CutScene
     //Player Respawn
     /// <summary>
     /// Called in PlayerController if a player is dying. Instantiating a new player object with some same max values, also put the player to the spawn point
     /// actually this should be run at the start of every game and every respawn
     /// </summary>
-    public void PlayerRespawn(GameObject player)//passing in a game object is usually bad, this is a temp solution
-    {
-        // Maybe I need to find if destroying the player is the correct decision, and also the way to controll the progress and the camera
-        //GameObject player = Instantiate(playerPrefab, spawnPoint.transform.position, Quaternion.identity);
-        player.transform.position = spawnPoint.transform.position;
-        if (player != null) CameraManager.Instance.Follow(player.transform);
-        PlayerController pc = player.GetComponent<PlayerController>();
-        pc.state.resting = true;
-        DataPersistenceManager.instance.LoadGame();//something work weird here
-
-        //if (player.TryGetComponent<PlayerController>(out PlayerController pc))
-        //{
-        //    if (pc.state.getLightDraw && skillItems.lightDrawItem != null)
-        //    {
-        //        //this is not a good way, there will not only this item needed to be controlled in the future
-        //        skillItems.lightDrawItem.SetActive(false);
-        //    }
-        //}
-
-    }
+    
 
     public IEnumerator WaitToRespawn(float t)
     {

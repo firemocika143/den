@@ -28,7 +28,7 @@ public class TriggerZone : MonoBehaviour
     {
         if (col.CompareTag("Player"))
         {
-            CameraManager.Instance.FixCamera(transform);
+            CameraManager.Instance.Follow(transform);
             Debug.Log("Player Enters");
         }
     }

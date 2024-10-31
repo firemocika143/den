@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[DefaultExecutionOrder(-1000)]
 public class CameraManager : MonoBehaviour
 {
     public static CameraManager Instance { get; private set; }
@@ -22,13 +23,15 @@ public class CameraManager : MonoBehaviour
     private void Start()
     {
         Instance = this;
-    }
 
-    public void FixCamera(Transform target)
-    {
-        if (curr_vcam == null) return;
-
-        curr_vcam.Follow = target;
+        GameObject player = FindFirstObjectByType<PlayerController>().gameObject;
+        if (player != null)
+        {
+            foreach (var c in vcams)
+            {
+                c.Follow = player.transform;
+            }
+        }
     }
 
     public void Follow(Transform target)

@@ -8,7 +8,7 @@ public class MainMenuManager : MonoBehaviour
     public void ClickStart()
     {
         //TODO - fade out then load player current scene
-        SceneManager.LoadScene("MainScene");
+        SceneManager.LoadScene(1);
     }
 
     public void ClickSettings()
