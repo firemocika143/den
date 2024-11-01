@@ -14,7 +14,7 @@ public class PlayerManager : MonoBehaviour
     private PlayerUI playerUI;
     [SerializeField]
     private Transform spawnPoint;
-    [SerializeField]
+
     private GameObject player;
 
     private void Start()
@@ -22,7 +22,7 @@ public class PlayerManager : MonoBehaviour
         Instance = this;
 
         player = FindFirstObjectByType<PlayerController>().gameObject;// does anyone really do this?
-        PlayerRespawn();
+        if (player != null) PlayerRespawn();
     }
 
     public void PlayerRespawn()//passing in a game object is usually bad, this is a temp solution

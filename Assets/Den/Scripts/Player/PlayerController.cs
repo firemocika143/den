@@ -70,9 +70,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
 
     void Awake()
     {
-        //PlayerController c = FindFirstObjectByType<PlayerController>();
-        //if (c != null && c != this) Destroy(this.gameObject);
-        //DontDestroyOnLoad(this.gameObject);
+
     }
     
     private void Start()
