@@ -70,7 +70,9 @@ public class PlayerController : MonoBehaviour, IDataPersistence
 
     void Awake()
     {
-        DontDestroyOnLoad(this.gameObject);
+        //PlayerController c = FindFirstObjectByType<PlayerController>();
+        //if (c != null && c != this) Destroy(this.gameObject);
+        //DontDestroyOnLoad(this.gameObject);
     }
     
     private void Start()
@@ -227,7 +229,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     //Player skill
     public void ObtainLightDraw()
     {
-        //state.getLightDraw = true;
+        state.getLightDraw = true;
         playerAttack.ObtainLightDraw();
     }
 
@@ -297,16 +299,16 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     {
         this.state.maxHealth = gameData.maxHealth;
         this.state.maxLightEnergy = gameData.maxLightEnergy;
-        //this.state.getLightDraw = gameData.getLightDraw;
+        this.state.getLightDraw = gameData.getLightDraw;
 
         AllRecover();
-        //if (this.state.getLightDraw) ObtainLightDraw();
+        if (this.state.getLightDraw) ObtainLightDraw();
     }
 
     public void SaveData(ref GameData gameData)
     {
         gameData.maxHealth = this.state.maxHealth;
         gameData.maxLightEnergy = this.state.maxLightEnergy;
-        //gameData.getLightDraw = this.state.getLightDraw;
+        gameData.getLightDraw = this.state.getLightDraw;
     }
 }

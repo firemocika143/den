@@ -9,15 +9,27 @@ public class SkillItem : MonoBehaviour
     [SerializeField]
     private GameObject tutorialSign;
     [SerializeField]
-    private GameObject blocker;
+    private GameObject blocker;//ugh... this is weird
+    [SerializeField]
+    private int id;
 
     private PlayerController pc = null;
 
     private void Start()
     {
+        pc = FindFirstObjectByType<PlayerController>();//ugh... it's alittle bit too much 
+        if (pc != null)
+        {
+            if (id == 0 && pc.state.getLightDraw)
+            {
+                blocker.SetActive(false);
+                Destroy(this.gameObject);
+            }
+        }
+
         sign.SetActive(false);
         tutorialSign.SetActive(false);
-        blocker.SetActive(true);
+        if (blocker != null) blocker.SetActive(true);
     }
 
     private void Update()
@@ -28,7 +40,7 @@ public class SkillItem : MonoBehaviour
             {
                 pc.ObtainLightDraw();
                 tutorialSign.SetActive(true);
-                blocker.SetActive(false);
+                if (blocker != null) blocker.SetActive(false);
                 Destroy(gameObject);
             }
         }

@@ -47,15 +47,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    [Serializable]
-    public class SkillItems
-    {
-        [Header("Skill Items")]
-        public GameObject lightDrawItem;
-    }
+    //[Serializable]
+    //public class SkillItems
+    //{
+    //    [Header("Skill Items")]
+    //    public GameObject lightDrawItem;
+    //}
 
-    [SerializeField]
-    private SkillItems skillItems;
+    //public SkillItems skillItems;
 
     [System.Serializable]
     public class KeySettings
@@ -73,6 +72,8 @@ public class GameManager : MonoBehaviour
     }
 
     public KeySettings keySettings;
+
+    public string currScene = "Street";
 
     public bool gamePaused = false;// Can utilize this variable to adjust some settings when game is paused
 
@@ -114,13 +115,6 @@ public class GameManager : MonoBehaviour
     /// Called in PlayerController if a player is dying. Instantiating a new player object with some same max values, also put the player to the spawn point
     /// actually this should be run at the start of every game and every respawn
     /// </summary>
-    
-
-    public IEnumerator WaitToRespawn(float t)
-    {
-        yield return new WaitForSeconds(t);
-        //if (!FindAnyObjectByType<PlayerController>()) PlayerRespawn();
-    }
     //Audio and Screen Settings
     //Game Progress
 

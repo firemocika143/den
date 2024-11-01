@@ -8,7 +8,5 @@ public class GameData
     public int maxHealth;
     public int maxLightEnergy;
     public bool getLightDraw;
-    
 
-    //Game
 }

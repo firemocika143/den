@@ -8,8 +8,8 @@ public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager Instance { get; private set; }
 
-    [SerializeField]
-    private GameObject playerPrefab;
+    //[SerializeField]
+    //private GameObject playerPrefab;
     [SerializeField]
     private PlayerUI playerUI;
     [SerializeField]
@@ -29,10 +29,10 @@ public class PlayerManager : MonoBehaviour
     {
         // Maybe I need to find if destroying the player is the correct decision, and also the way to controll the progress and the camera
         // GameObject player = Instantiate(playerPrefab, spawnPoint.transform.position, Quaternion.identity);
-        if (player == null)
-        {
-            player = Instantiate(playerPrefab, spawnPoint);
-        }
+        //if (player == null)
+        //{
+        //    player = Instantiate(playerPrefab, spawnPoint);
+        //}
 
         player.transform.position = spawnPoint.position;
         CameraManager.Instance.Follow(player.transform);
