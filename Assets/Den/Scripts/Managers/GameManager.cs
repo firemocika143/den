@@ -81,7 +81,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         // TODO - wait for everything to be set up (but how? game manager is always at the first place to run)
-        
+        // How to call start flow? should flow be a class or an interface (this should be an easy decision)
     }
 
     public void ManualSave()

@@ -39,8 +39,6 @@ public class PlayerManager : MonoBehaviour
         DataPersistenceManager.instance.LoadGame();
     }
 
-    
-
     private IEnumerator WaitToStart(float time)
     {
         yield return null;
@@ -52,5 +50,21 @@ public class PlayerManager : MonoBehaviour
             yield return new WaitForSeconds(time);
             pc.state.stop = false;
         }
+    }
+
+    public void PlayerInDanger()
+    {
+        // TODO - switch music
+        SoundManager.Instance.PlayInDanger();
+        // Enhance enemy effects
+        // start to cost health or higher enemy attack or enable the player to kill themselves
+    }
+
+    public void PlayerInLightSource()
+    {
+        // TODO - switch music
+        SoundManager.Instance.PlayInLightSource();
+        // Enhance enemy effects
+        // start to cost health or higher enemy attack or enable the player to kill themselves
     }
 }

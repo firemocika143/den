@@ -38,6 +38,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         public bool isHittable = true;
         public float unhittableTime = 1f;
         public bool dying = false;
+        public bool inDanger = false;
 
         [Header("Skill Obtaining States")]
         public bool getLightDraw = false;
@@ -67,6 +68,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     private PlayerMovement playerMovement;
     private PlayerAttack playerAttack;
     private float unhittableTimer;
+    private int damageMultiplier;
     
     private void Start()
     {
@@ -87,6 +89,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
 
     private void Update()
     {
+        // this is double check
         if (state.lightEnergy <= 0 && lightSystem.Lighting())
         {
             lightSystem.LightOff();
@@ -128,7 +131,9 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     {
         if (state.isHittable)
         {
-            state.health -= damage;
+            if (state.lightEnergy != 0) state.health -= damage;
+            else state.health -= damage * damageMultiplier;
+
             state.health = state.health >= 0 ? state.health : 0;
             UIManager.Instance.UpdatePlayerHealth(state.health);
             state.isHittable = false;
@@ -197,7 +202,9 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         //Called in OnCollisionEnter2D when the player lights on this lantern and when they enters the light area of this lantern
         isInLightSource = true;
         gainLightTimer = Time.time;
-        //TODO - Call function in playerStatus to start adding their light energy, but I don't know how to use coroutine
+
+        state.inDanger = false;
+        PlayerManager.Instance.PlayerInLightSource();
 
         lightSystem.CenterLightOff();
         //TODO - show some particles or animations
@@ -278,9 +285,17 @@ public class PlayerController : MonoBehaviour, IDataPersistence
                 state.lightEnergy--;
                 loseLightTimer = Time.time;
             }
+
             if (state.lightEnergy < lowLight)
             {
                 lightSystem.LowLightEnergyWarning();
+            }
+
+            if (state.lightEnergy <= 0 && !state.inDanger)
+            {
+                lightSystem.LightOff();
+                PlayerManager.Instance.PlayerInDanger();
+                state.inDanger = true;
             }
         }
 

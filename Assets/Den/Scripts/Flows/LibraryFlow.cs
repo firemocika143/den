@@ -20,5 +20,6 @@ public class LibraryFlow : MonoBehaviour
             player = Instantiate(playerPrefab);
         }
         //and then respawn player by player manager
+        //also play the music for library
     }
 }

@@ -16,13 +16,17 @@ public class StreetFlow : MonoBehaviour, IFlow, IDataPersistence
 
     public void StartFlow()
     {
-        // TODO - Loading
-        // TODO - RespawnPlayer
-        // TODO - Fade in
-        UIManager.Instance.FadeIn();
-        // SFX & VFX
+        if (first)
+        {
+            // TODO - Loading
+            // TODO - RespawnPlayer
+            // TODO - Fade in
+            UIManager.Instance.FadeIn();
+            // SFX & VFX
+            SoundManager.Instance.PlayInLightSource();
 
-        first = false;
+            first = false;
+        }
     }
 
     public void LoadData(GameData data)
