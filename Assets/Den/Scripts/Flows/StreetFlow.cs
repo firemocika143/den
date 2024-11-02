@@ -2,17 +2,35 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StreetFlow : MonoBehaviour
+public class StreetFlow : MonoBehaviour, IFlow, IDataPersistence
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField]
+    private string flowName = "Street";
+
+    private bool first;
+
+    public void Awake()
     {
-        
+        name = flowName;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void StartFlow()
     {
-        
+        // TODO - Loading
+        // TODO - RespawnPlayer
+        // TODO - Fade in
+        // SFX & VFX
+
+        first = false;
+    }
+
+    public void LoadData(GameData data)
+    {
+        //first = !data.Street;
+    }
+
+    public void SaveData(ref GameData data)
+    {
+        //data.Street = !first;
     }
 }

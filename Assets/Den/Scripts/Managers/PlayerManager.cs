@@ -8,10 +8,8 @@ public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager Instance { get; private set; }
 
-    //[SerializeField]
-    //private GameObject playerPrefab;
     [SerializeField]
-    private PlayerUI playerUI;
+    private GameObject playerPrefab;
     [SerializeField]
     private Transform spawnPoint;
 
@@ -29,10 +27,10 @@ public class PlayerManager : MonoBehaviour
     {
         // Maybe I need to find if destroying the player is the correct decision, and also the way to controll the progress and the camera
         // GameObject player = Instantiate(playerPrefab, spawnPoint.transform.position, Quaternion.identity);
-        //if (player == null)
-        //{
-        //    player = Instantiate(playerPrefab, spawnPoint);
-        //}
+        if (player == null)
+        {
+            player = Instantiate(playerPrefab, spawnPoint);
+        }
 
         player.transform.position = spawnPoint.position;
         CameraManager.Instance.Follow(player.transform);
@@ -41,44 +39,7 @@ public class PlayerManager : MonoBehaviour
         DataPersistenceManager.instance.LoadGame();
     }
 
-    public void UpdateHealth()
-    {
-        if (player.TryGetComponent<PlayerController>(out var pc))
-        {
-            playerUI.UpdateHealth(pc.state.health);
-        }
-    }
-
-    public void UpdateMaxHealth()
-    {
-        if (player.TryGetComponent<PlayerController>(out var pc))
-        {
-            playerUI.UpdateMaxHealth(pc.state.maxHealth);
-        }
-    }
-    public void UpdateLight()
-    {
-        if (player.TryGetComponent<PlayerController>(out var pc))
-        {
-            playerUI.UpdateLightEnergy(pc.state.lightEnergy);
-        }
-    }
-
-    public void UpdateMaxLight()
-    {
-        if (player.TryGetComponent<PlayerController>(out var pc))
-        {
-            playerUI.UpdateMaxLightEnergy(pc.state.maxLightEnergy);
-        }
-    }
-
-    public void UpdateAll()
-    {
-        if (player.TryGetComponent<PlayerController>(out var pc))
-        {
-            playerUI.UpdateAll(pc.state.maxHealth, pc.state.health, pc.state.maxLightEnergy, pc.state.lightEnergy);
-        }
-    }
+    
 
     private IEnumerator WaitToStart(float time)
     {

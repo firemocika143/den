@@ -17,7 +17,7 @@ public class SkillItem : MonoBehaviour
 
     private void Start()
     {
-        pc = FindFirstObjectByType<PlayerController>();//ugh... it's alittle bit too much 
+        pc = FindFirstObjectByType<PlayerController>();//ugh... it's a little bit too much 
         if (pc != null)
         {
             if (id == 0 && pc.state.getLightDraw)
@@ -27,6 +27,7 @@ public class SkillItem : MonoBehaviour
             }
         }
 
+        pc = null;
         sign.SetActive(false);
         tutorialSign.SetActive(false);
         if (blocker != null) blocker.SetActive(true);

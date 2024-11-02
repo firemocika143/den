@@ -67,11 +67,6 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     private PlayerMovement playerMovement;
     private PlayerAttack playerAttack;
     private float unhittableTimer;
-
-    void Awake()
-    {
-
-    }
     
     private void Start()
     {
@@ -135,7 +130,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         {
             state.health -= damage;
             state.health = state.health >= 0 ? state.health : 0;
-            PlayerManager.Instance.UpdateHealth();
+            UIManager.Instance.UpdatePlayerHealth(state.health);
             state.isHittable = false;
             unhittableTimer = Time.time;
 
@@ -150,7 +145,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     {
         state.health += recover;
         state.health = state.health <= state.maxHealth ? state.health : state.maxHealth;
-        PlayerManager.Instance.UpdateHealth();
+        UIManager.Instance.UpdatePlayerHealth(state.health);
     }
 
     public void AllRecover()
@@ -158,15 +153,14 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         state.health = state.maxHealth;
         state.lightEnergy = state.maxLightEnergy;
 
-        if (PlayerManager.Instance != null) PlayerManager.Instance.UpdateAll();
+        UIManager.Instance.UpdatePlayerAllState(state.maxHealth, state.health, state.maxLightEnergy, state.lightEnergy);
     }
 
     public void UseLightEnergy(int val)
     {
         state.lightEnergy = state.lightEnergy - val >= 0 ? state.lightEnergy - val : 0;
 
-        if (PlayerManager.Instance == null) return;
-        PlayerManager.Instance.UpdateLight();
+        UIManager.Instance.UpdatePlayerLight(state.lightEnergy);
     }
 
     //Events functions
@@ -290,7 +284,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
             }
         }
 
-        if (PlayerManager.Instance != null) PlayerManager.Instance.UpdateLight();
+        UIManager.Instance.UpdatePlayerLight(state.lightEnergy);
     }
 
     public void LoadData(GameData gameData)
