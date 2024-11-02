@@ -17,6 +17,15 @@ public class UIManager : MonoBehaviour
     private GameObject pauseMenuPanel;
     [SerializeField]
     private GameObject playerPanel;
+    [SerializeField]
+    private GameObject fadePanel;
+
+    private void Start()
+    {
+        pagePanel.SetActive(false);
+        pauseMenuPanel.SetActive(false);
+        fadePanel.SetActive(false);
+    }
 
     private void Update()
     {
@@ -107,5 +116,16 @@ public class UIManager : MonoBehaviour
         {
             playerUI.UpdateAll(h_max, h_val, l_max, l_val);
         }
+    }
+
+    public void FadeIn()
+    {
+        fadePanel.SetActive(true);
+        fadePanel.GetComponent<Fade>().FadeIn();
+    }
+    public void FadeOut()
+    {
+        fadePanel.SetActive(true);
+        fadePanel.GetComponent<Fade>().FadeOut();
     }
 }

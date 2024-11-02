@@ -19,6 +19,7 @@ public class StreetFlow : MonoBehaviour, IFlow, IDataPersistence
         // TODO - Loading
         // TODO - RespawnPlayer
         // TODO - Fade in
+        UIManager.Instance.FadeIn();
         // SFX & VFX
 
         first = false;

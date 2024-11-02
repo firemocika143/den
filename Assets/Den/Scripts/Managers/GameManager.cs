@@ -2,6 +2,7 @@ using Cinemachine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -76,6 +77,12 @@ public class GameManager : MonoBehaviour
     public string currScene = "Street";
 
     public bool gamePaused = false;// Can utilize this variable to adjust some settings when game is paused
+
+    private void Start()
+    {
+        // TODO - wait for everything to be set up (but how? game manager is always at the first place to run)
+        
+    }
 
     public void ManualSave()
     {
