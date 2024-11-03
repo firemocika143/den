@@ -49,4 +49,9 @@ public class CameraManager : MonoBehaviour
             if (c == vcam) curr_vcam = c;
         }
     }
+
+    public void SmoothZoom(float newRadius)
+    {
+        curr_vcam.m_Lens.OrthographicSize = newRadius;
+    }
 }

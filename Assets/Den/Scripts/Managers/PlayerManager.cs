@@ -67,4 +67,14 @@ public class PlayerManager : MonoBehaviour
         // Enhance enemy effects
         // start to cost health or higher enemy attack or enable the player to kill themselves
     }
+
+    public Transform PlayerTransform()
+    {
+        return player.transform;
+    }
+
+    public void EnablePlayerToMove()
+    {
+        player.GetComponent<PlayerController>().state.stop = false;
+    }
 }
