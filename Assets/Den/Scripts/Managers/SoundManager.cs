@@ -18,6 +18,8 @@ public class SoundManager : MonoBehaviour
     [SerializeField]
     private AudioClip InLightSource;
 
+    private Coroutine switchCoroutine;
+
     private void Start()
     {
         Instance = this;
@@ -26,16 +28,21 @@ public class SoundManager : MonoBehaviour
         WaitBGMSource.volume = 0f;
     }
 
+    private void OnDestroy()
+    {
+        StopAllCoroutines();
+    }
+
     public void PlayInDanger()
     {
-        WaitBGMSource.clip = InDanger;
-        StartCoroutine(SwitchSource(2, 20));
+        WaitBGMSource.clip = InDanger;  
+        switchCoroutine = StartCoroutine(SwitchSource(2, 20));
     }
 
     public void PlayInLightSource()
     {
         WaitBGMSource.clip = InLightSource;
-        StartCoroutine(SwitchSource(2, 20));
+        switchCoroutine = StartCoroutine(SwitchSource(2, 20));
     }
 
     private IEnumerator SwitchSource(float switchTime, float smoothness)

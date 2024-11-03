@@ -55,7 +55,7 @@ public class PlayerManager : MonoBehaviour
     public void PlayerInDanger()
     {
         // TODO - switch music
-        SoundManager.Instance.PlayInDanger();
+        if (SoundManager.Instance != null) SoundManager.Instance.PlayInDanger();
         // Enhance enemy effects
         // start to cost health or higher enemy attack or enable the player to kill themselves
     }
@@ -63,7 +63,7 @@ public class PlayerManager : MonoBehaviour
     public void PlayerInLightSource()
     {
         // TODO - switch music
-        SoundManager.Instance.PlayInLightSource();
+        if (SoundManager.Instance != null) SoundManager.Instance.PlayInLightSource();
         // Enhance enemy effects
         // start to cost health or higher enemy attack or enable the player to kill themselves
     }
