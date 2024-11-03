@@ -8,18 +8,27 @@ public class Boss1LeftUpperArmMovementTest : MonoBehaviour
     public Rigidbody2D rightUpperArmRigidbody;
     public HingeJoint2D rightUpperArmJoint;  // HingeJoint2D on the upper arm (right)
     public float rightUpperArmSpeed = 50f;   // Speed at which upper arm rotates
-    public float rightUpperArmMaxAngle = 60f;   // Maximum raising angle for upper arm (positive for right hand)
+    public float rightUpperArmMaxAngle = 90f;   // Maximum raising angle for upper arm (positive for right hand)
     public float rightUpperArmMinAngle = -10f;  // Minimum lowering angle for upper arm (negative for right hand)
 
     [Header("Right Lower Arm")]
     public Rigidbody2D rightLowerArmRigidbody;
     public HingeJoint2D rightLowerArmJoint;  // HingeJoint2D on the lower arm (right)
     public float rightLowerArmSpeed = 50f;   // Speed at which lower arm rotates
-    public float rightLowerArmMaxAngle = 120f;  // Maximum raising angle for lower arm (positive for right hand)
-    public float rightLowerArmMinAngle = 30f;   // Minimum angle for lower arm (when hand is down, positive for right hand)
+    public float rightLowerArmMaxAngle = 60f;  // Maximum raising angle for lower arm (positive for right hand)
+    public float rightLowerArmMinAngle = 0f;   // Minimum angle for lower arm (when hand is down, positive for right hand)
+
+    [Header("Sword")]
+    public Rigidbody2D swordRigidbody;
+    public HingeJoint2D swordJoint;
+    public float swordSpeed = 50f;
+    public float swordMaxAngle = 30f;
+    public float swordMinAngle = 0f;
 
     private bool raising = true;  // Control whether arm is raising or lowering
-    
+
+    private bool reocvery = false;
+    private float recoveryTime = 1.5f;
 
     void Start()
     {
@@ -36,14 +45,28 @@ public class Boss1LeftUpperArmMovementTest : MonoBehaviour
         rightLowerArmJoint.limits = rightLowerArmLimits;
         rightLowerArmJoint.useLimits = true;
 
+        JointAngleLimits2D swordLimits = new JointAngleLimits2D();
+        swordLimits.max = swordMaxAngle;
+        swordLimits.min = swordMinAngle;
+        swordJoint.limits = swordLimits;
+        swordJoint.useLimits = true;
+
         // Make sure motor is enabled on both joints
         rightUpperArmJoint.useMotor = true;
         rightLowerArmJoint.useMotor = true;
+        swordJoint.useMotor = true;
     }
 
-    void FixedUpdate()
+    void Update()
     {
-        MoveRightArm();
+        if (!reocvery)
+        {
+            MoveRightArm();
+        }
+        else
+        {
+            
+        }
     }
 
     void MoveRightArm()
@@ -51,9 +74,12 @@ public class Boss1LeftUpperArmMovementTest : MonoBehaviour
         // Get the current angle of both joints
         float rightUpperArmAngle = rightUpperArmJoint.jointAngle;
         float rightLowerArmAngle = rightLowerArmJoint.jointAngle;
+        float swordAngle = swordJoint.jointAngle;
+        bool needRecovery = false;
 
         JointMotor2D rightUpperMotor = rightUpperArmJoint.motor;
         JointMotor2D rightLowerMotor = rightLowerArmJoint.motor;
+        JointMotor2D swordMotor = swordJoint.motor;
 
         if (raising)
         {
@@ -76,8 +102,17 @@ public class Boss1LeftUpperArmMovementTest : MonoBehaviour
                 rightLowerMotor.motorSpeed = 0;
             }
 
+            if (swordAngle < swordMaxAngle)
+            {
+                swordMotor.motorSpeed = swordSpeed;
+            }
+            else
+            {
+                swordMotor.motorSpeed = 0;
+            }
+
             // If both arms reach their max angles, switch to lowering
-            if (rightUpperArmAngle >= rightUpperArmMaxAngle && rightLowerArmAngle >= rightLowerArmMaxAngle)
+            if (rightUpperArmAngle >= rightUpperArmMaxAngle && rightLowerArmAngle >= rightLowerArmMaxAngle && swordAngle >= swordMaxAngle)
             {
                 raising = false;
             }
@@ -103,15 +138,52 @@ public class Boss1LeftUpperArmMovementTest : MonoBehaviour
                 rightLowerMotor.motorSpeed = 0;
             }
 
+            if (swordAngle > swordMinAngle)
+            {
+                swordMotor.motorSpeed = -swordSpeed;
+            }
+            else
+            {
+                swordMotor.motorSpeed = 0;
+            }
+
             // If both arms reach their min angles, switch to raising
-            if (rightUpperArmAngle <= rightUpperArmMinAngle && rightLowerArmAngle <= rightLowerArmMinAngle)
+            if (rightUpperArmAngle <= rightUpperArmMinAngle && rightLowerArmAngle <= rightLowerArmMinAngle && swordAngle <= swordMinAngle)
             {
                 raising = true;
+                needRecovery = true;
             }
         }
 
         // Apply motor settings back to the joints
         rightUpperArmJoint.motor = rightUpperMotor;
         rightLowerArmJoint.motor = rightLowerMotor;
+        swordJoint.motor = swordMotor;
+
+        if (needRecovery)
+        {
+            StartCoroutine(recoveryTimeCount());
+        }
+    }
+
+    private IEnumerator recoveryTimeCount()
+    {
+        reocvery = true;
+        //rightUpperArmJoint.useMotor = false;
+        //rightLowerArmJoint.useMotor = false;
+        //swordJoint.useMotor = false;
+        rightUpperArmRigidbody.angularDrag = 10000f;
+        rightLowerArmRigidbody.angularDrag = 10000f;
+        swordRigidbody.angularDrag = 10000f;
+
+        yield return new WaitForSeconds(recoveryTime);
+
+        reocvery = false;
+        //rightUpperArmJoint.useMotor = true;
+        //rightLowerArmJoint.useMotor = true;
+        //swordJoint.useMotor = true;
+        rightUpperArmRigidbody.angularDrag = 0.05f;
+        rightLowerArmRigidbody.angularDrag = 0.05f;
+        swordRigidbody.angularDrag = 0.05f;
     }
 }
