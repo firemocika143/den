@@ -13,7 +13,7 @@ public class StreetLightOff : MonoBehaviour
         {
             PlayerController pc = col.gameObject.GetComponent<PlayerController>();
             pc.StopPlayer();
-            StartCoroutine(flow.StreetLightOff());
+            flow.StreetLightOff();
             this.gameObject.GetComponent<BoxCollider2D>().enabled = false;
         }
     }

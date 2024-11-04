@@ -2,16 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AutoRespawnPoint : MonoBehaviour
+public class StreetUpdate : MonoBehaviour
 {
-    public Transform point;
+    [SerializeField]
+    private int updateNumber;
 
     private void OnTriggerEnter2D(Collider2D col)
     {
         if (col.CompareTag("Player"))
         {
-            PlayerManager.Instance.spawnPoint = point;
-            //should I manual save here?
+            LampManager.Instance.UpdateReopen(updateNumber);
         }
     }
 }

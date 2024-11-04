@@ -15,30 +15,86 @@ public class LampManager : MonoBehaviour
 
     public float turnOffTime;
 
+    private int reopen;
+    private Coroutine turnOffEvent = null;// control the event here
+    private StreetFlow sf;
+    private List<GameObject> killTriggers = new List<GameObject>();
+    private int currLamp;
+
     private void Start()
     {
         Instance = this;
 
+        sf = (StreetFlow)GameManager.Instance.flow;
+
         lightArea.SetActive(true);
     }
 
-    public IEnumerator TurnOffLampEvent()
+    public IEnumerator TurnOffLampEventCoroutine()
     {
         yield return null;
         lightArea.SetActive(false);
 
-        foreach (var lamp in lamps)
+        while (currLamp < lamps.Count)
         {
             // It's quite lag here
-            if (lamp.gameObject.activeSelf)
+            if (lamps[currLamp].gameObject.activeSelf)
             {
-                lamp.Off();
+                lamps[currLamp].Off();
                 yield return new WaitForSeconds(turnOffTime);
                 // TODO - play SFX
-                lamp.gameObject.SetActive(false);
+                lamps[currLamp].gameObject.SetActive(false);
                 // TODO - place a death trigger at the lamp position(but then? how to control player respawn points? and return to which point of the game?, is it ok to just restart this function again?)
-                Instantiate(killTriggerPrefab, lamp.transform.position, Quaternion.identity);
+                GameObject killTrigger = Instantiate(killTriggerPrefab, lamps[currLamp].transform.position, Quaternion.identity);
+                killTriggers.Add(killTrigger);
             }
+            else
+            {
+                GameObject killTrigger = Instantiate(killTriggerPrefab, lamps[currLamp].transform.position, Quaternion.identity);
+                killTriggers.Add(killTrigger);
+            }
+
+            currLamp++;
         }
+    }
+
+    public void TurnOffLampEvent()
+    {
+        //if (turnOffEvent != null)
+        //{
+        //    StopCoroutine(turnOffEvent);
+        //    turnOffEvent = null;// then leak, but how to fix this?
+        //    // and this may even be restart again...
+        //}
+
+        turnOffEvent = StartCoroutine(TurnOffLampEventCoroutine());
+    }
+
+    public void UpdateReopen(int updateLamp)
+    {
+        reopen = updateLamp;
+    }
+
+    public void ReturnLamp()
+    {
+        if (reopen == lamps.Count - 1) return;
+
+        for (int i = 0; i < killTriggers.Count; i++)
+        {
+            Destroy(killTriggers[i]);
+            killTriggers[i] = null;
+        }
+
+        killTriggers.Clear();
+
+        for (int i = reopen; i < lamps.Count; i++)
+        {
+            var lamp = lamps[i];
+            lamp.gameObject.SetActive(true);
+            Debug.Log("RelightUp");
+            lamp.LightUp();
+        }
+
+        currLamp = 0;//
     }
 }

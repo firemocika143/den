@@ -8,10 +8,11 @@ public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager Instance { get; private set; }
 
+    
+    public Transform spawnPoint;
+
     [SerializeField]
     private GameObject playerPrefab;
-    [SerializeField]
-    private Transform spawnPoint;
 
     private GameObject player;
 
@@ -45,7 +46,7 @@ public class PlayerManager : MonoBehaviour
 
         if (player.TryGetComponent<PlayerController>(out var pc))
         {
-            pc.state.resting = true;
+            //pc.state.resting = true;
             pc.StopPlayer();
             yield return new WaitForSeconds(time);
             pc.state.stop = false;

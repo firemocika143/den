@@ -90,7 +90,7 @@ public class GameManager : MonoBehaviour
 
     public GameProgress progress;
 
-    public Flow flow;
+    public Flow flow; // well, this is not that good, I can only use those functions defined in Flow, but not the certain flows
     public string CurrScene;
 
     public bool gamePaused = false;// Can utilize this variable to adjust some settings when game is paused
