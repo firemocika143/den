@@ -77,4 +77,10 @@ public class PlayerManager : MonoBehaviour
     {
         player.GetComponent<PlayerController>().state.stop = false;
     }
+
+    //public void KillPlayer(bool instantDie)
+    //{
+    //    if (instantDie) player.GetComponent<PlayerController>().InstantDie();
+    //    else player.GetComponent<PlayerController>().PlayerKilled();
+    //}
 }

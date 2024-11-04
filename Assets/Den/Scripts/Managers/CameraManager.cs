@@ -14,6 +14,7 @@ public class CameraManager : MonoBehaviour
     private List<CinemachineVirtualCamera> vcams;
 
     private CinemachineVirtualCamera curr_vcam;
+    private Coroutine zoom;
 
     private void Awake()
     {
@@ -50,17 +51,30 @@ public class CameraManager : MonoBehaviour
         }
     }
 
-    public IEnumerator SmoothZoom(float newRadius)
+    public void Zoom(float newRadius, float zoomTime, float smoothness)
     {
-        yield return null;
+        if (zoom != null)
+        {
+            // how to deal with this?
+        }
+
+        zoom = StartCoroutine(SmoothZoom(newRadius, zoomTime, smoothness));
+    }
+
+    private IEnumerator SmoothZoom(float newRadius, float time, float times)
+    {
+        if (time <= 0 || curr_vcam.m_Lens.OrthographicSize == newRadius) yield break;
+
+        float addAmount = newRadius - curr_vcam.m_Lens.OrthographicSize;
 
         while (curr_vcam.m_Lens.OrthographicSize <= newRadius)
         {
             //this can have smoothness and time as well
-            yield return new WaitForSeconds(0.1f);
-            curr_vcam.m_Lens.OrthographicSize += 1f;
+            yield return new WaitForSeconds(time/times);
+            curr_vcam.m_Lens.OrthographicSize += addAmount / times;
         }
 
         curr_vcam.m_Lens.OrthographicSize = newRadius;
+        zoom = null;
     }
 }

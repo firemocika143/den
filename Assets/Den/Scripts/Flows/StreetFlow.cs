@@ -37,22 +37,22 @@ public class StreetFlow : Flow, IDataPersistence
 
     public IEnumerator StreetLightOff()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
         //inStreetLightOffEvent = true;// I should cosider about where to turn this into false   
         //TODO - move Camera to see the first light flashes then turns off, then zoom out, then the second as well then get back to player then play music in danger
         CameraManager.Instance.Follow(firstLamp.transform);
         firstLamp.GetComponent<Lamp>().Off();
         yield return new WaitForSeconds(LampManager.Instance.turnOffTime);
         firstLamp.SetActive(false);
-        // TODO - play tensive SFX for 1 second
-        yield return new WaitForSeconds(1f);
+        // TODO - play tensive SFX for 0.5 second
+        yield return new WaitForSeconds(0.5f);
         StartCoroutine(LampManager.Instance.TurnOffLampEvent());
         CameraManager.Instance.Follow(centerPointOfLamps);
-        CameraManager.Instance.SmoothZoom(zoomOutRadius);
-        yield return new WaitForSeconds(LampManager.Instance.turnOffTime - 1);
+        CameraManager.Instance.Zoom(zoomOutRadius, 0.5f, 40);
+        yield return new WaitForSeconds(LampManager.Instance.turnOffTime);
         // TODO - play tensive SFX for 1 second
         CameraManager.Instance.Follow(PlayerManager.Instance.PlayerTransform());
-        CameraManager.Instance.SmoothZoom(5f);
+        CameraManager.Instance.Zoom(5f, 1f, 40);
         PlayerManager.Instance.EnablePlayerToMove();
         SoundManager.Instance.PlayInDanger();
         // this wouldn't work successfully for now, beacause the player controller itself call the get Into light source sound on it own and player is in the light source though they will have to leave there later

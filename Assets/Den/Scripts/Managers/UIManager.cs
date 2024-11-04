@@ -19,6 +19,8 @@ public class UIManager : MonoBehaviour
     private GameObject playerPanel;
     [SerializeField]
     private GameObject fadePanel;
+    [SerializeField]
+    private GameObject instructionPanel;
 
     private void Start()
     {

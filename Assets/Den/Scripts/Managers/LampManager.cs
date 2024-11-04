@@ -10,7 +10,9 @@ public class LampManager : MonoBehaviour
     private List<Lamp> lamps;
     [SerializeField]
     private GameObject lightArea;
-    
+    [SerializeField]
+    private GameObject killTriggerPrefab;
+
     public float turnOffTime;
 
     private void Start()
@@ -27,6 +29,7 @@ public class LampManager : MonoBehaviour
 
         foreach (var lamp in lamps)
         {
+            // It's quite lag here
             if (lamp.gameObject.activeSelf)
             {
                 lamp.Off();
@@ -34,6 +37,7 @@ public class LampManager : MonoBehaviour
                 // TODO - play SFX
                 lamp.gameObject.SetActive(false);
                 // TODO - place a death trigger at the lamp position(but then? how to control player respawn points? and return to which point of the game?, is it ok to just restart this function again?)
+                Instantiate(killTriggerPrefab, lamp.transform.position, Quaternion.identity);
             }
         }
     }

@@ -2,7 +2,9 @@ using Cinemachine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -73,6 +75,20 @@ public class GameManager : MonoBehaviour
     }
 
     public KeySettings keySettings;
+
+    [Serializable]
+    public class GameProgress
+    {
+        [Header("Street")]
+        public bool getFirstPage = false;
+        public bool finishLightOff = false;
+        public bool getLightDraw = false;
+
+        [Header("Library")]
+        public bool getIn = false;
+    }
+
+    public GameProgress progress;
 
     public Flow flow;
     public string CurrScene;

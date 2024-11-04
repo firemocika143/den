@@ -87,7 +87,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
             lineRenderer.enabled = false;
         }
 
-        StartCoroutine(PlayerUnhittable());
+        InitPlayerState();
         LeaveLightSource();
     }
 
@@ -135,11 +135,14 @@ public class PlayerController : MonoBehaviour, IDataPersistence
 
             state.health = state.health >= 0 ? state.health : 0;
             UIManager.Instance.UpdatePlayerHealth(state.health);
-            StartCoroutine(PlayerUnhittable());
 
             if (state.health <= 0)
             {
                 PlayerKilled();
+            }
+            else
+            {
+                StartCoroutine(PlayerUnhittable(2f));
             }
         }
     }
@@ -189,7 +192,6 @@ public class PlayerController : MonoBehaviour, IDataPersistence
             playerAnimation.PlayerRespawnAnimation();
             state.dying = false;
             state.stop = false;
-            if (!state.isHittable) StartCoroutine(PlayerUnhittable());
         }));
 
         // Actually, most things went wrong if I really destroy the player, maybe this is not a good solution
@@ -224,13 +226,37 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         //TODO - show some particles or animations
     }
 
-    private IEnumerator PlayerUnhittable()
+    private IEnumerator PlayerUnhittable(float time)
     {
-        StartCoroutine(PlayerFlash());
+        StartCoroutine(PlayerFlash(4, time));
 
         state.isHittable = false;
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(time);
         state.isHittable = true;
+    }
+
+    private void InitPlayerState()
+    {
+        state.stop = false;
+        state.climb = false;
+        state.horMoving = false;
+        state.movingUp = false;
+        state.movingDown = false;
+
+        state.attacking = false;
+        state.attackEnd = false;
+
+        state.resting = true;
+        state.standing = false;
+        state.isHittable = true;
+        state.dying = false;
+        state.inDanger = false;
+    }
+
+    public void InstantDie()
+    {
+        PlayerManager.Instance.PlayerRespawn();//this is so weird, very weird
+        StartCoroutine(PlayerUnhittable(2f));
     }
 
     //Player skill
@@ -275,16 +301,17 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         }
     }
 
-    private IEnumerator PlayerFlash()
+    private IEnumerator PlayerFlash(int times, float time)
     {
-        yield return new WaitForSeconds(0.2f);
+        float pretime = 0.2f;
+        yield return new WaitForSeconds(pretime);
 
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < times; i++)
         {
             playerSprite.enabled = false;
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds((time - pretime) / (float)times / 2);
             playerSprite.enabled = true;
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds((time - pretime) / (float)times / 2);
         }
     }
 
