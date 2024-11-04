@@ -36,7 +36,6 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         public bool resting = true;
         public bool standing = false;
         public bool isHittable = true;
-        public float unhittableTime = 1f;
         public bool dying = false;
         public bool inDanger = false;
 
@@ -61,6 +60,10 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     private PlayerLightSystem lightSystem;
     [SerializeField]
     private PlayerAnimation playerAnimation;
+
+    [Header("The Others")]
+    [SerializeField]
+    private SpriteRenderer playerSprite;
     
     private float gainLightTimer; 
     private float loseLightTimer;
@@ -84,6 +87,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
             lineRenderer.enabled = false;
         }
 
+        StartCoroutine(PlayerUnhittable());
         LeaveLightSource();
     }
 
@@ -100,11 +104,6 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         }
 
         UpdatePlayerLightEnergy();
-
-        if (!state.isHittable && Time.time - unhittableTimer > state.unhittableTime)
-        {
-            state.isHittable = true;
-        }
 
         DecidePlayerAnimation();
     }
@@ -136,8 +135,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
 
             state.health = state.health >= 0 ? state.health : 0;
             UIManager.Instance.UpdatePlayerHealth(state.health);
-            state.isHittable = false;
-            unhittableTimer = Time.time;
+            StartCoroutine(PlayerUnhittable());
 
             if (state.health <= 0)
             {
@@ -191,6 +189,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
             playerAnimation.PlayerRespawnAnimation();
             state.dying = false;
             state.stop = false;
+            if (!state.isHittable) StartCoroutine(PlayerUnhittable());
         }));
 
         // Actually, most things went wrong if I really destroy the player, maybe this is not a good solution
@@ -223,6 +222,15 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         }
 
         //TODO - show some particles or animations
+    }
+
+    private IEnumerator PlayerUnhittable()
+    {
+        StartCoroutine(PlayerFlash());
+
+        state.isHittable = false;
+        yield return new WaitForSeconds(2f);
+        state.isHittable = true;
     }
 
     //Player skill
@@ -264,6 +272,19 @@ public class PlayerController : MonoBehaviour, IDataPersistence
                 currState = PlayerAnimationState.WALK;
             }
             else currState = PlayerAnimationState.IDLE;
+        }
+    }
+
+    private IEnumerator PlayerFlash()
+    {
+        yield return new WaitForSeconds(0.2f);
+
+        for (int i = 0; i < 3; i++)
+        {
+            playerSprite.enabled = false;
+            yield return new WaitForSeconds(0.3f);
+            playerSprite.enabled = true;
+            yield return new WaitForSeconds(0.3f);
         }
     }
 

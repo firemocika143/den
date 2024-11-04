@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class NextSceneTrigger : MonoBehaviour
 {
-    public string sceneName;
+    public string nextSceneName;
 
     private void OnTriggerEnter2D(Collider2D col)
     {
@@ -13,8 +13,8 @@ public class NextSceneTrigger : MonoBehaviour
         {
             //LoadSceneMode scene after a light
             DataPersistenceManager.instance.SaveGame();
-            GameManager.Instance.currScene = sceneName;
-            SceneManager.LoadScene(sceneName);
+            GameManager.Instance.CurrScene = nextSceneName;
+            SceneManager.LoadScene(nextSceneName);
         }
     }
 }

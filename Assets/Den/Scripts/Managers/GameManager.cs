@@ -74,7 +74,8 @@ public class GameManager : MonoBehaviour
 
     public KeySettings keySettings;
 
-    public string currScene = "Street";
+    public Flow flow;
+    public string CurrScene;
 
     public bool gamePaused = false;// Can utilize this variable to adjust some settings when game is paused
 
@@ -82,6 +83,8 @@ public class GameManager : MonoBehaviour
     {
         // TODO - wait for everything to be set up (but how? game manager is always at the first place to run)
         // How to call start flow? should flow be a class or an interface (this should be an easy decision)
+        flow = FindFirstObjectByType<Flow>();
+        CurrScene = flow.name;
     }
 
     public void ManualSave()

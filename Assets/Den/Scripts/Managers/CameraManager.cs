@@ -50,8 +50,17 @@ public class CameraManager : MonoBehaviour
         }
     }
 
-    public void SmoothZoom(float newRadius)
+    public IEnumerator SmoothZoom(float newRadius)
     {
+        yield return null;
+
+        while (curr_vcam.m_Lens.OrthographicSize <= newRadius)
+        {
+            //this can have smoothness and time as well
+            yield return new WaitForSeconds(0.1f);
+            curr_vcam.m_Lens.OrthographicSize += 1f;
+        }
+
         curr_vcam.m_Lens.OrthographicSize = newRadius;
     }
 }

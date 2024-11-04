@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RespawnPoint : MonoBehaviour
+public class RespawnPointForLibrary : MonoBehaviour
 {
     private Vector3 respawnPosition;
     private bool onTrigger;
