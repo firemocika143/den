@@ -9,9 +9,9 @@ public class StreetReturn : MonoBehaviour
         if (col.CompareTag("Player"))
         {
             //this way doesn't seem to be good
-            col.gameObject.GetComponent<PlayerController>().InstantDie();
+            col.gameObject.GetComponent<PlayerController>().InstantKill();
             StreetFlow sf = (StreetFlow)GameManager.Instance.flow;// and this looks really bad
-            StartCoroutine(sf.ReturnFlow());
+            sf.ReturnFlow();
         }
     }
 }

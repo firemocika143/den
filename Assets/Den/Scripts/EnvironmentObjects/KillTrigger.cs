@@ -8,7 +8,7 @@ public class KillTrigger : MonoBehaviour
     {
         if (col.CompareTag("Player"))
         {
-            col.gameObject.GetComponent<PlayerController>().InstantDie();
+            col.gameObject.GetComponent<PlayerController>().InstantKill();
         }
     }
 }

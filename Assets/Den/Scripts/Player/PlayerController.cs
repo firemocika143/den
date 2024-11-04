@@ -253,7 +253,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         state.inDanger = false;
     }
 
-    public void InstantDie()
+    public void InstantKill()
     {
         PlayerManager.Instance.PlayerRespawn();//this is so weird, very weird
         StartCoroutine(PlayerUnhittable(2f));
