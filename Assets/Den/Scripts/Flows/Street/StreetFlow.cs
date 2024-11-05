@@ -11,6 +11,8 @@ public class StreetFlow : Flow, IDataPersistence
     private Transform centerPointOfLamps;
     [SerializeField]
     private float zoomOutRadius;
+    [SerializeField]
+    private GameObject firstLightSource;
 
     private bool first;
     //private bool inStreetLightOffEvent;
@@ -40,12 +42,12 @@ public class StreetFlow : Flow, IDataPersistence
         StartCoroutine(StreetLightOffCoroutine());
     }
 
-    public void ReturnFlow()
-    {
-        // here is the function for that if the player achieve some conditions(like they died or something -> eventually this is in StreetReturn), then we should return the flow back to some point, and then use this function to continue the flow
-        // but where to call this function? In the Update function in this script? to check the player's state by PlayerManager?
-        StartCoroutine(ReturnFlowCoroutine());
-    }
+    //public void ReturnFlow()
+    //{
+    //    // here is the function for that if the player achieve some conditions(like they died or something -> eventually this is in StreetReturn), then we should return the flow back to some point, and then use this function to continue the flow
+    //    // but where to call this function? In the Update function in this script? to check the player's state by PlayerManager?
+    //    StartCoroutine(ReturnFlowCoroutine());
+    //}
     
     public void LoadData(GameData data)
     {
@@ -59,7 +61,9 @@ public class StreetFlow : Flow, IDataPersistence
 
     private IEnumerator StreetLightOffCoroutine()
     {
-        yield return new WaitForSeconds(0.5f);
+        firstLightSource.SetActive(false);
+        PlayerManager.Instance.DisableLightOn();
+        yield return new WaitForSeconds(1f);
         //inStreetLightOffEvent = true;// I should cosider about where to turn this into false   
         //TODO - move Camera to see the first light flashes then turns off, then zoom out, then the second as well then get back to player then play music in danger
         CameraManager.Instance.Follow(firstLamp.transform);
@@ -71,23 +75,24 @@ public class StreetFlow : Flow, IDataPersistence
         LampManager.Instance.TurnOffLampEvent();
         CameraManager.Instance.Follow(centerPointOfLamps);
         CameraManager.Instance.Zoom(zoomOutRadius, 0.5f, 40);
-        yield return new WaitForSeconds(LampManager.Instance.turnOffTime);
+        yield return new WaitForSeconds(LampManager.Instance.turnOffTime + 1);
         // TODO - play tensive SFX for 1 second
-        CameraManager.Instance.Zoom(5f, 1f, 40);
         CameraManager.Instance.Follow(PlayerManager.Instance.PlayerTransform());
+        CameraManager.Instance.Zoom(5f, 2f, 40);
+
         // somthing works lag here!!!!!!!!!!
         PlayerManager.Instance.EnablePlayerToMove();
         SoundManager.Instance.PlayInDanger();
         // this wouldn't work successfully for now, beacause the player controller itself call the get Into light source sound on it own and player is in the light source though they will have to leave there later
     }
 
-    private IEnumerator ReturnFlowCoroutine()
-    {
-        Debug.Log("Returning");
-        LampManager.Instance.ReturnLamp();
-        LampManager.Instance.PauseTurnOffEvent();
-        yield return new WaitForSeconds(1f);
-        SoundManager.Instance.PlayInDanger();
-        LampManager.Instance.TurnOffLampEvent();
-    }
+    //private IEnumerator ReturnFlowCoroutine()
+    //{
+    //    Debug.Log("Returning");
+    //    LampManager.Instance.ReturnLamp();
+    //    LampManager.Instance.PauseTurnOffEvent();
+    //    yield return new WaitForSeconds(1f);
+    //    SoundManager.Instance.PlayInDanger();
+    //    LampManager.Instance.TurnOffLampEvent();
+    //}
 }

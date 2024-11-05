@@ -12,8 +12,6 @@ public class Lamp : MonoBehaviour
     [SerializeField]
     private int origIntensity;
 
-    public bool went = false;
-
     public void Off()
     {
         animHandler.ChangeAnimationState("Off");
@@ -28,13 +26,5 @@ public class Lamp : MonoBehaviour
     {
         animHandler.ChangeAnimationState("LightUp");
         light2D.intensity = origIntensity;
-    }
-
-    private void OnTriggerEnter2D(Collider2D col)
-    {
-        if (col.CompareTag("Player"))
-        {
-            went = true;
-        }
     }
 }

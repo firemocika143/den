@@ -9,55 +9,57 @@ public class LampManager : MonoBehaviour
     [SerializeField]
     private List<Lamp> lamps;
     [SerializeField]
-    private GameObject lightArea;
-    [SerializeField]
     private GameObject killTriggerPrefab;
 
     public float turnOffTime;
 
     private int reopen;
     private IEnumerator turnOffEvent = null;// control the event here
-    private StreetFlow sf;
     private List<GameObject> killTriggers = new List<GameObject>();
-    private int currLamp;
-    private int cid = 0;
+    //private int currLamp;
+    //private int cid = 0;
 
     private void Start()
     {
         Instance = this;
-
-        sf = (StreetFlow)GameManager.Instance.flow;
-
-        lightArea.SetActive(true);
     }
 
     public IEnumerator TurnOffLampEventCoroutine()
     {
         yield return null;
-        lightArea.SetActive(false);
-        cid++;
-        Debug.Log(cid);
+        //cid++;
+        //Debug.Log(cid);
 
-        while (currLamp < lamps.Count)
+        foreach (Lamp lamp in lamps)
         {
-            int now = currLamp;
-            // It's quite lag here
-            if (lamps[currLamp].gameObject.activeSelf && currLamp >= reopen)
+            if (lamp.gameObject.activeSelf)
             {
-                lamps[currLamp].Off();
+                lamp.Off();
                 // TODO - play SFX
                 yield return new WaitForSeconds(turnOffTime);
             }
-
-            if (currLamp == now)
-            {
-                lamps[currLamp].gameObject.SetActive(false);
-                // TODO - place a death trigger at the lamp position(but then? how to control player respawn points? and return to which point of the game?, is it ok to just restart this function again?)
-                GameObject killTrigger = Instantiate(killTriggerPrefab, lamps[currLamp].transform.position, Quaternion.identity);
-                killTriggers.Add(killTrigger);
-                currLamp++;
-            }
         }
+
+        //while (currLamp < lamps.Count)
+        //{
+        //    int now = currLamp;
+        //    // It's quite lag here
+        //    if (lamps[currLamp].gameObject.activeSelf && currLamp >= reopen)
+        //    {
+        //        lamps[currLamp].Off();
+        //        // TODO - play SFX
+        //        yield return new WaitForSeconds(turnOffTime);
+        //    }
+
+        //    if (currLamp == now)
+        //    {
+        //        lamps[currLamp].gameObject.SetActive(false);
+        //        // TODO - place a death trigger at the lamp position(but then? how to control player respawn points? and return to which point of the game?, is it ok to just restart this function again?)
+        //        GameObject killTrigger = Instantiate(killTriggerPrefab, lamps[currLamp].transform.position, Quaternion.identity);
+        //        killTriggers.Add(killTrigger);
+        //        currLamp++;
+        //    }
+        //}
     }
 
     public void TurnOffLampEvent()
@@ -82,32 +84,32 @@ public class LampManager : MonoBehaviour
         reopen = updateLamp;
     }
 
-    public void ReturnLamp()
-    {
-        Debug.Log(reopen);
-        Debug.Log(lamps.Count);
-        if (reopen >= lamps.Count) return;
+    //public void ReturnLamp()
+    //{
+    //    Debug.Log(reopen);
+    //    Debug.Log(lamps.Count);
+    //    if (reopen >= lamps.Count) return;
 
-        foreach (var k in killTriggers)
-        {
-            Destroy(k);
-        }
+    //    foreach (var k in killTriggers)
+    //    {
+    //        Destroy(k);
+    //    }
 
-        killTriggers.Clear();
+    //    killTriggers.Clear();
 
-        //foreach (var lamp in lamps)
-        //{
-        //    lamp.gameObject.SetActive(true);
-        //}
+    //    //foreach (var lamp in lamps)
+    //    //{
+    //    //    lamp.gameObject.SetActive(true);
+    //    //}
 
-        for (int i = reopen; i < lamps.Count; i++)
-        {
-            var lamp = lamps[i];
-            lamp.gameObject.SetActive(true);
-            lamp.LightUp();
-        }
+    //    for (int i = reopen; i < lamps.Count; i++)
+    //    {
+    //        var lamp = lamps[i];
+    //        lamp.gameObject.SetActive(true);
+    //        lamp.LightUp();
+    //    }
 
-        currLamp = 0;
-        //it's working really weird here
-    }
+    //    currLamp = 0;
+    //    //it's working really weird here
+    //}
 }

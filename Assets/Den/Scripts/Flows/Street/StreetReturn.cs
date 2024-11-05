@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class StreetReturn : MonoBehaviour
 {
-    private void OnTriggerEnter2D(Collider2D col)
-    {
-        if (col.CompareTag("Player"))
-        {
-            //this way doesn't seem to be good
-            col.gameObject.GetComponent<PlayerController>().InstantKill();
-            StreetFlow sf = (StreetFlow)GameManager.Instance.flow;// and this looks really bad
-            sf.ReturnFlow();
-        }
-    }
+    //private void OnTriggerEnter2D(Collider2D col)
+    //{
+    //    if (col.CompareTag("Player"))
+    //    {
+    //        //this way doesn't seem to be good
+    //        col.gameObject.GetComponent<PlayerController>().InstantKill();
+    //        StreetFlow sf = (StreetFlow)GameManager.Instance.flow;// and this looks really bad
+    //        sf.ReturnFlow();
+    //    }
+    //}
 }

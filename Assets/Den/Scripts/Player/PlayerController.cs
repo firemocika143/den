@@ -93,14 +93,17 @@ public class PlayerController : MonoBehaviour, IDataPersistence
 
     private void Update()
     {
-        // this is double check
-        if (state.lightEnergy <= 0 && lightSystem.Lighting())
+        if (lightSystem.enabled)
         {
-            lightSystem.LightOff();
-        }
-        else if (state.lightEnergy > 0 && !lightSystem.Lighting() && !isInLightSource && !state.dying)
-        {
-            lightSystem.LightOn();
+            // this is double check
+            if (state.lightEnergy <= 0 && lightSystem.Lighting())
+            {
+                lightSystem.LightOff();
+            }
+            else if (state.lightEnergy > 0 && !lightSystem.Lighting() && !isInLightSource && !state.dying)
+            {
+                lightSystem.LightOn();
+            }
         }
 
         UpdatePlayerLightEnergy();
@@ -185,7 +188,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         // TODO - player dying Animation
         state.dying = true;
         StopPlayer();
-        lightSystem.CenterLightOff();
+        if (lightSystem.enabled) lightSystem.CenterLightOff();
         StartCoroutine(playerAnimation.PlayerDieAnimation(() => 
         { 
             PlayerManager.Instance.PlayerRespawn();
@@ -207,7 +210,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         state.inDanger = false;
         PlayerManager.Instance.PlayerInLightSource();
 
-        lightSystem.CenterLightOff();
+        if (lightSystem.enabled) lightSystem.CenterLightOff();
         //TODO - show some particles or animations
     }
 
@@ -220,7 +223,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
 
         if (state.lightEnergy > 0)
         {
-            lightSystem.LightOn();
+            if (lightSystem.enabled) lightSystem.LightOn();
         }
 
         //TODO - show some particles or animations
@@ -336,12 +339,12 @@ public class PlayerController : MonoBehaviour, IDataPersistence
 
             if (state.lightEnergy < lowLight)
             {
-                lightSystem.LowLightEnergyWarning();
+                if (lightSystem.enabled) lightSystem.LowLightEnergyWarning();
             }
 
             if (state.lightEnergy <= 0 && !state.inDanger)
             {
-                lightSystem.LightOff();
+                if (lightSystem.enabled) lightSystem.LightOff();
                 PlayerManager.Instance.PlayerInDanger();
                 state.inDanger = true;
             }

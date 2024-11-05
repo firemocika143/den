@@ -79,9 +79,17 @@ public class PlayerManager : MonoBehaviour
         player.GetComponent<PlayerController>().state.stop = false;
     }
 
-    //public void KillPlayer(bool instantDie)
-    //{
-    //    if (instantDie) player.GetComponent<PlayerController>().InstantDie();
-    //    else player.GetComponent<PlayerController>().PlayerKilled();
-    //}
+    public void DisableLightOn()
+    {
+        PlayerLightSystem pls = player.GetComponent<PlayerLightSystem>();
+        pls.LightOff();
+        pls.enabled = false;
+    }
+
+    public void EnableLightOn()
+    {
+        PlayerLightSystem pls = player.GetComponent<PlayerLightSystem>();
+        
+        pls.enabled = true;
+    }
 }

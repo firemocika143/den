@@ -53,28 +53,34 @@ public class CameraManager : MonoBehaviour
 
     public void Zoom(float newRadius, float zoomTime, float smoothness)
     {
-        if (zoom != null)
-        {
-            // how to deal with this?
-        }
+        //if (zoom != null)
+        //{
+        //    // how to deal with this?
+        //}
 
-        zoom = StartCoroutine(SmoothZoom(newRadius, zoomTime, smoothness));
+        //zoom = 
+        //curr_vcam.m_Lens.OrthographicSize = Mathf.MoveTowards(curr_vcam.m_Lens.OrthographicSize, newRadius, 1/zoomTime * Time.deltaTime);
+        StartCoroutine(SmoothZoom(newRadius, zoomTime, smoothness));
     }
 
     private IEnumerator SmoothZoom(float newRadius, float time, float times)
     {
-        if (time <= 0 || curr_vcam.m_Lens.OrthographicSize == newRadius) yield break;
+        //if (time <= 0 || curr_vcam.m_Lens.OrthographicSize == newRadius) yield break;
 
-        float addAmount = newRadius - curr_vcam.m_Lens.OrthographicSize;
+        //float addAmount = newRadius - curr_vcam.m_Lens.OrthographicSize;
 
-        while (curr_vcam.m_Lens.OrthographicSize <= newRadius)
-        {
-            //this can have smoothness and time as well
-            yield return new WaitForSeconds(time/times);
-            curr_vcam.m_Lens.OrthographicSize += addAmount / times;
-        }
+        //for (int i = 0; i < times; i++)
+        //{
+        //    //this can have smoothness and time as well
+        //    yield return new WaitForSeconds(time / times);
+        //    curr_vcam.m_Lens.OrthographicSize += addAmount / times;
+        //}
 
-        curr_vcam.m_Lens.OrthographicSize = newRadius;
-        zoom = null;
+        //Debug.Log("Done");
+        //curr_vcam.m_Lens.OrthographicSize = newRadius;
+        //zoom = null;
+
+        //lerpTimer = Time.deltaTime * smooth;
+        //Camera.main.fieldOfView = Mathf.Lerp(initialFOV, zoomInFOV, lerpTimer);
     }
 }
