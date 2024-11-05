@@ -15,6 +15,7 @@ public class StreetFlow : Flow, IDataPersistence
     private GameObject firstLightSource;
 
     private bool first;
+    private Coroutine eventCoroutine;
     //private bool inStreetLightOffEvent;
 
     public void Awake()
@@ -39,7 +40,9 @@ public class StreetFlow : Flow, IDataPersistence
 
     public void StreetLightOff()
     {
-        StartCoroutine(StreetLightOffCoroutine());
+        if (eventCoroutine != null) StopCoroutine(eventCoroutine);
+        
+        eventCoroutine = StartCoroutine(StreetLightOffCoroutine());
     }
 
     //public void ReturnFlow()

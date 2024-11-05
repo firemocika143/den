@@ -92,4 +92,12 @@ public class PlayerManager : MonoBehaviour
         
         pls.enabled = true;
     }
+
+    public BoxCollider2D PlayerCollider()
+    {
+        // this is just for oneWayPlatform
+        if (player == null) return null;
+
+        return player.GetComponent<BoxCollider2D>();
+    }
 }

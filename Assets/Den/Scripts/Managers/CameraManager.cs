@@ -14,7 +14,7 @@ public class CameraManager : MonoBehaviour
     private List<CinemachineVirtualCamera> vcams;
 
     private CinemachineVirtualCamera curr_vcam;
-    private Coroutine zoom;
+    private Coroutine zoomCoroutine;
 
     private void Awake()
     {
@@ -51,36 +51,54 @@ public class CameraManager : MonoBehaviour
         }
     }
 
-    public void Zoom(float newRadius, float zoomTime, float smoothness)
+    public void Zoom(float targetRadius, float duration, float smoothness)
     {
-        //if (zoom != null)
-        //{
-        //    // how to deal with this?
-        //}
+        if (zoomCoroutine != null)
+            StopCoroutine(zoomCoroutine);
 
-        //zoom = 
-        //curr_vcam.m_Lens.OrthographicSize = Mathf.MoveTowards(curr_vcam.m_Lens.OrthographicSize, newRadius, 1/zoomTime * Time.deltaTime);
-        StartCoroutine(SmoothZoom(newRadius, zoomTime, smoothness));
+        zoomCoroutine = StartCoroutine(lerpFieldOfView(targetRadius, duration));
     }
 
-    private IEnumerator SmoothZoom(float newRadius, float time, float times)
+    IEnumerator lerpFieldOfView(float targetRadius, float duration)
     {
-        //if (time <= 0 || curr_vcam.m_Lens.OrthographicSize == newRadius) yield break;
+        float counter = 0;
 
-        //float addAmount = newRadius - curr_vcam.m_Lens.OrthographicSize;
+        float fromRadius = curr_vcam.m_Lens.OrthographicSize;
 
-        //for (int i = 0; i < times; i++)
-        //{
-        //    //this can have smoothness and time as well
-        //    yield return new WaitForSeconds(time / times);
-        //    curr_vcam.m_Lens.OrthographicSize += addAmount / times;
-        //}
+        while (counter < duration)
+        {
+            counter += Time.deltaTime;
 
-        //Debug.Log("Done");
-        //curr_vcam.m_Lens.OrthographicSize = newRadius;
-        //zoom = null;
+            float fOVTime = counter / duration;
+            //Debug.Log(fOVTime);
 
-        //lerpTimer = Time.deltaTime * smooth;
-        //Camera.main.fieldOfView = Mathf.Lerp(initialFOV, zoomInFOV, lerpTimer);
+            //Change FOV
+            curr_vcam.m_Lens.OrthographicSize = Mathf.Lerp(fromRadius, targetRadius, fOVTime);
+            //Wait for a frame
+            yield return null;
+        }
     }
+
+    //private IEnumerator SmoothZoom(float newRadius, float time, float times)
+    //{
+    //    if (time <= 0 || curr_vcam.m_Lens.OrthographicSize == newRadius) yield break;
+
+    //    float addAmount = newRadius - curr_vcam.m_Lens.OrthographicSize;
+
+    //    for (int i = 0; i < times; i++)
+    //    {
+    //        //this can have smoothness and time as well
+    //        yield return new WaitForSeconds(time / times);
+    //        curr_vcam.m_Lens.OrthographicSize += addAmount / times;
+    //    }
+
+    //    Debug.Log("Done");
+    //    curr_vcam.m_Lens.OrthographicSize = newRadius;
+    //    zoomCoroutine = null;
+
+    //    //lerpTimer = Time.deltaTime * smooth;
+    //    //Camera.main.fieldOfView = Mathf.Lerp(initialFOV, zoomInFOV, lerpTimer);
+    //}
+
+
 }
