@@ -16,7 +16,7 @@ public class BossDarkKnight : MonoBehaviour, IEnemy
     public float invincibleTime = 1.0f;
     private bool invincible = false;
 
-    private float cooldownTime = 1.0f;
+    //private float cooldownTime = 1.0f;
     private bool cooldown = false;
 
     [Header("Normal Attack")]
@@ -34,8 +34,8 @@ public class BossDarkKnight : MonoBehaviour, IEnemy
 
     [Header("Skill 2")]
     public GameObject skill2Knight;
-    public float skill2KnightTime = 5.0f;
-    public float skill2stunningTime = 1.0f;
+    public float skill2KnightTime = 0.5f;
+    public float skill2stunningTime = 0.5f;
     public float skill2CooldownTime = 20.0f;
     private bool skill2Cooldown = false;
 
@@ -57,6 +57,7 @@ public class BossDarkKnight : MonoBehaviour, IEnemy
 
         normalAttack.SetActive(false);
         skill1FireArea.SetActive(false);
+        skill2Knight.SetActive(false);
     }
 
     // Update is called once per frame
@@ -178,17 +179,17 @@ public class BossDarkKnight : MonoBehaviour, IEnemy
         cooldown = true;
         skill2Cooldown = true;
 
-        rb.transform.position = new Vector3(targetTRansform.position.x, 5.0f, rb.transform.position.z); // set dark knight position
+        rb.transform.position = new Vector3(targetTRansform.position.x, rb.transform.position.y + 4.0f, rb.transform.position.z); // set dark knight position
         rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
         yield return new WaitForSeconds(skill2stunningTime); // stunning before summon knight
 
-        GameObject Knight = GameObject.Instantiate(skill2Knight); // summon knight
-        Knight.transform.position = new Vector3(targetTRansform.position.x + 5.0f, 3.0f, rb.transform.position.z); // set knight position
+        skill2Knight.SetActive(true);
+        skill2Knight.transform.position = new Vector3(targetTRansform.position.x + 9.0f, rb.transform.position.y - 2.0f, rb.transform.position.z); // set knight position
         yield return new WaitForSeconds(skill2KnightTime);
-        Destroy(Knight);
+        skill2Knight.SetActive(false);
 
         // fall
-        rb.constraints = RigidbodyConstraints2D.None;
+        //rb.constraints = RigidbodyConstraints2D.None;
         rb.constraints = RigidbodyConstraints2D.FreezePositionX;
 
         while (rb.velocity.y < 0)
