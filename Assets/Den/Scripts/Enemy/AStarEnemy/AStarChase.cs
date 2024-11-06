@@ -5,7 +5,7 @@ using Pathfinding;
 
 public class AStarChase: MonoBehaviour
 {
-    public Transform target;
+    private Transform target = PlayerManager.Instance.PlayerTransform();
     public Transform idlePos;
     public string playerTag = "Player";
 
@@ -19,11 +19,11 @@ public class AStarChase: MonoBehaviour
     {
         ai = GetComponent<AIDestinationSetter>();
         pc = FindFirstObjectByType<PlayerController>();
-        target = pc.transform;//ugh... this is not actually good, I hope it wouldn't be restricted to pc only
     }
     
     void Update()
     {
+        target = PlayerManager.Instance.PlayerTransform();
         if (ai.target != null && ASEDetector.chase) // if can chase
         {
             //Debug.Log("chase")
