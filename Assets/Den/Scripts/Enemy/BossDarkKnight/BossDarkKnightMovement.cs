@@ -5,7 +5,7 @@ using UnityEngine;
 public class BossDarkKnightMovement : MonoBehaviour
 {
     [Header("Speed")]
-    public float speed = 6.0f;
+    public float speed = 2.0f;
 
     private Transform target;
 
@@ -17,17 +17,18 @@ public class BossDarkKnightMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         pc = FindFirstObjectByType<PlayerController>();
+        target = PlayerManager.Instance.PlayerTransform();
     }
 
     // Update is called once per frame
     void Update()
     {
         target = PlayerManager.Instance.PlayerTransform();
-        if (target.position.x - rb.transform.position.x > 0.5f)
+        if (target.position.x - rb.transform.position.x > 1.0f)
         {
             rb.velocity = new Vector2(speed, rb.velocity.y);
         }
-        else if (target.position.x - rb.transform.position.x < 0.5f) 
+        else if (target.position.x - rb.transform.position.x < 1.0f) 
         {
             rb.velocity = new Vector2(-speed, rb.velocity.y);
         }
