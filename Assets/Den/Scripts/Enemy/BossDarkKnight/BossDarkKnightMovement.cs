@@ -23,11 +23,11 @@ public class BossDarkKnightMovement : MonoBehaviour
     void Update()
     {
         target = PlayerManager.Instance.PlayerTransform();
-        if (target.position.x - rb.transform.position.x > 0.5f)
+        if (target.position.x - rb.transform.position.x > 1.0f)
         {
             rb.velocity = new Vector2(speed, rb.velocity.y);
         }
-        else if (target.position.x - rb.transform.position.x < 0.5f) 
+        else if (target.position.x - rb.transform.position.x < 1.0f) 
         {
             rb.velocity = new Vector2(-speed, rb.velocity.y);
         }

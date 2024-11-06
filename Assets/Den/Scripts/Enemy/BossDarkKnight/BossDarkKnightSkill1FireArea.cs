@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BossDarkKnightNormalAttack : MonoBehaviour
+public class BossDarkKnightSkill1FireArea : MonoBehaviour
 {
     [Header("Attack")]
-    public int attack = 1;
+    public int attack = 2;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
