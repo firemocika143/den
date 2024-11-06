@@ -70,7 +70,6 @@ public class BossDarkKnight : MonoBehaviour, IEnemy
                 Skill1();
             } else if (!skill2Cooldown)
             {
-                targetTRansform = PlayerManager.Instance.PlayerTransform();
                 Skill2();
             }
             else if (!normalAttackCooldown)
@@ -78,8 +77,6 @@ public class BossDarkKnight : MonoBehaviour, IEnemy
                 StartCoroutine(ShowNormalAttackDetector());
             }
         }
-        
-        
     }
 
     //Damage Function for Player to Call
@@ -170,7 +167,7 @@ public class BossDarkKnight : MonoBehaviour, IEnemy
 
     private void Skill2()
     {
-
+        targetTRansform = PlayerManager.Instance.PlayerTransform();
         StartCoroutine(SummonKnight());
     }
 
@@ -179,8 +176,8 @@ public class BossDarkKnight : MonoBehaviour, IEnemy
         cooldown = true;
         skill2Cooldown = true;
 
-        rb.transform.position = new Vector3(targetTRansform.position.x, rb.transform.position.y + 4.0f, rb.transform.position.z); // set dark knight position
-        rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
+        rb.transform.position = new Vector3(targetTRansform.position.x, rb.transform.position.y + 5.0f, rb.transform.position.z); // set dark knight position
+        rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;// freeze dark knight
         yield return new WaitForSeconds(skill2stunningTime); // stunning before summon knight
 
         skill2Knight.SetActive(true);
