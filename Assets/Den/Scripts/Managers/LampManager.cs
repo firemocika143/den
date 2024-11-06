@@ -64,12 +64,14 @@ public class LampManager : MonoBehaviour
 
     public void TurnOffLampEvent()
     {
-        if (turnOffEvent == null)
+        if (turnOffEvent != null)
         {
             Debug.LogError("Wrong in lamp");
-            turnOffEvent = TurnOffLampEventCoroutine();
+            StopCoroutine(turnOffEvent);
+            turnOffEvent = null;
         }
 
+        turnOffEvent = TurnOffLampEventCoroutine();
         StartCoroutine(turnOffEvent);
     }
 

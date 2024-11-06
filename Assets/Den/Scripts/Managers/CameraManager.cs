@@ -55,7 +55,6 @@ public class CameraManager : MonoBehaviour
     {
         if (zoomCoroutine != null)
         {
-            Debug.LogError("worng in camera");
             StopCoroutine(zoomCoroutine);
         }
             
