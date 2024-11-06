@@ -22,7 +22,7 @@ public class PageItem : MonoBehaviour
         }
     }
 
-    public Page page; 
+    public Page page;
 
     [SerializeField]
     private GameObject sign;
