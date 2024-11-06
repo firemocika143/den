@@ -23,7 +23,6 @@ public class BossDarkKnightMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        target = PlayerManager.Instance.PlayerTransform();
         if (target.position.x - rb.transform.position.x > 1.0f)
         {
             rb.velocity = new Vector2(speed, rb.velocity.y);
@@ -34,7 +33,7 @@ public class BossDarkKnightMovement : MonoBehaviour
             rb.velocity = new Vector2(-speed, rb.velocity.y);
             Flip(-1);
         }
-        Debug.Log(target.position.x);
+        //Debug.Log(target.position.x);
     }
 
     private void Flip(float dir)

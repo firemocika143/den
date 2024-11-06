@@ -25,13 +25,11 @@ public class CameraManager : MonoBehaviour
     {
         Instance = this;
 
-        GameObject player = FindFirstObjectByType<PlayerController>().gameObject;
-        if (player != null)
+        if (PlayerManager.Instance == null) Debug.LogError("PlayerManager haven't set it's instance");
+
+        foreach (var c in vcams)
         {
-            foreach (var c in vcams)
-            {
-                c.Follow = player.transform;
-            }
+            c.Follow = PlayerManager.Instance.PlayerTransform();
         }
     }
 

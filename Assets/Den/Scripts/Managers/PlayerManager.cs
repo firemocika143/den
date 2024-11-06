@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static GameManager;
 
-[DefaultExecutionOrder(10001)]
+[DefaultExecutionOrder(-9000)]
 public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager Instance { get; private set; }
@@ -16,28 +16,31 @@ public class PlayerManager : MonoBehaviour
 
     private GameObject player;
 
-    private void Start()
+    private void Awake()
     {
-        Instance = this;
+        PlayerRespawn();
 
-        player = FindFirstObjectByType<PlayerController>().gameObject;// does anyone really do this?
-        if (player != null) PlayerRespawn();
+        Instance = this;
     }
 
     public void PlayerRespawn()//passing in a game object is usually bad, this is a temp solution
     {
         // Maybe I need to find if destroying the player is the correct decision, and also the way to controll the progress and the camera
-        // GameObject player = Instantiate(playerPrefab, spawnPoint.transform.position, Quaternion.identity);
+        PlayerController pc = FindFirstObjectByType<PlayerController>();// does anyone really do this?
+        if (pc != null)
+        {
+            player = pc.gameObject;
+        }
+
         if (player == null)
         {
-            player = Instantiate(playerPrefab, spawnPoint);
+            player = Instantiate(playerPrefab);
         }
 
         player.transform.position = spawnPoint.position;
-        CameraManager.Instance.Follow(player.transform);
         StartCoroutine(WaitToStart(1f));
         //something work weird here
-        DataPersistenceManager.instance.LoadGame();
+        if (DataPersistenceManager.instance != null) DataPersistenceManager.instance.LoadGame();
     }
 
     private IEnumerator WaitToStart(float time)

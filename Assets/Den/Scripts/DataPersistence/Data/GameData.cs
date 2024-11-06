@@ -7,7 +7,6 @@ public class GameData
     // Player
     public int maxHealth;
     public int maxLightEnergy;
-    public bool getLightDraw;
 
     // Flow
     public bool Street;

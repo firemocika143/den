@@ -265,7 +265,6 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     //Player skill
     public void ObtainLightDraw()
     {
-        state.getLightDraw = true;
         playerAttack.ObtainLightDraw();
     }
 
@@ -357,16 +356,14 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     {
         this.state.maxHealth = gameData.maxHealth;
         this.state.maxLightEnergy = gameData.maxLightEnergy;
-        this.state.getLightDraw = gameData.getLightDraw;
-
         AllRecover();
-        if (this.state.getLightDraw) ObtainLightDraw();
+
+        if (GameManager.Instance.progress.getLightDraw) ObtainLightDraw();
     }
 
     public void SaveData(ref GameData gameData)
     {
         gameData.maxHealth = this.state.maxHealth;
         gameData.maxLightEnergy = this.state.maxLightEnergy;
-        gameData.getLightDraw = this.state.getLightDraw;
     }
 }

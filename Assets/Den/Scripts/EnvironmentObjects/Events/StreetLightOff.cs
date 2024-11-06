@@ -1,20 +1,34 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 
 public class StreetLightOff : MonoBehaviour
 {
     [SerializeField]
     private StreetFlow flow;//I am not sure if this is good
+    [SerializeField]
+    private PlayableDirector show;
+
+    private bool triggered = false;
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.CompareTag("Player"))
+        if (col.CompareTag("Player") && !triggered)
         {
+            triggered = true;
             PlayerController pc = col.gameObject.GetComponent<PlayerController>();
-            pc.StopPlayer();
-            flow.StreetLightOff();
-            this.gameObject.GetComponent<BoxCollider2D>().enabled = false;
+            StartCoroutine(TurnOffShow(pc));
+            //flow.StreetLightOff();
+            //this.gameObject.GetComponent<BoxCollider2D>().enabled = false;
         }
+    }
+
+    private IEnumerator TurnOffShow(PlayerController pc)
+    {
+        pc.StopPlayer();
+        show.Play();
+        yield return new WaitForSeconds(10f);
+        pc.state.stop = false;
     }
 }

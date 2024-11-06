@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class SkillItem : MonoBehaviour
 {
+    [System.Serializable]
     public class Skill : Item
     {
         //TODO - many
@@ -49,6 +50,7 @@ public class SkillItem : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.E))
             {
                 pc.ObtainLightDraw();
+                GameManager.Instance.progress.getLightDraw = true;
                 tutorialSign.SetActive(true);
                 if (blocker != null) blocker.SetActive(false);
                 Destroy(gameObject);
