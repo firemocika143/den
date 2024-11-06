@@ -7,7 +7,7 @@ public class BossDarkKnightMovement : MonoBehaviour
     [Header("Speed")]
     public float speed = 2.0f;
 
-    private Transform target = PlayerManager.Instance.PlayerTransform();
+    private Transform target;
 
     private Rigidbody2D rb;
     private PlayerController pc;
@@ -27,11 +27,18 @@ public class BossDarkKnightMovement : MonoBehaviour
         if (target.position.x - rb.transform.position.x > 1.0f)
         {
             rb.velocity = new Vector2(speed, rb.velocity.y);
+            Flip(1);
         }
-        else if (target.position.x - rb.transform.position.x < 1.0f) 
+        else if (target.position.x - rb.transform.position.x < -1.0f) 
         {
             rb.velocity = new Vector2(-speed, rb.velocity.y);
+            Flip(-1);
         }
         Debug.Log(target.position.x);
+    }
+
+    private void Flip(float dir)
+    {
+        transform.localScale = new Vector3(dir * transform.localScale.x, 1 * transform.localScale.y, 1);
     }
 }

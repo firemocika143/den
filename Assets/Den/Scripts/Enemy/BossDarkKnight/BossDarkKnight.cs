@@ -42,7 +42,7 @@ public class BossDarkKnight : MonoBehaviour, IEnemy
 
     private Rigidbody2D rb;
     private PlayerController pc;
-    private Transform targetTRansform = PlayerManager.Instance.PlayerTransform();
+    private Transform targetTRansform;
 
 
     // Start is called before the first frame update
