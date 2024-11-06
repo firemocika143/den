@@ -7,7 +7,7 @@ public class BossDarkKnightMovement : MonoBehaviour
     [Header("Speed")]
     public float speed = 6.0f;
 
-    private Transform target = PlayerManager.Instance.PlayerTransform();
+    private Transform target;
 
     private Rigidbody2D rb;
     private PlayerController pc;
