@@ -13,6 +13,8 @@ public class StreetFlow : Flow, IDataPersistence
     private float zoomOutRadius;
     [SerializeField]
     private GameObject firstLightSource;
+    [SerializeField]
+    private List<SkillItem.Skill> skillsInThisScene; 
 
     private bool first;
     private Coroutine eventCoroutine;
@@ -21,6 +23,14 @@ public class StreetFlow : Flow, IDataPersistence
     public void Awake()
     {
         name = "Street";
+    }
+
+    private void Update()
+    {
+        if (PlayerManager.Instance.PlayerLightEnergy() <= 0)
+        {
+            PlayerManager.Instance.InstantKillPlayer();
+        }
     }
 
     public override void StartFlow()
@@ -40,7 +50,11 @@ public class StreetFlow : Flow, IDataPersistence
 
     public void StreetLightOff()
     {
-        if (eventCoroutine != null) StopCoroutine(eventCoroutine);
+        if (eventCoroutine != null)
+        {
+            Debug.LogError("wrong!");
+            StopCoroutine(eventCoroutine);
+        }
         
         eventCoroutine = StartCoroutine(StreetLightOffCoroutine());
     }

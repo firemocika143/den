@@ -7,7 +7,7 @@ using UnityEngine.Rendering.Universal;
 public class PageItem : MonoBehaviour
 {
     [Serializable]
-    public class Page
+    public class Page : Item
     {
         public Sprite graph;
 
@@ -15,6 +15,11 @@ public class PageItem : MonoBehaviour
         [Header("Resolution")]
         public float width;
         public float height;
+
+        Page()
+        {
+            type = ItemType.PAGE;
+        }
     }
 
     public Page page; 

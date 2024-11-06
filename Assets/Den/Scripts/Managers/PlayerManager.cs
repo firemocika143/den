@@ -100,4 +100,14 @@ public class PlayerManager : MonoBehaviour
 
         return player.GetComponent<BoxCollider2D>();
     }
+
+    public int PlayerLightEnergy()
+    {
+        return player.GetComponent<PlayerController>().state.lightEnergy;
+    }
+
+    public void InstantKillPlayer()
+    {
+        player.GetComponent<PlayerController>().InstantKill();
+    }
 }

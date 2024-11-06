@@ -54,7 +54,11 @@ public class CameraManager : MonoBehaviour
     public void Zoom(float targetRadius, float duration, float smoothness)
     {
         if (zoomCoroutine != null)
+        {
+            Debug.LogError("worng in camera");
             StopCoroutine(zoomCoroutine);
+        }
+            
 
         zoomCoroutine = StartCoroutine(lerpFieldOfView(targetRadius, duration));
     }

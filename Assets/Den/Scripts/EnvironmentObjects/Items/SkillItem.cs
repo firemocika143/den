@@ -4,6 +4,15 @@ using UnityEngine;
 
 public class SkillItem : MonoBehaviour
 {
+    public class Skill : Item
+    {
+        //TODO - many
+        Skill()
+        {
+            type = ItemType.SKILL;
+        }
+    }
+
     [SerializeField]
     private GameObject sign;
     [SerializeField]

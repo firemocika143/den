@@ -50,15 +50,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    //[Serializable]
-    //public class SkillItems
-    //{
-    //    [Header("Skill Items")]
-    //    public GameObject lightDrawItem;
-    //}
-
-    //public SkillItems skillItems;
-
     [System.Serializable]
     public class KeySettings
     {
