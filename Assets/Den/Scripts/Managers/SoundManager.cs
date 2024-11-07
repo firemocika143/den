@@ -76,7 +76,7 @@ public class SoundManager : MonoBehaviour
             yield return null;
         }
 
-        CurrBGMSource.Pause();
+        CurrBGMSource.Stop();
         if (WaitBGMSource.isPlaying == false)
             WaitBGMSource.Play();
         WaitBGMSource.UnPause();

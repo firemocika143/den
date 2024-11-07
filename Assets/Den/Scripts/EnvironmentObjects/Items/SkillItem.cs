@@ -17,8 +17,6 @@ public class SkillItem : MonoBehaviour
     [SerializeField]
     private GameObject sign;
     [SerializeField]
-    private GameObject tutorialSign;
-    [SerializeField]
     private GameObject blocker;//ugh... this is weird
     [SerializeField]
     private int id;
@@ -39,7 +37,6 @@ public class SkillItem : MonoBehaviour
 
         pc = null;
         sign.SetActive(false);
-        tutorialSign.SetActive(false);
         if (blocker != null) blocker.SetActive(true);
     }
 
@@ -51,7 +48,6 @@ public class SkillItem : MonoBehaviour
             {
                 pc.ObtainLightDraw();
                 GameManager.Instance.progress.getLightDraw = true;
-                tutorialSign.SetActive(true);
                 if (blocker != null) blocker.SetActive(false);
                 Destroy(gameObject);
             }
