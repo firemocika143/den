@@ -56,22 +56,6 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    public void PlayerInDanger()
-    {
-        // TODO - switch music
-        if (SoundManager.Instance != null) SoundManager.Instance.PlayInDanger();
-        // Enhance enemy effects
-        // start to cost health or higher enemy attack or enable the player to kill themselves
-    }
-
-    public void PlayerInLightSource()
-    {
-        // TODO - switch music
-        if (SoundManager.Instance != null) SoundManager.Instance.PlayInLightSource();
-        // Enhance enemy effects
-        // start to cost health or higher enemy attack or enable the player to kill themselves
-    }
-
     public Transform PlayerTransform()
     {
         return player.transform;

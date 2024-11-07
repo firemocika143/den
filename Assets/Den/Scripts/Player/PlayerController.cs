@@ -208,7 +208,6 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         gainLightTimer = Time.time;
 
         state.inDanger = false;
-        PlayerManager.Instance.PlayerInLightSource();
 
         if (lightSystem.enabled) lightSystem.CenterLightOff();
         //TODO - show some particles or animations
@@ -344,7 +343,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
             if (state.lightEnergy <= 0 && !state.inDanger)
             {
                 if (lightSystem.enabled) lightSystem.LightOff();
-                PlayerManager.Instance.PlayerInDanger();
+                SoundManager.Instance.ChangeClip(SoundManager.Instance.clips.DANGER);
                 state.inDanger = true;
             }
         }

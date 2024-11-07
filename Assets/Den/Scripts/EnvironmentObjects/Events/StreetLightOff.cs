@@ -9,6 +9,8 @@ public class StreetLightOff : MonoBehaviour
     private StreetFlow flow;//I am not sure if this is good
     [SerializeField]
     private PlayableDirector show;
+    [SerializeField]
+    private GameObject lightSource;
 
     private bool triggered = false;
 
@@ -19,8 +21,6 @@ public class StreetLightOff : MonoBehaviour
             triggered = true;
             PlayerController pc = col.gameObject.GetComponent<PlayerController>();
             StartCoroutine(TurnOffShow(pc));
-            //flow.StreetLightOff();
-            //this.gameObject.GetComponent<BoxCollider2D>().enabled = false;
         }
     }
 
@@ -28,7 +28,10 @@ public class StreetLightOff : MonoBehaviour
     {
         pc.StopPlayer();
         show.Play();
+        SoundManager.Instance.ChangeClip(SoundManager.Instance.clips.DANGER);
         yield return new WaitForSeconds(10f);
+        GameManager.Instance.progress.finishLightOff = true;
         pc.state.stop = false;
+        lightSource.SetActive(false);
     }
 }
