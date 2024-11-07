@@ -20,6 +20,7 @@ public class StreetLightOff : MonoBehaviour
         {
             triggered = true;
             PlayerController pc = col.gameObject.GetComponent<PlayerController>();
+            SoundManager.Instance.ChangeClip(SoundManager.Instance.clips.DANGER);
             StartCoroutine(TurnOffShow(pc));
         }
     }
@@ -28,7 +29,6 @@ public class StreetLightOff : MonoBehaviour
     {
         pc.StopPlayer();
         show.Play();
-        SoundManager.Instance.ChangeClip(SoundManager.Instance.clips.DANGER);
         yield return new WaitForSeconds(10f);
         GameManager.Instance.progress.finishLightOff = true;
         pc.state.stop = false;

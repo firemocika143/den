@@ -42,7 +42,7 @@ public class StreetFlow : Flow
             // TODO - Fade in
             UIManager.Instance.FadeIn();// this is not working on currently
             // SFX & VFX
-            SoundManager.Instance.ResetSound();
+            SoundManager.Instance.ResetBGM();
 
             first = false;
         }

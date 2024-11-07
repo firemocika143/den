@@ -21,16 +21,8 @@ public class SoundManager : MonoBehaviour
         public AudioClip STREETLIGHTSOURCE;
         public AudioClip LIBRARYLIGHTSOURCE;
     }
-    //public AudioClip Exploring;
-    //[SerializeField]
-    //private AudioClip InDanger;
-    //[SerializeField]
-    //private AudioClip StreetLightSource;
-    //[SerializeField]
-    //private AudioClip LibraryLightSource;
 
     public Clips clips;
-
 
     private Coroutine switchCoroutine;
 
@@ -40,6 +32,9 @@ public class SoundManager : MonoBehaviour
 
         CurrBGMSource.volume = 1f;
         WaitBGMSource.volume = 0f;
+
+        CurrBGMSource.Pause();
+        WaitBGMSource.Pause();
     }
 
     private void OnDestroy()
@@ -47,38 +42,24 @@ public class SoundManager : MonoBehaviour
         StopAllCoroutines();
     }
 
-    public void ResetSound()
+    public void ResetBGM()
     {
         CurrBGMSource.clip = null;
         WaitBGMSource.clip = null;
+
+        CurrBGMSource.Pause();
+        WaitBGMSource.Pause();
     }
-
-    //public void PlayInDanger()
-    //{
-    //    if (CurrBGMSource.clip == clips.DANGER) return;
-
-    //    WaitBGMSource.clip = clips.DANGER;  
-    //    switchCoroutine = StartCoroutine(SwitchSource(2, 20));
-    //}
-
-    //public void PlayStreetLightSource()
-    //{
-    //    if (CurrBGMSource.clip == clips.STREETLIGHTSOURCE) return;
-
-    //    WaitBGMSource.clip = clips.STREETLIGHTSOURCE;
-    //    switchCoroutine = StartCoroutine(SwitchSource(5, 20));
-    //}
-    //public void PlayLibraryLightSource()
-    //{
-    //    if (CurrBGMSource.clip == clips.LIBRARYLIGHTSOURCE) return;
-
-    //    WaitBGMSource.clip = clips.LIBRARYLIGHTSOURCE;
-    //    switchCoroutine = StartCoroutine(SwitchSource(5, 20));
-    //}
 
     public void ChangeClip(AudioClip ac)
     {
         if (CurrBGMSource.clip == ac) return;
+        if (CurrBGMSource.clip == null)
+        {
+            CurrBGMSource.clip = ac;
+            CurrBGMSource.Play();
+            return;
+        }
 
         StopAllCoroutines();
         WaitBGMSource.clip = ac;
@@ -112,23 +93,4 @@ public class SoundManager : MonoBehaviour
         CurrBGMSource = WaitBGMSource;
         WaitBGMSource = t;
     }
-
-    //private IEnumerator SwitchSource(float switchTime, float smoothness)
-    //{
-    //    AudioSource t = CurrBGMSource;
-    //    CurrBGMSource = WaitBGMSource;
-    //    WaitBGMSource = t;
-    //    CurrBGMSource.Play();
-
-    //    while (CurrBGMSource.volume < 1 && WaitBGMSource.volume > 0)
-    //    {
-    //        CurrBGMSource.volume += 1 / smoothness;
-    //        WaitBGMSource.volume -= 1 / smoothness;
-    //        yield return new WaitForSeconds(switchTime / smoothness);
-    //    }
-
-    //    CurrBGMSource.volume = 1;
-    //    WaitBGMSource.volume = 0;
-    //    WaitBGMSource.clip = null;
-    //}
 }

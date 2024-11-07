@@ -82,7 +82,7 @@ public class GameManager : MonoBehaviour
     public GameProgress progress;
 
     public Flow flow; // well, this is not that good, I can only use those functions defined in Flow, but not the certain flows
-    public string CurrScene;
+    public string CurrScene = "Street";
 
     public bool gamePaused = false;// Can utilize this variable to adjust some settings when game is paused
 
@@ -91,7 +91,7 @@ public class GameManager : MonoBehaviour
         // TODO - wait for everything to be set up (but how? game manager is always at the first place to run)
         // How to call start flow? should flow be a class or an interface (this should be an easy decision)
         flow = FindFirstObjectByType<Flow>();
-        CurrScene = flow.name;
+        if (flow != null) CurrScene = flow.name;
     }
 
     public void ManualSave()
