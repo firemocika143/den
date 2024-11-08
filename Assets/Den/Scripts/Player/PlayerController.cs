@@ -6,7 +6,7 @@ using UnityEngine.Rendering.Universal;
 using static PlayerAnimation;
 
 public class PlayerController : MonoBehaviour, IDataPersistence
-{
+{   
     [System.Serializable]
     public class PlayerState
     {
@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         public bool resting = true;
         public bool standing = false;
         public bool isHittable = true;
+        public bool isDamaged = false;
         public bool dying = false;
         public bool inDanger = false;
 
@@ -133,6 +134,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     {
         if (state.isHittable)
         {
+            state.isDamaged = true;
             if (state.lightEnergy != 0) state.health -= damage;
             else state.health -= damage * damageMultiplier;
 
@@ -147,6 +149,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
             {
                 StartCoroutine(PlayerUnhittable(2f));
             }
+            state.isDamaged = false;
         }
     }
 
