@@ -25,7 +25,7 @@ public class ItemManager : MonoBehaviour
 
     public void GenerateSkillItem(Skill sk, Vector3 worldPos)
     {
-        GameObject skillItem = Instantiate(pageItemPrefab, worldPos, Quaternion.identity);
+        GameObject skillItem = Instantiate(skillItemPrefab, worldPos, Quaternion.identity);
         SkillItem skillItemScript = skillItem.GetComponent<SkillItem>();
         skillItemScript.skill = sk;
     }

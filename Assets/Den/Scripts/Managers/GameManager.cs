@@ -71,7 +71,7 @@ public class GameManager : MonoBehaviour
     public class GameProgress
     {
         [Header("Street")]
-        public bool getFirstPage = false;
+        public bool getPage2 = false;
         public bool finishLightOff = false;
         public bool getLightDraw = false;
 
@@ -80,6 +80,8 @@ public class GameManager : MonoBehaviour
     }
 
     public GameProgress progress;
+    public Book book = new Book();
+    public int currentPage;
 
     public Flow flow; // well, this is not that good, I can only use those functions defined in Flow, but not the certain flows
     public string CurrScene = "Street";
@@ -92,6 +94,9 @@ public class GameManager : MonoBehaviour
         // How to call start flow? should flow be a class or an interface (this should be an easy decision)
         flow = FindFirstObjectByType<Flow>();
         if (flow != null) CurrScene = flow.name;
+
+        // TODO - load the whole book first
+        if (UIManager.Instance != null) UIManager.Instance.ReloadBook(book);
     }
 
     public void ManualSave()

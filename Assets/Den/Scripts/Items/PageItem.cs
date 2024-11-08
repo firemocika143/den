@@ -10,9 +10,17 @@ public class PageItem : MonoBehaviour, IItem
 
     public void Get()
     {
-        BookManager.Instance.book.AddPage(page);
+        GameManager.Instance.book.AddPage(page);
         // TODO - some animation that shows the player has get the page
-        Destroy(this.gameObject);
+        Destroy(gameObject);
+    }
+
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.CompareTag("Player"))
+        {
+            Get();
+        }
     }
 }
 

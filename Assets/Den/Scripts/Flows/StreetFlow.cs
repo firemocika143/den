@@ -13,6 +13,7 @@ public class StreetFlow : Flow
         public Vector3 page2Position;
 
         [Header("Light Draw Settings")]
+        public Skill lightDraw = new Skill("LightDraw", 1);
         public Vector3 lightDrawPosition;
     }
 
@@ -25,14 +26,19 @@ public class StreetFlow : Flow
     private float zoomOutRadius;
     [SerializeField]
     private GameObject firstLightSource;
+    [SerializeField]
+    private StreetItemSettings streetItemSettings;
 
-    private bool first;
     private Coroutine eventCoroutine;
-    //private bool inStreetLightOffEvent;
 
     public void Awake()
     {
         name = "Street";
+    }
+
+    public void Start()
+    {
+        StartFlow();// this is actually a little bit of funny
     }
 
     private void Update()
@@ -45,23 +51,28 @@ public class StreetFlow : Flow
 
     public override void StartFlow()
     {
-        if (first)
+        UIManager.Instance.FadeMaskOn();// this is like [loading...]
+        // TODO - Loading
+        // TODO - RespawnPlayer -> that might be right, respawning player in player manager is a little bit of weird, after all, I should set the player respawning point inn here probably
+        // TODO - Generate all items
+        if (!GameManager.Instance.progress.finishLightOff)
         {
-            // TODO - Loading
-            // TODO - RespawnPlayer
-            // TODO - Generate all items
-            if (!GameManager.Instance.progress.finishLightOff)
-            {
 
-                return;
-            }
-            // TODO - Fade in
-            UIManager.Instance.FadeIn();// this is not working on currently
-            // SFX & VFX
-            SoundManager.Instance.ResetBGM();
-
-            first = false;
         }
+        if (!GameManager.Instance.progress.getPage2)
+        {
+            ItemManager.Instance.GeneratePageItem(streetItemSettings.page2, streetItemSettings.page2Position);
+        }
+        if (!GameManager.Instance.progress.getLightDraw)
+        {
+            ItemManager.Instance.GenerateSkillItem(streetItemSettings.lightDraw, streetItemSettings.lightDrawPosition);
+        }
+
+        // TODO - Fade in
+        UIManager.Instance.FadeIn();// this is not working on currently
+        // SFX & VFX
+        SoundManager.Instance.ResetBGM();
+
     }
 
     

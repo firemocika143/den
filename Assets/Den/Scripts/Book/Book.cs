@@ -2,17 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class Book
 {
     /// This script would have a lot of functions that can be called by the UI Manager ///
-    
-    public List<Page> book = new List<Page>();
+
+    public int id;
+    public List<Page> pages; // { get; private set; }
 
     public void AddPage(Page newPage)
     {
-        if (book.Contains(newPage)) Debug.LogError("Duplicated page");
+        if (pages.Contains(newPage)) Debug.LogError("Duplicated page");
 
-        book.Add(newPage);
+        pages.Add(newPage);
+        UIManager.Instance.LoadPage(newPage);
     }
 }
 
