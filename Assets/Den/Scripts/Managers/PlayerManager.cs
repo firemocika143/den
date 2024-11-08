@@ -66,6 +66,11 @@ public class PlayerManager : MonoBehaviour
         player.GetComponent<PlayerController>().state.stop = false;
     }
 
+    public void StopPlayer()
+    {
+        player.GetComponent<PlayerController>().StopPlayer();
+    }
+
     public void DisableLightOn()
     {
         PlayerLightSystem pls = player.GetComponent<PlayerLightSystem>();

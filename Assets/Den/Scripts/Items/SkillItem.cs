@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,8 +6,9 @@ using UnityEngine;
 public class SkillItem : MonoBehaviour, IItem// hum... this is actually a light draw item
 {
     public Skill skill;
-    [SerializeField]
-    private int id;
+    public int id;
+    public string hintText;
+    public Action gameRecord;
 
     private PlayerController pc = null;
 
@@ -24,6 +26,8 @@ public class SkillItem : MonoBehaviour, IItem// hum... this is actually a light 
     {
         pc.ObtainLightDraw();
         GameManager.Instance.progress.getLightDraw = true;// and this is very possible to be remake
+        UIManager.Instance.ShowHint(hintText);
+        gameRecord?.Invoke();
         //if (blocker != null) blocker.SetActive(false);
         Destroy(gameObject);
     }

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
+using UnityEngine.Playables;
 
 public class UIManager : MonoBehaviour
 {
@@ -21,6 +23,10 @@ public class UIManager : MonoBehaviour
     private GameObject fadePanel;
     [SerializeField]
     private GameObject bookPanel;
+    [SerializeField] 
+    private PlayableDirector hintTimeLine;
+    [SerializeField]
+    private TMP_Text hintText;
 
     private List<GameObject> pagePanels = new List<GameObject>();
 
@@ -44,8 +50,16 @@ public class UIManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Tab))
             {
                 // should I make this works only if the player is in light source?
-                if (!bookPanel.activeSelf) OpenBook();
-                else CloseBook();
+                if (!bookPanel.activeSelf)
+                {
+                    PlayerManager.Instance.StopPlayer();
+                    OpenBook();
+                }
+                else
+                {
+                    PlayerManager.Instance.EnablePlayerToMove();
+                    CloseBook();
+                }
             }
 
             if (bookPanel.activeSelf)
@@ -144,8 +158,11 @@ public class UIManager : MonoBehaviour
     public void OpenBook()
     {
         if (pagePanels.Count != GameManager.Instance.book.pages.Count) ReloadBook(GameManager.Instance.book);
-        bookPanel.SetActive(true);
-        pagePanels[GameManager.Instance.currentPage].SetActive(true);// maybe quite inefficient
+        if (pagePanels.Count > 0)
+        {
+            bookPanel.SetActive(true);
+            pagePanels[GameManager.Instance.currentPage].SetActive(true);// maybe quite inefficient
+        }
     }
 
     public void CloseBook()
@@ -199,5 +216,12 @@ public class UIManager : MonoBehaviour
     {
         fadePanel.SetActive(true);
         // TODO - set the opacity of the mask to 255 (full)
+    }
+
+    // Hint
+    public void ShowHint(string text)
+    {
+        hintText.text = text;
+        hintTimeLine.Play();
     }
 }

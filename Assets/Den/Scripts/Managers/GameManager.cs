@@ -95,8 +95,7 @@ public class GameManager : MonoBehaviour
         flow = FindFirstObjectByType<Flow>();
         if (flow != null) CurrScene = flow.name;
 
-        // TODO - load the whole book first
-        if (UIManager.Instance != null) UIManager.Instance.ReloadBook(book);
+        
     }
 
     public void ManualSave()
@@ -129,6 +128,15 @@ public class GameManager : MonoBehaviour
     public void BackToNormalSpeed()
     {
         Time.timeScale = 1f;
+    }
+
+    //This might be called in flows
+    public void ReloadGameProgress()
+    {
+        // book
+        if (UIManager.Instance != null) UIManager.Instance.ReloadBook(book);
+        //player respawn point
+        //player skill
     }
 
     //Audio and Screen Settings
