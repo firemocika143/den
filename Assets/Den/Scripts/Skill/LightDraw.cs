@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static PlayerSkill;
 
-public class LightDraw
+public class LightDraw : Skill
 {
     public float minDistanceToStart = 0.1f;
     public Vector3 previousPosition;
@@ -15,7 +15,13 @@ public class LightDraw
     public int costPerTime = 1;
     public float costTimer;
 
-    // LightDraw(showing track of light here) -> if I don;t put these in to the class, we wouldn't need to check if the player still haven't get lightDraw in PlayerAttack
+    public LightDraw()
+    {
+        skillName = "LightDraw";
+        skillID = 1;
+    }
+
+    // LightDraw(showing track of light here) -> if I don't put these in to the class, we wouldn't need to check if the player still haven't get lightDraw in PlayerAttack
     // or, maybe we should detect there to avoid useless calculations
     public void LightDrawStart(Vector3 startPos)
     {

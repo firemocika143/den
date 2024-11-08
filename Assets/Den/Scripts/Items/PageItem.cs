@@ -4,9 +4,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-public class PageItem : MonoBehaviour
+public class PageItem : MonoBehaviour, IItem
 {
-    
+    public Page page;
+
+    public void Get()
+    {
+        BookManager.Instance.book.AddPage(page);
+        // TODO - some animation that shows the player has get the page
+        Destroy(this.gameObject);
+    }
 }
 
 //public Page page;
