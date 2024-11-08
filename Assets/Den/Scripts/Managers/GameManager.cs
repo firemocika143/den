@@ -126,17 +126,5 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
     }
 
-    //Player Dead CutScene
-    //Player Respawn
-    /// <summary>
-    /// Called in PlayerController if a player is dying. Instantiating a new player object with some same max values, also put the player to the spawn point
-    /// actually this should be run at the start of every game and every respawn
-    /// </summary>
     //Audio and Screen Settings
-    //Game Progress
-
-    //Fix Camera
-    //Follow player
-    //Switch Camera
-    //zoom in and out (special skill)
 }

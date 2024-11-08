@@ -21,6 +21,8 @@ public class UIManager : MonoBehaviour
     private GameObject fadePanel;
     [SerializeField]
     private GameObject instructionPanel;
+    [SerializeField]
+    private GameObject BookPanel;
 
     private void Start()
     {
@@ -118,6 +120,11 @@ public class UIManager : MonoBehaviour
         {
             playerUI.UpdateAll(h_max, h_val, l_max, l_val);
         }
+    }
+
+    public void OpenBook(Book book)
+    {
+
     }
 
     public void FadeIn()

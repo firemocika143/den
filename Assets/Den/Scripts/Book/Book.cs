@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Book : MonoBehaviour
+public class Book
 {
     /// This script would have a lot of functions that can be called by the UI Manager ///
     
