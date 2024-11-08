@@ -4,16 +4,6 @@ using UnityEngine;
 
 public class SkillItem : MonoBehaviour
 {
-    [System.Serializable]
-    public class Skill : Item
-    {
-        //TODO - many
-        Skill()
-        {
-            type = ItemType.SKILL;
-        }
-    }
-
     [SerializeField]
     private GameObject sign;
     [SerializeField]
@@ -47,7 +37,7 @@ public class SkillItem : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.E))
             {
                 pc.ObtainLightDraw();
-                GameManager.Instance.progress.getLightDraw = true;
+                GameManager.Instance.progress.getLightDraw = true;// and this is very possible to be remake
                 if (blocker != null) blocker.SetActive(false);
                 Destroy(gameObject);
             }

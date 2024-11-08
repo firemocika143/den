@@ -38,15 +38,15 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void ReadPage(PageItem.Page p)
-    {
-        GameManager.Instance.PauseGame();
-        pagePanel.SetActive(true);
-        if (pagePanel.TryGetComponent<PageUI>(out var u))
-        {
-            u.LoadPage(p);
-        }
-    }
+    //public void ReadPage(PageItem.Page p)
+    //{
+    //    GameManager.Instance.PauseGame();
+    //    pagePanel.SetActive(true);
+    //    if (pagePanel.TryGetComponent<PageUI>(out var u))
+    //    {
+    //        u.LoadPage(p);
+    //    }
+    //}
 
     public void ClosePage()
     {
