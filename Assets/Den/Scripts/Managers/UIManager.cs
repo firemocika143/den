@@ -58,21 +58,11 @@ public class UIManager : MonoBehaviour
             {
                 if (Input.GetKeyDown(KeyCode.LeftArrow))
                 {
-                    if (GameManager.Instance.currentPage > 0)
-                    {
-                        pagePanels[GameManager.Instance.currentPage].SetActive(false);
-                        GameManager.Instance.currentPage--;
-                        pagePanels[GameManager.Instance.currentPage].SetActive(true);
-                    }
+                    FlipToPreviousPage();
                 }
                 if (Input.GetKeyDown(KeyCode.RightArrow))
                 {
-                    if (GameManager.Instance.currentPage < pagePanels.Count - 1)
-                    {
-                        pagePanels[GameManager.Instance.currentPage].SetActive(false);
-                        GameManager.Instance.currentPage++;
-                        pagePanels[GameManager.Instance.currentPage].SetActive(true);
-                    }
+                    FlipToNextPage();
                 }
             }
         }
@@ -168,6 +158,8 @@ public class UIManager : MonoBehaviour
         GameObject newPagePanel = Instantiate(newPage.pagePanelPrefab, bookPanel.transform);
         pagePanels.Add(newPagePanel);
         newPagePanel.SetActive(false);
+
+        bookPanel.GetComponent<BookUI>().MoveButtonPanelToTop();
     }
 
     public void LoadBook(Book book)
@@ -189,6 +181,27 @@ public class UIManager : MonoBehaviour
         pagePanels.Clear();
 
         LoadBook(book);
+    }
+
+    public void FlipToPreviousPage()
+    {
+        //but I think this will be better to be put in the other scripts like BookUI or something that is on the BookPanel, and maybe we should let the book panel itself to record the page panels
+        if (GameManager.Instance.currentPage > 0)
+        {
+            pagePanels[GameManager.Instance.currentPage].SetActive(false);
+            GameManager.Instance.currentPage--;
+            pagePanels[GameManager.Instance.currentPage].SetActive(true);
+        }
+    }
+
+    public void FlipToNextPage()
+    {
+        if (GameManager.Instance.currentPage < pagePanels.Count - 1)
+        {
+            pagePanels[GameManager.Instance.currentPage].SetActive(false);
+            GameManager.Instance.currentPage++;
+            pagePanels[GameManager.Instance.currentPage].SetActive(true);
+        }
     }
 
     // Fade

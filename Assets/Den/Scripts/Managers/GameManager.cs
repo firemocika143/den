@@ -72,6 +72,7 @@ public class GameManager : MonoBehaviour
     {
         [Header("Street")]
         public bool getPage2 = false;
+        public bool getPage1 = false;
         public bool finishLightOff = false;
         public bool getLightDraw = false;
 

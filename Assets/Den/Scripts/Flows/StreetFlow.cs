@@ -13,6 +13,11 @@ public class StreetFlow : Flow
         public Vector3 page2Position;
         public string page2HintText;
 
+        [Header("Page 2 Settings")]
+        public Page page1;
+        public Vector3 page1Position;
+        public string page1HintText;
+
         [Header("Light Draw Settings")]
         public Skill lightDraw = new Skill("LightDraw", 1);
         public Vector3 lightDrawPosition;
@@ -80,6 +85,13 @@ public class StreetFlow : Flow
             ItemManager.Instance.GeneratePageItem(streetItemSettings.page2, streetItemSettings.page2Position, streetItemSettings.page2HintText, () =>
             {
                 GameManager.Instance.progress.getPage2 = true;
+            });
+        }
+        if (!GameManager.Instance.progress.getPage1)
+        {
+            ItemManager.Instance.GeneratePageItem(streetItemSettings.page1, streetItemSettings.page1Position, streetItemSettings.page1HintText, () =>
+            {
+                GameManager.Instance.progress.getPage1 = true;
             });
         }
         if (!GameManager.Instance.progress.getLightDraw)
