@@ -15,15 +15,20 @@ public class LibraryFlow : Flow
         throw new System.NotImplementedException();
     }
 
-    //private void Update()
-    //{
-    //    // hum... I don't think this a good I idea though
-    //    if (PlayerManager.Instance != null)
-    //    {
-    //        if (!PlayerManager.Instance.PlayerIsInLightSource() && PlayerManager.Instance.PlayerLightEnergy() > 0)
-    //        {
-    //            SoundManager.Instance.ChangeClip(exploringClip);
-    //        }
-    //    }
-    //}
+    private void Update()
+    {
+        //// hum... I don't think this a good I idea though
+        //if (PlayerManager.Instance != null)
+        //{
+        //    if (!PlayerManager.Instance.PlayerIsInLightSource() && PlayerManager.Instance.PlayerLightEnergy() > 0)
+        //    {
+        //        SoundManager.Instance.ChangeClip(exploringClip);
+        //    }
+        //}
+
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            PlayerManager.Instance.InstantKillPlayer();
+        }
+    }
 }

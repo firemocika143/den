@@ -107,4 +107,9 @@ public class PlayerManager : MonoBehaviour
     {
         return player.GetComponent<PlayerController>().isInLightSource;
     }
+
+    public bool PlayerGetLightDraw()
+    {
+        return !(player.GetComponent<PlayerSkill>().lightDraw == null);
+    }
 }

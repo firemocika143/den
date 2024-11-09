@@ -30,6 +30,8 @@ public class StreetFlow : Flow
     private GameObject firstLightSource;
     [SerializeField]
     private StreetItemSettings streetItemSettings;
+    [SerializeField]
+    private GameObject libraryBlocker;
 
     private Coroutine eventCoroutine;
 
@@ -48,6 +50,16 @@ public class StreetFlow : Flow
         if (PlayerManager.Instance.PlayerLightEnergy() <= 0)
         {
             PlayerManager.Instance.InstantKillPlayer();
+        }
+
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            // TODO - play a sfx
+        }
+
+        if (libraryBlocker.activeSelf && PlayerManager.Instance.PlayerGetLightDraw())
+        {
+            libraryBlocker.SetActive(false);
         }
     }
 
