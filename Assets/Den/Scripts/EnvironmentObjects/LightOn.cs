@@ -20,7 +20,7 @@ public class LightOn : MonoBehaviour
     private Material outline;
 
     private bool trigger = false;
-    private bool castRequest, castSuccess, castInProgress;
+    public bool castRequest, castSuccess, castInProgress;
     public float castTime;
     private float castStartTime;
     private PlayerController playerController;
@@ -41,7 +41,7 @@ public class LightOn : MonoBehaviour
     void Update()
     {
         // When the player is closed enough, press e will change the state of light (on -> off; off -> on)
-        if (trigger & !lanternLight.enabled && Input.GetKeyDown(KeyCode.E) && playerController.state.lightEnergy > 0)
+        if (trigger & !lanternLight.enabled && Input.GetKeyDown(GameManager.Instance.keySettings.LightLantern) && playerController.state.lightEnergy > 0)
         {
             if (!castInProgress)
             {
@@ -53,19 +53,20 @@ public class LightOn : MonoBehaviour
         {
             InProgress();
 
-            if (Input.GetKeyUp(KeyCode.E) || playerController.state.isDamaged)
+            if (Input.GetKeyUp(GameManager.Instance.keySettings.LightLantern) || playerController.state.isDamaged)
             {   
                 CastFail();
             }
-            else
-            {
-                if (Input.anyKeyDown && !Input.GetKeyDown(KeyCode.E))
-                {
-                    CastFail();
-                }
-            }
+            //else
+            //{
+            //    (I think the player should probably to be able to move or attack when lighting up the lantern, that may be more fun? though if this can prompt the player to attack or not... idk) (well, might need to fix the camera if We do this)
+            //    if (Input.anyKeyDown && !Input.GetKeyDown(GameManager.Instance.keySettings.LightLantern))
+            //    {
+            //        CastFail();
+            //    }
+            //}
         }
-        
+
         if (trigger && !(lanternLight.enabled || playerController.state.lightEnergy <= 0))
         {
             lanternSprite.material = outline;
@@ -74,7 +75,7 @@ public class LightOn : MonoBehaviour
         {
             lanternSprite.material = original;
         }
-        Debug.Log(playerController.state.isDamaged);
+        //Debug.Log(playerController.state.isDamaged);
     }
 
     private IEnumerator Cast()
@@ -113,7 +114,7 @@ public class LightOn : MonoBehaviour
         castSuccess = true;
     }
 
-    private void CastFail()
+    public void CastFail()
     {
         castRequest = false;
         castSuccess = false;

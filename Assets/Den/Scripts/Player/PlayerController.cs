@@ -65,14 +65,15 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     [Header("The Others")]
     [SerializeField]
     private SpriteRenderer playerSprite;
-    
+    [SerializeField]
+    private int damageMultiplier;
+
     private float gainLightTimer; 
     private float loseLightTimer;
 
     private PlayerMovement playerMovement;
     private PlayerAttack playerAttack;
     private float unhittableTimer;
-    private int damageMultiplier;
     
     private void Start()
     {
@@ -134,11 +135,11 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     {
         if (state.isHittable)
         {
-            state.isDamaged = true;
-            if (state.lightEnergy != 0) state.health -= damage;
+            //state.isDamaged = true;
+            if (state.lightEnergy > 0) state.health -= damage;
             else state.health -= damage * damageMultiplier;
 
-            state.health = state.health >= 0 ? state.health : 0;
+            state.health = state.health > 0 ? state.health : 0;
             UIManager.Instance.UpdatePlayerHealth(state.health);
 
             if (state.health <= 0)
@@ -149,7 +150,9 @@ public class PlayerController : MonoBehaviour, IDataPersistence
             {
                 StartCoroutine(PlayerUnhittable(2f));
             }
-            state.isDamaged = false;
+            //state.isDamaged = false;
+
+            LanternManager.Instance.AllCastFail();
         }
     }
 
@@ -356,8 +359,8 @@ public class PlayerController : MonoBehaviour, IDataPersistence
 
     public void LoadData(GameData gameData)
     {
-        this.state.maxHealth = gameData.maxHealth;
-        this.state.maxLightEnergy = gameData.maxLightEnergy;
+        //this.state.maxHealth = gameData.maxHealth;
+        //this.state.maxLightEnergy = gameData.maxLightEnergy;
         AllRecover();
 
         if (GameManager.Instance.progress.getLightDraw) ObtainLightDraw();
@@ -365,7 +368,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
 
     public void SaveData(ref GameData gameData)
     {
-        gameData.maxHealth = this.state.maxHealth;
-        gameData.maxLightEnergy = this.state.maxLightEnergy;
+        //gameData.maxHealth = this.state.maxHealth;
+        //gameData.maxLightEnergy = this.state.maxLightEnergy;
     }
 }

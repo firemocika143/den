@@ -35,12 +35,14 @@ public class PlayerMovement : MonoBehaviour
     //public Ladder ladder;
 
     private PlayerController playerController;
+    private PlayerSFX playerSFX;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         playerController = GetComponent<PlayerController>();
         size = GetComponent<Transform>().localScale;
+        playerSFX = GetComponent<PlayerSFX>();
     }
 
     void Update()
@@ -103,10 +105,12 @@ public class PlayerMovement : MonoBehaviour
             {
                 Flip(horizontal);
                 playerController.state.horMoving = true;
+                if (isGrounded) playerSFX.PlayFootStepSFX();
             }
             else
             {
                 playerController.state.horMoving = false;
+                playerSFX.StopFootStepSFX();
             }
         }
     }
@@ -131,6 +135,11 @@ public class PlayerMovement : MonoBehaviour
                     //this is dangerous
                     playerController.state.climb = false;
                     rb.velocity = new Vector2(rb.velocity.x, jumpPower);
+                    playerSFX.StopFootStepSFX();
+                }
+                else
+                {
+                    playerSFX.StopFootStepSFX();
                 }
             }
 

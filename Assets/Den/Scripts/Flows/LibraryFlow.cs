@@ -1,30 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static SoundManager;
 
 public class LibraryFlow : Flow
 {
     [SerializeField]
     private GameObject playerPrefab;
+    [SerializeField]
+    private SoundManager.ClipEnum exploringClip;
 
     public override void StartFlow()
     {
         throw new System.NotImplementedException();
     }
 
-    //private void Awake()
+    //private void Update()
     //{
-    //    GameObject player;
-    //    PlayerController c = FindFirstObjectByType(typeof(PlayerController)) as PlayerController;
-    //    if (c != null)
+    //    // hum... I don't think this a good I idea though
+    //    if (PlayerManager.Instance != null)
     //    {
-    //        player = c.gameObject;
+    //        if (!PlayerManager.Instance.PlayerIsInLightSource() && PlayerManager.Instance.PlayerLightEnergy() > 0)
+    //        {
+    //            SoundManager.Instance.ChangeClip(exploringClip);
+    //        }
     //    }
-    //    else
-    //    {
-    //        player = Instantiate(playerPrefab);
-    //    }
-    //    //and then respawn player by player manager
-    //    //also play the music for library
     //}
 }

@@ -50,19 +50,11 @@ public class UIManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Tab))
             {
                 // should I make this works only if the player is in light source?
-                if (!bookPanel.activeSelf)
-                {
-                    PlayerManager.Instance.StopPlayer();
-                    OpenBook();
-                }
-                else
-                {
-                    PlayerManager.Instance.EnablePlayerToMove();
-                    CloseBook();
-                }
+                if (!bookPanel.activeSelf) OpenBook();
+                else CloseBook();
             }
 
-            if (bookPanel.activeSelf)
+            if (bookPanel.activeSelf && pagePanels.Count > 0)
             {
                 if (Input.GetKeyDown(KeyCode.LeftArrow))
                 {
@@ -158,17 +150,17 @@ public class UIManager : MonoBehaviour
     public void OpenBook()
     {
         if (pagePanels.Count != GameManager.Instance.book.pages.Count) ReloadBook(GameManager.Instance.book);
-        if (pagePanels.Count > 0)
-        {
-            bookPanel.SetActive(true);
-            pagePanels[GameManager.Instance.currentPage].SetActive(true);// maybe quite inefficient
-        }
+
+        PlayerManager.Instance.StopPlayer();
+        bookPanel.SetActive(true);
+        if (pagePanels.Count > 0) pagePanels[GameManager.Instance.currentPage].SetActive(true);// maybe quite inefficient
     }
 
     public void CloseBook()
     {
-        pagePanels[GameManager.Instance.currentPage].SetActive(false);// maybe quite inefficient
+        if (pagePanels.Count > 0) pagePanels[GameManager.Instance.currentPage].SetActive(false);// maybe quite inefficient
         bookPanel.SetActive(false);
+        PlayerManager.Instance.EnablePlayerToMove();
     }
 
     public void LoadPage(Page newPage)

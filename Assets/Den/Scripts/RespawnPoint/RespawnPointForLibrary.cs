@@ -7,25 +7,25 @@ public class RespawnPointForLibrary : MonoBehaviour
     private Vector3 respawnPosition;
     private bool onTrigger;
 
-    [SerializeField]
-    private GameObject sign;
+    //[SerializeField]
+    //private GameObject sign;
 
     private void Start()
     {
         respawnPosition = transform.position;
-        sign.SetActive(false);
+        //sign.SetActive(false);
     }
 
     private void Update()
     {
         if (onTrigger)
         {
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.S))
             {
                 GameManager.Instance.ManualSave();
 
                 //change sign appearance
-                if (!sign.activeSelf) StartCoroutine(ShowSaveSign());
+                //if (!sign.activeSelf) StartCoroutine(ShowSaveSign());
             }
         }
     }
@@ -46,10 +46,10 @@ public class RespawnPointForLibrary : MonoBehaviour
         //camera follow player
     }
 
-    private IEnumerator ShowSaveSign()
-    {
-        sign.SetActive(true);
-        yield return new WaitForSeconds(3);
-        sign.SetActive(false);
-    }
+    //private IEnumerator ShowSaveSign()
+    //{
+    //    sign.SetActive(true);
+    //    yield return new WaitForSeconds(3);
+    //    sign.SetActive(false);
+    //}
 }

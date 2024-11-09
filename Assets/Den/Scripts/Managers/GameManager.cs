@@ -62,7 +62,7 @@ public class GameManager : MonoBehaviour
         [Header("Interaction/Skill Keys")]
         public KeyCode Attack = KeyCode.Mouse0;
         public KeyCode Interaction = KeyCode.E;
-        public KeyCode FacePlayerTurnOnLight = KeyCode.S;
+        public KeyCode LightLantern = KeyCode.S;
     }
 
     public KeySettings keySettings;

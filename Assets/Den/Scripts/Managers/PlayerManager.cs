@@ -34,7 +34,7 @@ public class PlayerManager : MonoBehaviour
 
         if (player == null)
         {
-            player = Instantiate(playerPrefab);
+            player = Instantiate(playerPrefab, spawnPoint.position, Quaternion.identity);
         }
 
         player.transform.position = spawnPoint.position;
@@ -101,5 +101,10 @@ public class PlayerManager : MonoBehaviour
     public void InstantKillPlayer()
     {
         player.GetComponent<PlayerController>().InstantKill();
+    }
+
+    public bool PlayerIsInLightSource()
+    {
+        return player.GetComponent<PlayerController>().isInLightSource;
     }
 }

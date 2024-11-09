@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,9 +10,9 @@ public class SoundManager : MonoBehaviour
     public float defaultVolume = 1f;
 
     [SerializeField]
-    private AudioSource CurrBGMSource;
-    [SerializeField]
-    private AudioSource WaitBGMSource;
+    private AudioSource BGMSource;
+
+    private float fadePercentage = 1;
 
     [System.Serializable]
     public class Clips
@@ -22,6 +23,15 @@ public class SoundManager : MonoBehaviour
         public AudioClip LIBRARYLIGHTSOURCE;
     }
 
+    [System.Serializable]
+    public enum ClipEnum
+    {
+        EXPLORING, 
+        DANGER,
+        STREETLIGHTSOURCE,
+        LIBRARYLIGHTSOURCE
+    }
+
     public Clips clips;
 
     private Coroutine switchCoroutine;
@@ -30,11 +40,9 @@ public class SoundManager : MonoBehaviour
     {
         Instance = this;
 
-        CurrBGMSource.volume = 1f;
-        WaitBGMSource.volume = 0f;
+        BGMSource.volume = 1f;
 
-        CurrBGMSource.Pause();
-        WaitBGMSource.Pause();
+        BGMSource.Play();
     }
 
     private void OnDestroy()
@@ -44,53 +52,87 @@ public class SoundManager : MonoBehaviour
 
     public void ResetBGM()
     {
-        CurrBGMSource.clip = null;
-        WaitBGMSource.clip = null;
+        BGMSource.clip = null;
 
-        CurrBGMSource.Pause();
-        WaitBGMSource.Pause();
+        BGMSource.Stop();
     }
 
-    public void ChangeClip(AudioClip ac)
+    public void ChangeClip(AudioClip ac, float switchTime = 3f)
     {
-        if (CurrBGMSource.clip == ac) return;
-        if (CurrBGMSource.clip == null)
-        {
-            CurrBGMSource.clip = ac;
-            CurrBGMSource.Play();
-            return;
-        }
-
         StopAllCoroutines();
-        WaitBGMSource.clip = ac;
-        StartCoroutine(SwitchBGM(3f));
+
+        if (BGMSource.clip == null)
+        {
+            Debug.Log("last clip is null");
+            BGMSource.clip = ac;
+            fadePercentage = 0;
+            StartCoroutine(FadeIn(switchTime));
+        }
+        else if (BGMSource.clip == ac)
+        {
+            StartCoroutine(FadeIn(switchTime));
+        }
+        else
+        {
+            StartCoroutine(FadeOut( switchTime, () =>
+            {
+                BGMSource.clip = ac;
+                StartCoroutine(FadeIn(switchTime));
+            }));
+        }
     }
 
-    private IEnumerator SwitchBGM(float switchTime)
+    public void ChangeClip(ClipEnum ac_name)
     {
-        float percentage = 0;
-        while (CurrBGMSource.volume > 0)
+        AudioClip ac = EnumToAC(ac_name);
+        ChangeClip(ac);
+    }
+
+    private IEnumerator FadeOut(float switchTime, Action after_fade_out = null)
+    {
+        while (fadePercentage > 0)
         {
-            CurrBGMSource.volume = Mathf.Lerp(defaultVolume, 0, percentage);
-            percentage += Time.deltaTime / switchTime;
+            BGMSource.volume = Mathf.Lerp(0, defaultVolume, fadePercentage);
+            fadePercentage -= Time.deltaTime / switchTime;
             yield return null;
         }
+        BGMSource.volume = 0;
+        fadePercentage = 0;
+        BGMSource.Stop();
 
-        CurrBGMSource.Stop();
-        if (WaitBGMSource.isPlaying == false)
-            WaitBGMSource.Play();
-        WaitBGMSource.UnPause();
-        percentage = 0;
+        after_fade_out?.Invoke();
+    }
 
-        while (WaitBGMSource.volume < defaultVolume)
+    private IEnumerator FadeIn(float switchTime, Action after_fade_in = null)
+    {
+        if (!BGMSource.isPlaying) BGMSource.Play();
+        while (fadePercentage < 1)
         {
-            WaitBGMSource.volume = Mathf.Lerp(0, defaultVolume, percentage);
-            percentage += Time.deltaTime / switchTime;
+            BGMSource.volume = Mathf.Lerp(0, defaultVolume, fadePercentage);
+            fadePercentage += Time.deltaTime / switchTime;
             yield return null;
         }
+        BGMSource.volume = 1;
+        fadePercentage = 1;
 
-        AudioSource t = CurrBGMSource;
-        CurrBGMSource = WaitBGMSource;
-        WaitBGMSource = t;
+        after_fade_in?.Invoke();
+    }
+
+    private AudioClip EnumToAC(ClipEnum ac_name)
+    {
+        switch (ac_name)
+        {
+            case ClipEnum.EXPLORING:
+                return clips.EXPLORING;
+            case ClipEnum.LIBRARYLIGHTSOURCE:
+                return clips.LIBRARYLIGHTSOURCE;
+            case ClipEnum.STREETLIGHTSOURCE:
+                return clips.STREETLIGHTSOURCE;
+            case ClipEnum.DANGER:
+                return clips.DANGER;
+        }
+
+        Debug.LogError("No this clip");
+        return null;
     }
 }
