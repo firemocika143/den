@@ -8,9 +8,9 @@ public class StreetLightOff : MonoBehaviour
     [SerializeField]
     private StreetFlow flow;//I am not sure if this is good
     [SerializeField]
-    private PlayableDirector show;
+    private PlayableDirector firstTimeShow;
     [SerializeField]
-    private GameObject lightSource;
+    private PlayableDirector otherTimeShow;
 
     private bool triggered = false;
 
@@ -19,6 +19,7 @@ public class StreetLightOff : MonoBehaviour
         if (col.CompareTag("Player") && !triggered)
         {
             triggered = true;
+            flow.isInLightOffEvent = true;
             PlayerController pc = col.gameObject.GetComponent<PlayerController>();
             SoundManager.Instance.ChangeClip(SoundManager.Instance.clips.DANGER);
             StartCoroutine(TurnOffShow(pc));
@@ -28,10 +29,14 @@ public class StreetLightOff : MonoBehaviour
     private IEnumerator TurnOffShow(PlayerController pc)
     {
         pc.StopPlayer();
-        show.Play();
-        yield return new WaitForSeconds(10f);
-        GameManager.Instance.progress.finishLightOff = true;
+        if (GameManager.Instance.progress.firstTimeLightOff)
+        {
+            firstTimeShow.Play();
+            yield return new WaitForSeconds(10f);
+        }
+        else otherTimeShow.Play();
+
+        GameManager.Instance.progress.firstTimeLightOff = false;
         pc.state.stop = false;
-        lightSource.SetActive(false);
     }
 }

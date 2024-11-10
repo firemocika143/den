@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class StreetFlow : Flow
 {
@@ -13,7 +14,7 @@ public class StreetFlow : Flow
         public Vector3 page2Position;
         public string page2HintText;
 
-        [Header("Page 2 Settings")]
+        [Header("Page 1 Settings")]
         public Page page1;
         public Vector3 page1Position;
         public string page1HintText;
@@ -22,6 +23,11 @@ public class StreetFlow : Flow
         public Skill lightDraw = new Skill("LightDraw", 1);
         public Vector3 lightDrawPosition;
         public string lightDrawHintText;
+
+        [Header("Lantern Settings")]
+        public Skill lantern = new Skill("Lantern", 0);
+        public Vector3 lanternPosition;
+        public string lanternHintText;
     }
 
     // should I make an static instance for this script?
@@ -38,7 +44,9 @@ public class StreetFlow : Flow
     [SerializeField]
     private GameObject libraryBlocker;
 
-    private Coroutine eventCoroutine;
+    public bool lightOffEnd = false;
+
+    public bool isInLightOffEvent = false;
 
     public void Awake()
     {
@@ -54,6 +62,10 @@ public class StreetFlow : Flow
     {
         if (PlayerManager.Instance.PlayerLightEnergy() <= 0)
         {
+            if (isInLightOffEvent)
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            }
             PlayerManager.Instance.InstantKillPlayer();
         }
 
@@ -76,10 +88,10 @@ public class StreetFlow : Flow
         // TODO - Loading
         // TODO - RespawnPlayer -> that might be right, respawning player in player manager is a little bit of weird, after all, I should set the player respawning point inn here probably
         // TODO - Generate all items
-        if (!GameManager.Instance.progress.finishLightOff)
-        {
-            // close the event triggers and reload to the environment after those events
-        }
+        //if (!GameManager.Instance.progress.finishLightOff)
+        //{
+        //    // close the event triggers and reload to the environment after those events
+        //}
         if (!GameManager.Instance.progress.getPage2)
         {
             ItemManager.Instance.GeneratePageItem(streetItemSettings.page2, streetItemSettings.page2Position, streetItemSettings.page2HintText, () =>
@@ -101,13 +113,30 @@ public class StreetFlow : Flow
                 GameManager.Instance.progress.getLightDraw = true;
             }); ;
         }
+        if (!GameManager.Instance.progress.getLantern)
+        {
+            ItemManager.Instance.GenerateSkillItem(streetItemSettings.lantern, streetItemSettings.lanternPosition, streetItemSettings.lanternHintText, () =>
+            {
+                GameManager.Instance.progress.getLantern = true;
+            }); ;
+        }
 
         // TODO - Fade in
         UIManager.Instance.FadeIn();// this is not working on currently
         // SFX & VFX
         SoundManager.Instance.ResetBGM();
-
     }
 
-    
+    ////shouldn't these set up in game manager?
+    //private void BeforeFinishLightOffSetUp()
+    //{
+    //    // nothing
+    //}
+
+    //private void AfterFinishLightOffSetUp()
+    //{
+
+    //}
+
+    //private void 
 }

@@ -73,8 +73,10 @@ public class GameManager : MonoBehaviour
         [Header("Street")]
         public bool getPage2 = false;
         public bool getPage1 = false;
+        public bool firstTimeLightOff = true;
         public bool finishLightOff = false;
         public bool getLightDraw = false;
+        public bool getLantern = false;
 
         [Header("Library")]
         public bool getIn = false;

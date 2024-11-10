@@ -6,7 +6,6 @@ using UnityEngine;
 public class SkillItem : MonoBehaviour, IItem// hum... this is actually a light draw item
 {
     public Skill skill;
-    public int id;
     public string hintText;
     public Action gameRecord;
 
@@ -24,11 +23,25 @@ public class SkillItem : MonoBehaviour, IItem// hum... this is actually a light 
 
     public void Get()
     {
-        pc.ObtainLightDraw();
-        GameManager.Instance.progress.getLightDraw = true;// and this is very possible to be remake
+        GetSkill(skill.skillID);
         UIManager.Instance.ShowHint(hintText);
         gameRecord?.Invoke();
         //if (blocker != null) blocker.SetActive(false);
         Destroy(gameObject);
+    }
+
+    private void GetSkill(int skill_id)
+    {
+        switch (skill_id)
+        {
+            case 0:
+                pc.GetLantern();
+                break;
+            case 1:
+                GameManager.Instance.progress.getLightDraw = true;// and this is very possible to be remake
+                pc.ObtainLightDraw(); ;
+                break;
+        }
+            
     }
 }

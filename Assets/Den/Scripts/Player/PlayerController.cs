@@ -123,6 +123,14 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         }
     }
 
+    private void OnTriggerStay2D(Collider2D col)
+    {
+        if (col.gameObject.CompareTag("LightSource"))
+        {
+            isInLightSource = true;
+        }
+    }
+
     private void OnTriggerExit2D(Collider2D col)
     {
         //what if we leave one and enter the other one immediately?
@@ -196,6 +204,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         // TODO - player dying Animation
         state.dying = true;
         StopPlayer();
+        SoundManager.Instance.ResetBGM();
         StartCoroutine(playerAnimation.PlayerDieAnimation(() => 
         { 
             PlayerManager.Instance.PlayerRespawn();
@@ -265,6 +274,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     public void InstantKill()
     {
         PlayerManager.Instance.PlayerRespawn();//this is so weird, very weird
+        SoundManager.Instance.ResetBGM();
         StartCoroutine(PlayerUnhittable(2f));
     }
 
@@ -272,6 +282,11 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     public void ObtainLightDraw()
     {
         playerAttack.ObtainLightDraw();
+    }
+
+    public void GetLantern()
+    {
+        state.maxLightEnergy = 50;
     }
 
     //PlayerAnimation
@@ -367,9 +382,11 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     {
         //this.state.maxHealth = gameData.maxHealth;
         //this.state.maxLightEnergy = gameData.maxLightEnergy;
-        AllRecover();
 
         if (GameManager.Instance.progress.getLightDraw) ObtainLightDraw();
+        if (GameManager.Instance.progress.getLantern) GetLantern();
+
+        AllRecover();
     }
 
     public void SaveData(ref GameData gameData)
