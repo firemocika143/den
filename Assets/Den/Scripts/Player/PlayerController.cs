@@ -19,13 +19,13 @@ public class PlayerController : MonoBehaviour, IDataPersistence
 
         //health
         [Header("Health")]
-        public int maxHealth = 100;
+        public int maxHealth;
         public int health;
 
         //light
         [Header("Light")]
-        public int maxLightEnergy = 100;
-        public int lightEnergy = 50;
+        public int maxLightEnergy;
+        public int lightEnergy;
 
         [Header("Attack")]
         public int attack = 1;
@@ -100,11 +100,13 @@ public class PlayerController : MonoBehaviour, IDataPersistence
             // this is double check
             if (state.lightEnergy <= 0 && lightSystem.Lighting())
             {
-                lightSystem.LightOff();
+                //lightSystem.LightOff();
+                lightSystem.ChangeLight(PlayerLightSystem.LightState.NOLIGHTENERGY);
             }
             else if (state.lightEnergy > 0 && !lightSystem.Lighting() && !isInLightSource && !state.dying)
             {
-                lightSystem.LightOn();
+                //lightSystem.LightOn();
+                lightSystem.ChangeLight(PlayerLightSystem.LightState.WITHLIGHTENERGY);
             }
         }
 
@@ -194,7 +196,6 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         // TODO - player dying Animation
         state.dying = true;
         StopPlayer();
-        if (lightSystem.enabled) lightSystem.CenterLightOff();
         StartCoroutine(playerAnimation.PlayerDieAnimation(() => 
         { 
             PlayerManager.Instance.PlayerRespawn();
@@ -215,7 +216,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
 
         state.inDanger = false;
 
-        if (lightSystem.enabled) lightSystem.CenterLightOff();
+        if (lightSystem.enabled) lightSystem.ChangeLight(PlayerLightSystem.LightState.INLIGHTSOURCE);
         //TODO - show some particles or animations
     }
 
@@ -228,7 +229,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
 
         if (state.lightEnergy > 0)
         {
-            if (lightSystem.enabled) lightSystem.LightOn();
+            if (lightSystem.enabled) lightSystem.ChangeLight(PlayerLightSystem.LightState.WITHLIGHTENERGY); ;
         }
 
         //TODO - show some particles or animations
@@ -343,12 +344,17 @@ public class PlayerController : MonoBehaviour, IDataPersistence
 
             if (state.lightEnergy < lowLight)
             {
-                if (lightSystem.enabled) lightSystem.LowLightEnergyWarning();
+                //if (lightSystem.enabled) lightSystem.LowLightEnergyWarning();
+                //TODO - SFX
+
+                //this should be in update()
+                //and I need a alternative way to show this by playing sfx
+                //vfx is too hard to see
             }
 
             if (state.lightEnergy <= 0 && !state.inDanger)
             {
-                if (lightSystem.enabled) lightSystem.LightOff();
+                if (lightSystem.enabled) lightSystem.ChangeLight(PlayerLightSystem.LightState.NOLIGHTENERGY); ;
                 SoundManager.Instance.ChangeClip(SoundManager.Instance.clips.DANGER);
                 state.inDanger = true;
             }

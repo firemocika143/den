@@ -61,24 +61,31 @@ public class SoundManager : MonoBehaviour
     {
         StopAllCoroutines();
 
-        if (BGMSource.clip == null)
+        if (BGMSource != null)
         {
-            Debug.Log("last clip is null");
-            BGMSource.clip = ac;
-            fadePercentage = 0;
-            StartCoroutine(FadeIn(switchTime));
-        }
-        else if (BGMSource.clip == ac)
-        {
-            StartCoroutine(FadeIn(switchTime));
+            if (BGMSource.clip == null)
+            {
+                Debug.Log("last clip is null");
+                BGMSource.clip = ac;
+                fadePercentage = 0;
+                StartCoroutine(FadeIn(switchTime));
+            }
+            else if (BGMSource.clip == ac)
+            {
+                StartCoroutine(FadeIn(switchTime));
+            }
+            else
+            {
+                StartCoroutine(FadeOut(switchTime, () =>
+                {
+                    BGMSource.clip = ac;
+                    StartCoroutine(FadeIn(switchTime));
+                }));
+            }
         }
         else
         {
-            StartCoroutine(FadeOut( switchTime, () =>
-            {
-                BGMSource.clip = ac;
-                StartCoroutine(FadeIn(switchTime));
-            }));
+            Debug.LogError("no sound source");
         }
     }
 
