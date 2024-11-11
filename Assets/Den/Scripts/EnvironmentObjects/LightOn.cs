@@ -18,6 +18,8 @@ public class LightOn : MonoBehaviour
     private Material original;
     [SerializeField]
     private Material outline;
+    [SerializeField]
+    private Animator animator;
 
     private bool trigger = false;
     public bool castRequest, castSuccess, castInProgress;
@@ -31,6 +33,7 @@ public class LightOn : MonoBehaviour
     {
         playerController = FindObjectOfType<PlayerController>();//can this find the script for other objects in the same scene? 
         lanternSprite = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
 
         lanternLight.enabled = false;
         lightAreaForEnemy.SetActive(false);
@@ -93,6 +96,8 @@ public class LightOn : MonoBehaviour
             lightArea.SetActive(true);
         } else
         {
+            animator.Play("Lantern 1 - Orange Light", 0, 0.0f);
+            animator.Update(0.0f);
             Debug.Log("Cast was fail");
         }
 
@@ -104,6 +109,7 @@ public class LightOn : MonoBehaviour
         castRequest = true;
         castSuccess = false;
         castStartTime = Time.time;
+        animator.Play("Lantern 1 - Orange Light", 0, 0.0f);
         Invoke(nameof(CastSuccess), castTime);
     }
 
