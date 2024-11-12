@@ -278,13 +278,13 @@ public class Boss1LeftUpperArmMovementTest : MonoBehaviour
         rightUpperArmRigidbody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
         rightLowerArmRigidbody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
 
-        rightUpperArmRigidbody.angularDrag = 100000000f;
-        rightLowerArmRigidbody.angularDrag = 100000000f;
-        leftUpperArmRigidbody.angularDrag = 100000000f;
-        leftLowerArmRigidbody.angularDrag = 100000000f;
-        swordRigidbody.angularDrag = 100000000f;
+        //rightUpperArmRigidbody.angularDrag = 100000000f;
+        //rightLowerArmRigidbody.angularDrag = 100000000f;
+        //leftUpperArmRigidbody.angularDrag = 100000000f;
+        //leftLowerArmRigidbody.angularDrag = 100000000f;
+        //swordRigidbody.angularDrag = 100000000f;
 
-        yield return new WaitForSeconds(recoveryTime);
+        //yield return new WaitForSeconds(recoveryTime);
 
         reocvery = false;
         rightUpperArmJoint.useLimits = false;
@@ -295,10 +295,12 @@ public class Boss1LeftUpperArmMovementTest : MonoBehaviour
         rightUpperArmRigidbody.constraints = RigidbodyConstraints2D.None;
         rightLowerArmRigidbody.constraints = RigidbodyConstraints2D.None;
 
-        rightUpperArmRigidbody.angularDrag = 0.01f;
-        rightLowerArmRigidbody.angularDrag = 0.01f;
-        leftUpperArmRigidbody.angularDrag = 0.01f;
-        leftLowerArmRigidbody.angularDrag = 0.01f;
-        swordRigidbody.angularDrag = 0.01f;
+        //rightUpperArmRigidbody.angularDrag = 0.01f;
+        //rightLowerArmRigidbody.angularDrag = 0.01f;
+        //leftUpperArmRigidbody.angularDrag = 0.01f;
+        //leftLowerArmRigidbody.angularDrag = 0.01f;
+        //swordRigidbody.angularDrag = 0.01f;
+
+        yield return null;
     }
 }

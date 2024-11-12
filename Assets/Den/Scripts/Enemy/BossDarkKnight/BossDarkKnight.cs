@@ -205,6 +205,7 @@ public class BossDarkKnight : Enemy
         skill2Knight.transform.position = new Vector3(targetTRansform.position.x + 9.0f, rb.transform.position.y - 2.0f, rb.transform.position.z); // set knight position
         yield return new WaitForSeconds(skill2KnightTime);
         skill2Knight.SetActive(false);
+        //skill2Knight.transform.position = new Vector3(23.15f, 2.327281f, rb.transform.position.z); // set knight
         //if (right)
         //{
         //    var localScale = skill2Knight.transform.localScale;
