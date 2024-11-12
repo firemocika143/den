@@ -39,11 +39,15 @@ public class BossDarkKnight : MonoBehaviour, IEnemy
     public float skill2CooldownTime = 20.0f;
     private bool skill2Cooldown = false;
 
+    [Header("Boss Dark Knight Area")]
+    private Transform bossDarkKnightAreaTRansform;
 
     private Rigidbody2D rb;
     private PlayerController pc;
     private Transform targetTRansform;
 
+    [HideInInspector]
+    public bool playerIsInBossDarkKnightArea = false;
 
     // Start is called before the first frame update
     void Start()
@@ -63,12 +67,14 @@ public class BossDarkKnight : MonoBehaviour, IEnemy
     // Update is called once per frame
     void Update()
     {
-        if (!cooldown)
+        Debug.Log(cooldown);
+        if (!cooldown && playerIsInBossDarkKnightArea)
         {
             if (!skill1Cooldown)
             {
                 Skill1();
-            } else if (!skill2Cooldown)
+            }
+            else if (!skill2Cooldown)
             {
                 Skill2();
             }
@@ -156,9 +162,11 @@ public class BossDarkKnight : MonoBehaviour, IEnemy
         // set fire area
         skill1FireArea.transform.position = new Vector3(rb.transform.position.x, skill1FireArea.transform.position.y, skill1FireArea.transform.position.z);
         skill1FireArea.SetActive(true);
-        cooldown = false; // set cooldown to false, can use other skills
+
+        
         yield return new WaitForSeconds(skill1FireAreaTime);
         skill1FireArea.SetActive(false);
+        cooldown = false; // set cooldown to false, can use other skills
 
         // skill 1 cooldown
         yield return new WaitForSeconds(skill1CooldownTime);
@@ -176,14 +184,32 @@ public class BossDarkKnight : MonoBehaviour, IEnemy
         cooldown = true;
         skill2Cooldown = true;
 
-        rb.transform.position = new Vector3(targetTRansform.position.x, rb.transform.position.y + 5.0f, rb.transform.position.z); // set dark knight position
+        rb.transform.position = new Vector3(bossDarkKnightAreaTRansform.position.x, bossDarkKnightAreaTRansform.transform.position.y, rb.transform.position.z); // set dark knight position
         rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;// freeze dark knight
         yield return new WaitForSeconds(skill2stunningTime); // stunning before summon knight
 
         skill2Knight.SetActive(true);
-        skill2Knight.transform.position = new Vector3(targetTRansform.position.x + 9.0f, rb.transform.position.y - 2.0f, rb.transform.position.z); // set knight position
+        bool right = false;
+        if (targetTRansform.position.x - bossDarkKnightAreaTRansform.position.x < 0)
+        {
+            skill2Knight.transform.position = new Vector3(targetTRansform.position.x + 9.0f, rb.transform.position.y - 2.0f, rb.transform.position.z); // set knight position
+        }
+        else
+        {
+            skill2Knight.transform.position = new Vector3(targetTRansform.position.x - 9.0f, rb.transform.position.y - 2.0f, rb.transform.position.z); // set knight position
+            var localScale = skill2Knight.transform.localScale;
+            localScale.x *= -1;
+            skill2Knight.transform.localScale = localScale;
+            right = true;
+        }
         yield return new WaitForSeconds(skill2KnightTime);
         skill2Knight.SetActive(false);
+        if (right)
+        {
+            var localScale = skill2Knight.transform.localScale;
+            localScale.x *= -1;
+            skill2Knight.transform.localScale = localScale;
+        }
 
         // fall
         //rb.constraints = RigidbodyConstraints2D.None;
@@ -201,5 +227,10 @@ public class BossDarkKnight : MonoBehaviour, IEnemy
         // skill 2 cooldown
         yield return new WaitForSeconds(skill2CooldownTime);
         skill2Cooldown = false;
+    }
+
+    public void BossStart()
+    {
+        playerIsInBossDarkKnightArea = true;
     }
 }

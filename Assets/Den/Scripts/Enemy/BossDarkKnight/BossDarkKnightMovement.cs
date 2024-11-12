@@ -12,6 +12,9 @@ public class BossDarkKnightMovement : MonoBehaviour
     private Rigidbody2D rb;
     private PlayerController pc;
 
+
+    public BossDarkKnight bossDarkKnight;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,17 +26,20 @@ public class BossDarkKnightMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (target.position.x - rb.transform.position.x > 1.0f)
+        if (bossDarkKnight.playerIsInBossDarkKnightArea)
         {
-            rb.velocity = new Vector2(speed, rb.velocity.y);
-            Flip(1);
+            if (target.position.x - rb.transform.position.x > 1.0f)
+            {
+                rb.velocity = new Vector2(speed, rb.velocity.y);
+                Flip(1);
+            }
+            else if (target.position.x - rb.transform.position.x < -1.0f)
+            {
+                rb.velocity = new Vector2(-speed, rb.velocity.y);
+                Flip(-1);
+            }
+            //Debug.Log(target.position.x);
         }
-        else if (target.position.x - rb.transform.position.x < -1.0f) 
-        {
-            rb.velocity = new Vector2(-speed, rb.velocity.y);
-            Flip(-1);
-        }
-        //Debug.Log(target.position.x);
     }
 
     private void Flip(float dir)
