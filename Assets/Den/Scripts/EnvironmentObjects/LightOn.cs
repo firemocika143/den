@@ -34,11 +34,12 @@ public class LightOn : MonoBehaviour
         playerController = FindObjectOfType<PlayerController>();//can this find the script for other objects in the same scene? 
         lanternSprite = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
+        animator.enabled = false;
 
         lanternLight.enabled = false;
         lightAreaForEnemy.SetActive(false);
         lightArea.SetActive(false);
-        castTime = 2f;
+        castTime = 1.5f;
     }
 
     void Update()
@@ -97,7 +98,7 @@ public class LightOn : MonoBehaviour
         } else
         {
             animator.Play("Lantern 1 - Orange Light", 0, 0.0f);
-            animator.Update(0.0f);
+            animator.speed = 0;
             Debug.Log("Cast was fail");
         }
 
@@ -109,6 +110,8 @@ public class LightOn : MonoBehaviour
         castRequest = true;
         castSuccess = false;
         castStartTime = Time.time;
+        animator.enabled = true;
+        animator.speed = 1;
         animator.Play("Lantern 1 - Orange Light", 0, 0.0f);
         Invoke(nameof(CastSuccess), castTime);
     }
