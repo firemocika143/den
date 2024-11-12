@@ -40,7 +40,7 @@ public class BossDarkKnight : MonoBehaviour, IEnemy
     private bool skill2Cooldown = false;
 
     [Header("Boss Dark Knight Area")]
-    private Transform bossDarkKnightAreaTRansform;
+    public Transform bossDarkKnightAreaTRansform;
 
     private Rigidbody2D rb;
     private PlayerController pc;
@@ -189,27 +189,28 @@ public class BossDarkKnight : MonoBehaviour, IEnemy
         yield return new WaitForSeconds(skill2stunningTime); // stunning before summon knight
 
         skill2Knight.SetActive(true);
-        bool right = false;
-        if (targetTRansform.position.x - bossDarkKnightAreaTRansform.position.x < 0)
-        {
-            skill2Knight.transform.position = new Vector3(targetTRansform.position.x + 9.0f, rb.transform.position.y - 2.0f, rb.transform.position.z); // set knight position
-        }
-        else
-        {
-            skill2Knight.transform.position = new Vector3(targetTRansform.position.x - 9.0f, rb.transform.position.y - 2.0f, rb.transform.position.z); // set knight position
-            var localScale = skill2Knight.transform.localScale;
-            localScale.x *= -1;
-            skill2Knight.transform.localScale = localScale;
-            right = true;
-        }
+        //bool right = false;
+        //if (targetTRansform.position.x - bossDarkKnightAreaTRansform.position.x < 0)
+        //{
+        //    skill2Knight.transform.position = new Vector3(targetTRansform.position.x + 9.0f, rb.transform.position.y - 2.0f, rb.transform.position.z); // set knight position
+        //}
+        //else
+        //{
+        //    skill2Knight.transform.position = new Vector3(targetTRansform.position.x - 9.0f, rb.transform.position.y - 2.0f, rb.transform.position.z); // set knight position
+        //    var localScale = skill2Knight.transform.localScale;
+        //    localScale.x *= -1;
+        //    skill2Knight.transform.localScale = localScale;
+        //    right = true;
+        //}
+        skill2Knight.transform.position = new Vector3(targetTRansform.position.x + 9.0f, rb.transform.position.y - 2.0f, rb.transform.position.z); // set knight position
         yield return new WaitForSeconds(skill2KnightTime);
         skill2Knight.SetActive(false);
-        if (right)
-        {
-            var localScale = skill2Knight.transform.localScale;
-            localScale.x *= -1;
-            skill2Knight.transform.localScale = localScale;
-        }
+        //if (right)
+        //{
+        //    var localScale = skill2Knight.transform.localScale;
+        //    localScale.x *= -1;
+        //    skill2Knight.transform.localScale = localScale;
+        //}
 
         // fall
         //rb.constraints = RigidbodyConstraints2D.None;
