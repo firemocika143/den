@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HangAroundEnemy : MonoBehaviour, IEnemy
+public class HangAroundEnemy : Enemy
 {
 
     //health
@@ -51,7 +51,7 @@ public class HangAroundEnemy : MonoBehaviour, IEnemy
     }
 
     //Damage Function for Player to Call
-    public void Damage(int d)
+    public override void Damage(int d)
     {
         if (!invincible)
         {

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AStarEnemy : MonoBehaviour, IEnemy
+public class AStarEnemy : Enemy
 {
     //health
     [Header("Health")]
@@ -36,7 +36,7 @@ public class AStarEnemy : MonoBehaviour, IEnemy
     }
 
     //Damage Function for Player to Call
-    public void Damage(int d)
+    public override void Damage(int d)
     {
         if (!invincible)
         {

@@ -2,7 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IEnemy
+//public interface IEnemy
+//{
+//    public void Damage(int d);
+//}
+
+public abstract class Enemy: MonoBehaviour
 {
-    public void Damage(int d);
+    public abstract void Damage(int d);
 }

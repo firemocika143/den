@@ -60,7 +60,7 @@ public class PlayerAttack : MonoBehaviour
         {
             //TODO - give damage to target enemy
 
-            if (enemy.TryGetComponent<IEnemy>(out var e))
+            if (enemy.TryGetComponent<Enemy>(out var e))
             {
                 e.Damage(attack);
             }
