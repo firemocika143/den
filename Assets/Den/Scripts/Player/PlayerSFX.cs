@@ -4,60 +4,41 @@ using UnityEngine;
 
 public class PlayerSFX : MonoBehaviour
 {
-    //public AudioClip footStep;
-    //public AudioClip lightOn;
-    //public AudioClip drawStart;
-
-    //public AudioSource footStepSFXPlayer;
-
-    //public float FootStepInterval;
-
-    //private IEnumerator footStepSFXCoroutine;
-
-    //private void Start()
-    //{
-    //    footStepSFXCoroutine = FootStepSFXCoroutine();
-    //}
-
-    //public void PlayFootStepSFX()
-    //{
-    //    if (footStepSFXCoroutine == null)
-    //    {
-    //        Debug.LogError("didn't set up the IEnumerator for footstep");
-    //        footStepSFXCoroutine = FootStepSFXCoroutine();
-    //    }
-
-    //    StopAllCoroutines();
-    //    StartCoroutine(footStepSFXCoroutine);
-    //}
-
-    //public void PauseFootStepSFX()
-    //{
-    //    footStepSFXPlayer.Pause();
-    //    StopAllCoroutines();
-    //}
-
-    //private IEnumerator FootStepSFXCoroutine()
-    //{
-    //    while (true)
-    //    {
-    //        footStepSFXPlayer.Play();
-    //        yield return new WaitForSeconds(FootStepInterval);
-    //    }
-    //}
+    //[SerializeField]
+    //private GameObject SFXPlayerPrefab;
+    //[SerializeField]
+    //private GameObject SFXBox;
 
     public AudioSource footStepSFXPlayer;
+    public AudioSource getSFXPlayer;
+    public AudioSource drawSFXPlayer;
 
+    [Header("Foot Step SFX")]
     [SerializeField]
     private float footStepInterval;
     [SerializeField]
     private float footStepVolumeMultiplier;
-    
+
+    [Header("Get Light Energy SFX")]
+    [SerializeField] 
+    private float lastFor;
+    [SerializeField]
+    private float getVolumeMultiplier;
+
+    [Header("Drawing SFX")]
+    [SerializeField]
+    private float drawInterval;
+    [SerializeField]
+    private float drawVolumeMultiplier;
+
     private float footStepTimer = 0;
+    private float getTimer = 0;
+    private float drawTimer = 0;
 
     private void Start()
     {
         footStepSFXPlayer.volume *= footStepVolumeMultiplier;
+        getSFXPlayer.volume *= getVolumeMultiplier;
     }
 
     public void PlayFootStepSFX()
@@ -71,6 +52,46 @@ public class PlayerSFX : MonoBehaviour
 
     public void StopFootStepSFX()
     {
-        footStepSFXPlayer.Stop();
+        if (footStepSFXPlayer.isPlaying) footStepSFXPlayer.Stop();
     }
+
+    public void PlayGetEnergySFX()
+    {
+        if (!getSFXPlayer.isPlaying) getSFXPlayer.Play();
+        getTimer = Time.time;
+    }
+
+    public void StopGetSFX()
+    {
+        if (!getSFXPlayer.isPlaying) return;
+
+        if ((Time.time - getTimer) % getSFXPlayer.clip.length < lastFor) return;
+        getSFXPlayer.Stop();
+    }
+
+    public void PlayDrawSFX()
+    {
+        if (Time.time - drawTimer > drawInterval && !drawSFXPlayer.isPlaying)
+        {
+            drawSFXPlayer.Play();
+            drawTimer = Time.time;
+        }
+    }
+
+    public void StopDrawSFX()
+    {
+        if (drawSFXPlayer.isPlaying) drawSFXPlayer.Stop();
+    }
+
+    //public void PlaySFX(AudioClip clip, float volume)
+    //{
+    //    GameObject sfxPlayer = Instantiate(SFXPlayerPrefab, SFXBox.transform, false);
+
+    //    AudioSource source = sfxPlayer.GetComponent<AudioSource>();
+    //    source.clip = clip;
+    //    source.volume = volume;
+        
+    //    float clipLength = clip.length;
+    //    Destroy(sfxPlayer, clipLength);
+    //}
 }

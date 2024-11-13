@@ -73,6 +73,8 @@ public class PlayerController : MonoBehaviour, IDataPersistence
 
     private PlayerMovement playerMovement;
     private PlayerAttack playerAttack;
+    private PlayerSFX playerSFX;
+    private PlayerParticle playerParticle;
     private float unhittableTimer;
     
     private void Start()
@@ -84,6 +86,8 @@ public class PlayerController : MonoBehaviour, IDataPersistence
 
         playerMovement = GetComponent<PlayerMovement>();
         playerAttack = GetComponent<PlayerAttack>();
+        playerSFX = GetComponent<PlayerSFX>();
+        playerParticle = GetComponent<PlayerParticle>();
         if (TryGetComponent<LineRenderer>(out var lineRenderer))
         {
             lineRenderer.enabled = false;
@@ -347,10 +351,20 @@ public class PlayerController : MonoBehaviour, IDataPersistence
             {
                 state.lightEnergy++;
                 gainLightTimer = Time.time;
+                playerSFX.PlayGetEnergySFX();
+                playerParticle.PlayRecoverParticle();
+            }
+            else if (state.lightEnergy >= state.maxLightEnergy)
+            {
+                playerSFX.StopGetSFX();
+                playerParticle.StopRecoverParticle();
             }
         }
         else
         {
+            playerSFX.StopGetSFX();
+            playerParticle.StopRecoverParticle();
+
             if (Time.time - loseLightTimer >= loseLightTime && state.lightEnergy > 0)
             {
                 state.lightEnergy--;
