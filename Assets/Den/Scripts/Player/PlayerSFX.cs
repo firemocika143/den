@@ -35,6 +35,8 @@ public class PlayerSFX : MonoBehaviour
     private float getTimer = 0;
     private float drawTimer = 0;
 
+    private bool getFadingOut = false;
+
     private void Start()
     {
         footStepSFXPlayer.volume *= footStepVolumeMultiplier;
@@ -57,16 +59,20 @@ public class PlayerSFX : MonoBehaviour
 
     public void PlayGetEnergySFX()
     {
-        if (!getSFXPlayer.isPlaying) getSFXPlayer.Play();
-        getTimer = Time.time;
+        if (!getSFXPlayer.isPlaying)
+        {
+            getSFXPlayer.Play();
+            getSFXPlayer.volume = 1;
+        }
     }
 
     public void StopGetSFX()
     {
         if (!getSFXPlayer.isPlaying) return;
 
-        if ((Time.time - getTimer) % getSFXPlayer.clip.length < lastFor) return;
-        getSFXPlayer.Stop();
+        if (getFadingOut) return;
+
+        StartCoroutine(FadeOut(1f));
     }
 
     public void PlayDrawSFX()
@@ -90,8 +96,24 @@ public class PlayerSFX : MonoBehaviour
     //    AudioSource source = sfxPlayer.GetComponent<AudioSource>();
     //    source.clip = clip;
     //    source.volume = volume;
-        
+
     //    float clipLength = clip.length;
     //    Destroy(sfxPlayer, clipLength);
     //}
+
+    private IEnumerator FadeOut(float switchTime)
+    {
+        getFadingOut = true;
+        float fadePercentage = 1;
+        while (fadePercentage > 0)
+        {
+            getSFXPlayer.volume = Mathf.Lerp(0, 1, fadePercentage);
+            fadePercentage -= Time.deltaTime / switchTime;
+            yield return null;
+        }
+        getSFXPlayer.volume = 0;
+        fadePercentage = 0;
+        getSFXPlayer.Stop();
+        getFadingOut = false;
+    }
 }
