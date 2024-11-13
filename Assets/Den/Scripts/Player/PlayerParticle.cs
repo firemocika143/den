@@ -9,18 +9,22 @@ public class PlayerParticle : MonoBehaviour
     [SerializeField]
     private float lastFor;
 
-    private float timer;
+    //private float timer;
 
     public void PlayRecoverParticle()
     {
-        if (!particleSystem.isPlaying) particleSystem.Play();
-        timer = Time.time;
+        if (!particleSystem.isPlaying)
+        {
+            particleSystem.Play();
+
+            var main = particleSystem.main;// Why it seems I can only call it main?
+            main.loop = true;
+        }
     }
+
     public void StopRecoverParticle()
     {
-        if (!particleSystem.isPlaying) return;
-
-        if ((Time.time - timer) % particleSystem.main.duration < lastFor) return;
-        particleSystem.Stop();
+        var main = particleSystem.main;
+        main.loop = false;
     }
 }
