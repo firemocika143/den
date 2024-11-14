@@ -291,6 +291,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     public void GetLantern()
     {
         state.maxLightEnergy = 50;
+        AllRecover();
     }
 
     //PlayerAnimation

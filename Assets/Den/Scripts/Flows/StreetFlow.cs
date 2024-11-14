@@ -9,24 +9,24 @@ public class StreetFlow : Flow
     [Serializable]
     public class StreetItemSettings
     {
-        [Header("Page 2 Settings")]
+        [Header("Page 1 Settings")]
         public Page page2;
-        public Vector3 page2Position;
+        public Transform page2Pos;
         public string page2HintText;
 
-        [Header("Page 1 Settings")]
+        [Header("Page 2 Settings")]
         public Page page1;
-        public Vector3 page1Position;
+        public Transform page1Pos;
         public string page1HintText;
 
         [Header("Light Draw Settings")]
         public Skill lightDraw = new Skill("LightDraw", 1);
-        public Vector3 lightDrawPosition;
+        public Transform lightDrawPos;
         public string lightDrawHintText;
 
         [Header("Lantern Settings")]
         public Skill lantern = new Skill("Lantern", 0);
-        public Vector3 lanternPosition;
+        public Transform lanternPos;
         public string lanternHintText;
     }
 
@@ -62,16 +62,17 @@ public class StreetFlow : Flow
     {
         if (PlayerManager.Instance.PlayerLightEnergy() <= 0)
         {
-            if (isInLightOffEvent)
-            {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-            }
-            PlayerManager.Instance.InstantKillPlayer();
+            //if (isInLightOffEvent)
+            //{
+            //    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            //}
+            //PlayerManager.Instance.InstantKillPlayer();
         }
 
         if (Input.GetKeyDown(KeyCode.K))
         {
             // TODO - play a sfx
+            PlayerManager.Instance.InstantKillPlayer();
         }
 
         if (libraryBlocker.activeSelf && PlayerManager.Instance.PlayerGetLightDraw())
@@ -94,28 +95,28 @@ public class StreetFlow : Flow
         //}
         if (!GameManager.Instance.progress.getPage2)
         {
-            ItemManager.Instance.GeneratePageItem(streetItemSettings.page2, streetItemSettings.page2Position, streetItemSettings.page2HintText, () =>
+            ItemManager.Instance.GeneratePageItem(streetItemSettings.page2, streetItemSettings.page2Pos.position, streetItemSettings.page2HintText, () =>
             {
                 GameManager.Instance.progress.getPage2 = true;
             });
         }
         if (!GameManager.Instance.progress.getPage1)
         {
-            ItemManager.Instance.GeneratePageItem(streetItemSettings.page1, streetItemSettings.page1Position, streetItemSettings.page1HintText, () =>
+            ItemManager.Instance.GeneratePageItem(streetItemSettings.page1, streetItemSettings.page1Pos.position, streetItemSettings.page1HintText, () =>
             {
                 GameManager.Instance.progress.getPage1 = true;
             });
         }
         if (!GameManager.Instance.progress.getLightDraw)
         {
-            ItemManager.Instance.GenerateSkillItem(streetItemSettings.lightDraw, streetItemSettings.lightDrawPosition, streetItemSettings.lightDrawHintText, () =>
+            ItemManager.Instance.GenerateSkillItem(streetItemSettings.lightDraw, streetItemSettings.lightDrawPos.position, streetItemSettings.lightDrawHintText, () =>
             {
                 GameManager.Instance.progress.getLightDraw = true;
             }); ;
         }
         if (!GameManager.Instance.progress.getLantern)
         {
-            ItemManager.Instance.GenerateSkillItem(streetItemSettings.lantern, streetItemSettings.lanternPosition, streetItemSettings.lanternHintText, () =>
+            ItemManager.Instance.GenerateSkillItem(streetItemSettings.lantern, streetItemSettings.lanternPos.position, streetItemSettings.lanternHintText, () =>
             {
                 GameManager.Instance.progress.getLantern = true;
             }); ;
