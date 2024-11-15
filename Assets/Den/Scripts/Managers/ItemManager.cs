@@ -12,37 +12,33 @@ public class ItemManager : MonoBehaviour
     [SerializeField]
     private GameObject skillItemPrefab;
     [SerializeField]
-    private GameObject lanternPieceItemPrefab;
+    private GameObject lanternItemPrefab;
 
     void Start()
     {
         Instance = this;
     }
 
-    public void GeneratePageItem(Page p, Vector3 worldPos, string hintText, Action gameRecord)
+    public void GeneratePageItem(PageItemInfo info, Action record)
     {
-        GameObject pageItem = Instantiate(pageItemPrefab, worldPos, Quaternion.identity);
+        GameObject pageItem = Instantiate(pageItemPrefab, info.pos.position, Quaternion.identity);
         PageItem pageItemScript = pageItem.GetComponent<PageItem>();
-        pageItemScript.page = p;
-        pageItemScript.hintText = hintText;
-        pageItemScript.gameRecord = gameRecord;
+        info.gameRecord = record;
+        pageItemScript.info = info;
     }
 
-    public void GenerateSkillItem(Skill sk, Vector3 worldPos, string hintText, Action gameRecord)
+    public void GenerateSkillItem(SkillItemInfo info, Action record)
     {
-        GameObject skillItem = Instantiate(skillItemPrefab, worldPos, Quaternion.identity);
+        GameObject skillItem = Instantiate(skillItemPrefab, info.pos.position, Quaternion.identity);
         SkillItem skillItemScript = skillItem.GetComponent<SkillItem>();
-        skillItemScript.skill = sk;
-        skillItemScript.hintText = hintText;
-        skillItemScript.gameRecord = gameRecord;
+        info.gameRecord = record;
+        skillItemScript.info = info;
     }
 
-    public void GenerateLanternPieceItem(int energy, Vector3 worldPos, string hintText, Action gameRecord = null)
+    public void GenerateLanternItem(LanternItemInfo info)
     {
-        GameObject lanternPieceItem = Instantiate(lanternPieceItemPrefab, worldPos, Quaternion.identity);
-        LanternItem lanternPieceItemScript = lanternPieceItem.GetComponent<LanternItem>();
-        lanternPieceItemScript.energy = energy;
-        //lanternPieceItemScript.hintText = hintText;
-        //lanternPieceItemScript.gameRecord = gameRecord;
+        GameObject lanternItem = Instantiate(lanternItemPrefab, info.pos.position, Quaternion.identity);
+        LanternItem lanternItemScript = lanternItem.GetComponent<LanternItem>();
+        lanternItemScript.info = info;
     }
 }

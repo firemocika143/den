@@ -6,11 +6,7 @@ using System;
 [System.Serializable]
 public class LanternItem: MonoBehaviour, IItem
 {
-    public int energy;
-    ItemInfo info;
-
-    //[HideInInspector]
-    //public bool collected = false;
+    public LanternItemInfo info;
 
     private void OnTriggerEnter2D(Collider2D col)
     {
@@ -22,7 +18,9 @@ public class LanternItem: MonoBehaviour, IItem
 
     public void Get()
     {
-        PlayerManager.Instance.SetPlayerMaxLightEnergy(energy);
+        UIManager.Instance.ShowHint(info.hintText);
+        info.gameRecord?.Invoke();
+        PlayerManager.Instance.AddPlayerMaxLightEnergy(info.energy);
         Destroy(gameObject);
     }
 }

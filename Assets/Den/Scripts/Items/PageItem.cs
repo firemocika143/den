@@ -6,9 +6,7 @@ using UnityEngine.Rendering.Universal;
 
 public class PageItem : MonoBehaviour, IItem
 {
-    public Page page;
-    public string hintText;
-    public Action gameRecord;
+    public PageItemInfo info;
 
     void OnTriggerEnter2D(Collider2D col)
     {
@@ -20,9 +18,9 @@ public class PageItem : MonoBehaviour, IItem
 
     public void Get()
     {
-        GameManager.Instance.book.AddPage(page);
-        UIManager.Instance.ShowHint(hintText);
-        gameRecord?.Invoke();
+        GameManager.Instance.book.AddPage(info.page);
+        UIManager.Instance.ShowHint(info.hintText);
+        info.gameRecord?.Invoke();
         // TODO - some animation that shows the player has get the page
         Destroy(gameObject);
     }

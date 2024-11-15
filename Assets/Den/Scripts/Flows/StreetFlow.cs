@@ -4,36 +4,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class StreetFlow : Flow, IDataPersistence
+public class StreetFlow : Flow //, IDataPersistence
 {
     [Serializable]
     public class StreetItemSettings
     {
         [Header("Page 1 Settings")]
-        public Page page2;
-        public Transform page2Pos;
-        public string page2HintText;
+        public PageItemInfo page1Info;
 
         [Header("Page 2 Settings")]
-        public Page page1;
-        public Transform page1Pos;
-        public string page1HintText;
+        public PageItemInfo page2Info;
 
         [Header("Light Draw Settings")]
-        public Skill lightDraw = new Skill("LightDraw", 1);
-        public Transform lightDrawPos;
-        public string lightDrawHintText;
+        public SkillItemInfo lightDrawInfo;
 
-        [Header("Lantern Settings")]
-        public Skill lantern = new Skill("Lantern", 0);
-        public Transform lanternPos;
-        public string lanternHintText;
-
-        [Header("LanternSettings")]
-        public List<LanternItem> lanternItems = new List<LanternItem>();
-
-        [Header("DeviceSettings")]
-        public List<Device> device;
+        [Header("Lantern Piece Settings")]
+        public List<LanternItemInfo> lanternItems = new List<LanternItemInfo>();
     }
 
     // should I make an static instance for this script?
@@ -96,38 +82,7 @@ public class StreetFlow : Flow, IDataPersistence
         // TODO - ResetPlayerState -> that might be right, respawning player in player manager is a little bit of weird, after all, I should set the player respawning point inn here probably
         PlayerManager.Instance.SetPlayerMaxLightEnergy(5);
         // TODO - Generate all items
-        //if (!GameManager.Instance.progress.finishLightOff)
-        //{
-        //    // close the event triggers and reload to the environment after those events
-        //}
-        if (!GameManager.Instance.progress.getPage2)
-        {
-            ItemManager.Instance.GeneratePageItem(streetItemSettings.page2, streetItemSettings.page2Pos.position, streetItemSettings.page2HintText, () =>
-            {
-                GameManager.Instance.progress.getPage2 = true;
-            });
-        }
-        if (!GameManager.Instance.progress.getPage1)
-        {
-            ItemManager.Instance.GeneratePageItem(streetItemSettings.page1, streetItemSettings.page1Pos.position, streetItemSettings.page1HintText, () =>
-            {
-                GameManager.Instance.progress.getPage1 = true;
-            });
-        }
-        if (!GameManager.Instance.progress.getLightDraw)
-        {
-            ItemManager.Instance.GenerateSkillItem(streetItemSettings.lightDraw, streetItemSettings.lightDrawPos.position, streetItemSettings.lightDrawHintText, () =>
-            {
-                GameManager.Instance.progress.getLightDraw = true;
-            }); ;
-        }
-        if (!GameManager.Instance.progress.getLantern)
-        {
-            ItemManager.Instance.GenerateSkillItem(streetItemSettings.lantern, streetItemSettings.lanternPos.position, streetItemSettings.lanternHintText, () =>
-            {
-                GameManager.Instance.progress.getLantern = true;
-            }); ;
-        }
+        GenerateAllItems();
 
         // TODO - Fade in
         UIManager.Instance.FadeIn();// this is not working on currently
@@ -135,26 +90,52 @@ public class StreetFlow : Flow, IDataPersistence
         SoundManager.Instance.ResetBGM();
     }
 
-    private void GenerateAllLanternPieces()
+    private void GenerateAllItems()
     {
-        foreach(LanternItem li in streetItemSettings.lanternItems)
+        if (!GameManager.Instance.progress.getPage2)
         {
-            //ItemManager.Instance.GenerateLanternPieceItem(li.energy, li.pos, )
+            ItemManager.Instance.GeneratePageItem(streetItemSettings.page2Info, () =>
+            {
+                GameManager.Instance.progress.getPage2 = true;
+            });
+        }
+        if (!GameManager.Instance.progress.getPage1)
+        {
+            ItemManager.Instance.GeneratePageItem(streetItemSettings.page1Info, () =>
+            {
+                GameManager.Instance.progress.getPage1 = true;
+            });
+        }
+        if (!GameManager.Instance.progress.getLightDraw)
+        {
+            ItemManager.Instance.GenerateSkillItem(streetItemSettings.lightDrawInfo, () =>
+            {
+                GameManager.Instance.progress.getLightDraw = true;
+            });
+        }
+        GenerateAllLanternItems();
+    }
+
+    private void GenerateAllLanternItems()
+    {
+        foreach(LanternItemInfo li in streetItemSettings.lanternItems)
+        {
+            ItemManager.Instance.GenerateLanternItem(li);
         }
     }
 
-    public void LoadData(GameData gameData)
-    {
+    //public void LoadData(GameData gameData)
+    //{
 
-    }
+    //}
 
-    public void SaveData(ref GameData gameData)
-    {
+    //public void SaveData(ref GameData gameData)
+    //{
 
-    }
+    //}
 
-    private void OnDestroy()
-    {
+    //private void OnDestroy()
+    //{
                 
-    }
+    //}
 }

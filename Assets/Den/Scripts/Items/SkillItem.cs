@@ -5,12 +5,7 @@ using UnityEngine;
 
 public class SkillItem : MonoBehaviour, IItem// hum... this is actually a light draw item
 {
-    public Skill skill;
-    public string hintText;
-
-    public Action gameRecord;
-
-    public ItemInfo info;
+    public SkillItemInfo info;
 
     private PlayerController pc = null;
 
@@ -26,9 +21,9 @@ public class SkillItem : MonoBehaviour, IItem// hum... this is actually a light 
 
     public void Get()
     {
-        GetSkill(skill.skillID);
-        UIManager.Instance.ShowHint(hintText);
-        gameRecord?.Invoke();
+        GetSkill(info.skill.skillID);
+        UIManager.Instance.ShowHint(info.hintText);
+        info.gameRecord?.Invoke();
         //if (blocker != null) blocker.SetActive(false);
         Destroy(gameObject);
     }
