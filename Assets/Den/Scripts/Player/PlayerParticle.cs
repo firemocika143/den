@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerParticle : MonoBehaviour
 {
     [SerializeField]
-    private ParticleSystem particleSystem;
+    private ParticleSystem ps;
     [SerializeField]
     private float lastFor;
 
@@ -13,18 +13,19 @@ public class PlayerParticle : MonoBehaviour
 
     public void PlayRecoverParticle()
     {
-        if (!particleSystem.isPlaying)
+        if (!ps.isPlaying)
         {
-            particleSystem.Play();
+            ps.Play();
 
-            var main = particleSystem.main;// Why it seems I can only call it main?
+            var main = ps.main;// Why it seems I can only call it main?
             main.loop = true;
         }
     }
 
     public void StopRecoverParticle()
     {
-        var main = particleSystem.main;
+        var main = ps.main;
         main.loop = false;
+        //ps.Stop(true);
     }
 }

@@ -49,6 +49,27 @@ public class CameraManager : MonoBehaviour
         }
     }
 
+    public void SwitchOtherCamera(CinemachineVirtualCamera vcam)
+    {
+        if (vcam == null)
+        {
+            Debug.LogError("no virtual camera assigned");
+            return;
+        }
+
+        vcam.enabled = true;
+
+        foreach (var c in vcams)
+        {
+            c.enabled = false;
+        }
+    }
+
+    public void SwitchBackToCurrentCamera()
+    {
+        SwitchVirtualCamera (curr_vcam);
+    }
+
     public void Zoom(float targetRadius, float duration, float smoothness)
     {
         if (zoomCoroutine != null)
@@ -79,27 +100,4 @@ public class CameraManager : MonoBehaviour
             yield return null;
         }
     }
-
-    //private IEnumerator SmoothZoom(float newRadius, float time, float times)
-    //{
-    //    if (time <= 0 || curr_vcam.m_Lens.OrthographicSize == newRadius) yield break;
-
-    //    float addAmount = newRadius - curr_vcam.m_Lens.OrthographicSize;
-
-    //    for (int i = 0; i < times; i++)
-    //    {
-    //        //this can have smoothness and time as well
-    //        yield return new WaitForSeconds(time / times);
-    //        curr_vcam.m_Lens.OrthographicSize += addAmount / times;
-    //    }
-
-    //    Debug.Log("Done");
-    //    curr_vcam.m_Lens.OrthographicSize = newRadius;
-    //    zoomCoroutine = null;
-
-    //    //lerpTimer = Time.deltaTime * smooth;
-    //    //Camera.main.fieldOfView = Mathf.Lerp(initialFOV, zoomInFOV, lerpTimer);
-    //}
-
-
 }

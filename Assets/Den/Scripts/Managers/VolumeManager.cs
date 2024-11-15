@@ -28,7 +28,7 @@ public class VolumeManager : MonoBehaviour
         {
             if (PlayerManager.Instance.PlayerLightEnergy() <= lowValue - 1)
             {
-                filmGrain.intensity.Override((0.1f * (lowValue - PlayerManager.Instance.PlayerLightEnergy())));
+                filmGrain.intensity.Override((0.3f * (lowValue - PlayerManager.Instance.PlayerLightEnergy()) / lowValue));
             }
             else
             {

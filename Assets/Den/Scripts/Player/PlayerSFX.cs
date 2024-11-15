@@ -32,7 +32,6 @@ public class PlayerSFX : MonoBehaviour
     private float drawVolumeMultiplier;
 
     private float footStepTimer = 0;
-    private float getTimer = 0;
     private float drawTimer = 0;
 
     private bool getFadingOut = false;
