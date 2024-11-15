@@ -77,9 +77,6 @@ public class GameManager : MonoBehaviour
         public bool finishLightOff = false;
         public bool getLightDraw = false;
         public bool getLantern = false;
-
-        [Header("Library")]
-        public bool getIn = false;
     }
 
     public GameProgress progress;

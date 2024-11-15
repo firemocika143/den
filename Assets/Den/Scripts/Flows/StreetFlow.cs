@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class StreetFlow : Flow
+public class StreetFlow : Flow, IDataPersistence
 {
     [Serializable]
     public class StreetItemSettings
@@ -28,6 +28,12 @@ public class StreetFlow : Flow
         public Skill lantern = new Skill("Lantern", 0);
         public Transform lanternPos;
         public string lanternHintText;
+
+        [Header("LanternSettings")]
+        public List<LanternItem> lanternItems = new List<LanternItem>();
+
+        [Header("DeviceSettings")]
+        public List<Device> device;
     }
 
     // should I make an static instance for this script?
@@ -128,16 +134,18 @@ public class StreetFlow : Flow
         SoundManager.Instance.ResetBGM();
     }
 
-    ////shouldn't these set up in game manager?
-    //private void BeforeFinishLightOffSetUp()
-    //{
-    //    // nothing
-    //}
+    public void LoadData(GameData gameData)
+    {
 
-    //private void AfterFinishLightOffSetUp()
-    //{
+    }
 
-    //}
+    public void SaveData(ref GameData gameData)
+    {
 
-    //private void 
+    }
+
+    private void OnDestroy()
+    {
+                
+    }
 }

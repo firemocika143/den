@@ -11,6 +11,8 @@ public class ItemManager : MonoBehaviour
     private GameObject pageItemPrefab;
     [SerializeField]
     private GameObject skillItemPrefab;
+    [SerializeField]
+    private GameObject lanternPieceItemPrefab;
 
     void Start()
     {
@@ -33,5 +35,14 @@ public class ItemManager : MonoBehaviour
         skillItemScript.skill = sk;
         skillItemScript.hintText = hintText;
         skillItemScript.gameRecord = gameRecord;
+    }
+
+    public void GenerateLanternPieceItem(int energy, Vector3 worldPos, string hintText, Action gameRecord)
+    {
+        GameObject lanternPieceItem = Instantiate(lanternPieceItemPrefab, worldPos, Quaternion.identity);
+        LanternItem lanternPieceItemScript = lanternPieceItem.GetComponent<LanternItem>();
+        lanternPieceItemScript.energy = energy;
+        lanternPieceItemScript.hintText = hintText;
+        lanternPieceItemScript.gameRecord = gameRecord;
     }
 }
