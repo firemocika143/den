@@ -37,12 +37,12 @@ public class ItemManager : MonoBehaviour
         skillItemScript.gameRecord = gameRecord;
     }
 
-    public void GenerateLanternPieceItem(int energy, Vector3 worldPos, string hintText, Action gameRecord)
+    public void GenerateLanternPieceItem(int energy, Vector3 worldPos, string hintText, Action gameRecord = null)
     {
         GameObject lanternPieceItem = Instantiate(lanternPieceItemPrefab, worldPos, Quaternion.identity);
         LanternItem lanternPieceItemScript = lanternPieceItem.GetComponent<LanternItem>();
         lanternPieceItemScript.energy = energy;
-        lanternPieceItemScript.hintText = hintText;
-        lanternPieceItemScript.gameRecord = gameRecord;
+        //lanternPieceItemScript.hintText = hintText;
+        //lanternPieceItemScript.gameRecord = gameRecord;
     }
 }

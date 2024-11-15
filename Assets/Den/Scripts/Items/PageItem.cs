@@ -10,6 +10,14 @@ public class PageItem : MonoBehaviour, IItem
     public string hintText;
     public Action gameRecord;
 
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.CompareTag("Player"))
+        {
+            Get();
+        }
+    }
+
     public void Get()
     {
         GameManager.Instance.book.AddPage(page);
@@ -17,13 +25,5 @@ public class PageItem : MonoBehaviour, IItem
         gameRecord?.Invoke();
         // TODO - some animation that shows the player has get the page
         Destroy(gameObject);
-    }
-
-    void OnTriggerEnter2D(Collider2D col)
-    {
-        if (col.CompareTag("Player"))
-        {
-            Get();
-        }
     }
 }

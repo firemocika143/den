@@ -112,4 +112,15 @@ public class PlayerManager : MonoBehaviour
     {
         return !(player.GetComponent<PlayerSkill>().lightDraw == null);
     }
+
+    public void SetPlayerMaxLightEnergy(int val)
+    {
+        if (player == null)
+        {
+            Debug.LogError("Try to change player energy while player is not on the field");
+            return;
+        }
+
+        player.GetComponent<PlayerController>().state.maxLightEnergy = val;
+    }
 }

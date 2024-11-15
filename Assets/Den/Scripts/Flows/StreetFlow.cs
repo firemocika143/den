@@ -93,7 +93,8 @@ public class StreetFlow : Flow, IDataPersistence
 
         UIManager.Instance.FadeMaskOn();// this is like [loading...]
         // TODO - Loading
-        // TODO - RespawnPlayer -> that might be right, respawning player in player manager is a little bit of weird, after all, I should set the player respawning point inn here probably
+        // TODO - ResetPlayerState -> that might be right, respawning player in player manager is a little bit of weird, after all, I should set the player respawning point inn here probably
+        PlayerManager.Instance.SetPlayerMaxLightEnergy(5);
         // TODO - Generate all items
         //if (!GameManager.Instance.progress.finishLightOff)
         //{
@@ -132,6 +133,14 @@ public class StreetFlow : Flow, IDataPersistence
         UIManager.Instance.FadeIn();// this is not working on currently
         // SFX & VFX
         SoundManager.Instance.ResetBGM();
+    }
+
+    private void GenerateAllLanternPieces()
+    {
+        foreach(LanternItem li in streetItemSettings.lanternItems)
+        {
+            //ItemManager.Instance.GenerateLanternPieceItem(li.energy, li.pos, )
+        }
     }
 
     public void LoadData(GameData gameData)

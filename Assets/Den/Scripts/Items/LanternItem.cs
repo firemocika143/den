@@ -4,19 +4,25 @@ using UnityEngine;
 using System;
 
 [System.Serializable]
-public class LanternItem: IItem
+public class LanternItem: MonoBehaviour, IItem
 {
-    public int energy = 5;
-    public Transform pos;
-    public Skill skill;
-    public string hintText;
-    public Action gameRecord;
+    public int energy;
+    ItemInfo info;
 
-    [HideInInspector]
-    public bool collected = false;
+    //[HideInInspector]
+    //public bool collected = false;
+
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.CompareTag("Player"))
+        {
+            Get();
+        }
+    }
 
     public void Get()
     {
-
+        PlayerManager.Instance.SetPlayerMaxLightEnergy(energy);
+        Destroy(gameObject);
     }
 }

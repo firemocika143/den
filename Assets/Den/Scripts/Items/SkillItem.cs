@@ -7,7 +7,10 @@ public class SkillItem : MonoBehaviour, IItem// hum... this is actually a light 
 {
     public Skill skill;
     public string hintText;
+
     public Action gameRecord;
+
+    public ItemInfo info;
 
     private PlayerController pc = null;
 
