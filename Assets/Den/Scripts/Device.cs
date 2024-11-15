@@ -23,6 +23,8 @@ public class Device : MonoBehaviour
     private float maxRadius = 0;
     private float extendTime = 0.5f;
     private float maxIntensity = 1f;
+
+    private float interruptMaxIntensity = 12f;
     private bool interrupting = false;
     private float interruptTime = 1f;
     private bool charging = false;
@@ -64,7 +66,7 @@ public class Device : MonoBehaviour
             {
                 StartCharging();
             }
-            if (charging && (!playerIsInArea || Input.GetKeyUp(GameManager.Instance.keySettings.LightLantern)))
+            if (charging && (!playerIsInArea || Input.GetKeyUp(GameManager.Instance.keySettings.LightLantern) || PlayerManager.Instance.PlayerLightEnergy() <= 0))
             {
                 InterruptCharging();
             }
@@ -174,7 +176,7 @@ public class Device : MonoBehaviour
 
         while (perc > 0)
         {
-            timeLight.intensity = Mathf.Lerp(0, maxIntensity, perc);
+            timeLight.intensity = Mathf.Lerp(0, interruptMaxIntensity, perc);
             perc -= Time.deltaTime / switchTime;
             yield return null;
         }

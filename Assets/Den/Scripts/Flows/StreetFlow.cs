@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+[DefaultExecutionOrder(10000)]
 public class StreetFlow : Flow //, IDataPersistence
 {
     [Serializable]
@@ -23,8 +24,6 @@ public class StreetFlow : Flow //, IDataPersistence
     }
 
     // should I make an static instance for this script?
-    [SerializeField]
-    private GameObject firstLamp;
     [SerializeField]
     private Transform centerPointOfLamps;
     [SerializeField]
