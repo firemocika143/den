@@ -7,7 +7,7 @@ public class Charging : MonoBehaviour
     [SerializeField]
     private Animator animator;
 
-    private bool trigger = false;
+    public bool trigger = false;
     private bool isActivate = false;
     public bool castRequest, castSuccess, castInProgress;
     public float castTime;
@@ -57,6 +57,14 @@ public class Charging : MonoBehaviour
         {
             Debug.Log("Cast was successful");
             isActivate = true;
+            if (trigger)
+            {
+                OffTrigger();
+            }
+            else
+            {
+                OnTrigger();
+            }
         } else
         {
             animator.Play("Charging", 0, 0.0f);
