@@ -228,8 +228,6 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         gainLightTimer = Time.time;
 
         state.inDanger = false;
-
-        if (lightSystem.enabled) lightSystem.ChangeLight(PlayerLightSystem.LightState.INLIGHTSOURCE);
         //TODO - show some particles or animations
     }
 
@@ -239,11 +237,6 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         isInLightSource = false;
         loseLightTimer = Time.time;
         //TODO - Call function in playerStatus to stop adding their light energy, but I don't know how to use coroutine
-
-        if (state.lightEnergy > 0)
-        {
-            if (lightSystem.enabled) lightSystem.ChangeLight(PlayerLightSystem.LightState.WITHLIGHTENERGY); ;
-        }
 
         //TODO - show some particles or animations
     }
@@ -382,12 +375,11 @@ public class PlayerController : MonoBehaviour, IDataPersistence
                 //vfx is too hard to see
             }
 
-            if (state.lightEnergy <= 0 && !state.inDanger)
-            {
-                if (lightSystem.enabled) lightSystem.ChangeLight(PlayerLightSystem.LightState.NOLIGHTENERGY); ;
-                SoundManager.Instance.ChangeClip(SoundManager.Instance.clips.DANGER);
-                state.inDanger = true;
-            }
+            //if (state.lightEnergy <= 0 && !state.inDanger)
+            //{
+            //    SoundManager.Instance.ChangeClip(SoundManager.Instance.clips.DANGER);
+            //    state.inDanger = true;
+            //}
         }
 
         UIManager.Instance.UpdatePlayerLight(state.lightEnergy);

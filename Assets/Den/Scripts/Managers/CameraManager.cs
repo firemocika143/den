@@ -31,6 +31,8 @@ public class CameraManager : MonoBehaviour
         {
             c.Follow = PlayerManager.Instance.PlayerTransform();
         }
+
+        curr_vcam = fst_vcam;
     }
 
     public void Follow(Transform target)

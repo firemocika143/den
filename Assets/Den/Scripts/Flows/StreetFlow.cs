@@ -16,27 +16,19 @@ public class StreetFlow : Flow //, IDataPersistence
         [Header("Page 2 Settings")]
         public PageItemInfo page2Info;
 
-        [Header("Light Draw Settings")]
-        public SkillItemInfo lightDrawInfo;
-
         [Header("Lantern Piece Settings")]
         public List<LanternItemInfo> lanternItems = new List<LanternItemInfo>();
     }
 
     // should I make an static instance for this script?
     [SerializeField]
-    private Transform centerPointOfLamps;
-    [SerializeField]
-    private float zoomOutRadius;
-    [SerializeField]
-    private GameObject firstLightSource;
-    [SerializeField]
     private StreetItemSettings streetItemSettings;
     [SerializeField]
     private GameObject libraryBlocker;
+    [SerializeField]
+    private GameObject firstBlocker;
 
     public bool lightOffEnd = false;
-
     public bool isInLightOffEvent = false;
 
     public void Awake()
@@ -66,7 +58,11 @@ public class StreetFlow : Flow //, IDataPersistence
             PlayerManager.Instance.InstantKillPlayer();
         }
 
-        if (libraryBlocker.activeSelf && PlayerManager.Instance.PlayerGetLightDraw())
+        if (firstBlocker.activeSelf && PlayerManager.Instance.PlayerLightEnergy() >= 10)
+        {
+            firstBlocker.SetActive(false);
+        }
+        if (libraryBlocker.activeSelf && PlayerManager.Instance.PlayerLightEnergy() >= 15)
         {
             libraryBlocker.SetActive(false);
         }
@@ -103,13 +99,6 @@ public class StreetFlow : Flow //, IDataPersistence
             ItemManager.Instance.GeneratePageItem(streetItemSettings.page1Info, () =>
             {
                 GameManager.Instance.progress.getPage1 = true;
-            });
-        }
-        if (!GameManager.Instance.progress.getLightDraw)
-        {
-            ItemManager.Instance.GenerateSkillItem(streetItemSettings.lightDrawInfo, () =>
-            {
-                GameManager.Instance.progress.getLightDraw = true;
             });
         }
         GenerateAllLanternItems();

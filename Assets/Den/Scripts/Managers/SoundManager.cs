@@ -29,7 +29,8 @@ public class SoundManager : MonoBehaviour
         EXPLORING, 
         DANGER,
         STREETLIGHTSOURCE,
-        LIBRARYLIGHTSOURCE
+        LIBRARYLIGHTSOURCE,
+        NULL
     }
 
     public Clips clips;
@@ -137,6 +138,8 @@ public class SoundManager : MonoBehaviour
                 return clips.STREETLIGHTSOURCE;
             case ClipEnum.DANGER:
                 return clips.DANGER;
+            case ClipEnum.NULL:
+                return null;
         }
 
         Debug.LogError("No this clip");

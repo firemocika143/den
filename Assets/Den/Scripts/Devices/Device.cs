@@ -121,6 +121,7 @@ public abstract class Device : MonoBehaviour
         charged = true;
         // play success animation
         hintArea.SetActive(false);
+        CameraManager.Instance.SwitchBackToCurrentCamera();
         ActivatedAbility();
     }
 

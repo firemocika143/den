@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private float jumpPower = 12f;
     [SerializeField]
-    private float climbSpeed = 1.3f;
+    private float climbSpeed = 3f;
 
     [Header("Check Settings")]
     [SerializeField]
@@ -23,12 +23,14 @@ public class PlayerMovement : MonoBehaviour
     private LayerMask ladderLayer;
     public float distance;
 
-
+    private float currClimbSpeed;
     private float horizontal;
     private float vertical;
     private bool isGrounded = false;
     private Rigidbody2D rb;
     private Vector3 size;
+
+    private bool currentLadderHorizontalMoveConstraint = false;
 
     //sorry for this note! I just tried to test the higher ladder and I find this have some problem unsolved, so I decided to note it first.
     //if a ladder is here, this should mean that you would assign a ladder to it whenever the player starts to climb, just for sure
@@ -98,7 +100,10 @@ public class PlayerMovement : MonoBehaviour
 
             // Moving left or right
             // I should change this into transform.position to precisely control the player position
-            rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
+            if (!(playerController.state.climb && currentLadderHorizontalMoveConstraint))
+            {
+                rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
+            }
 
             // Flipping
             if (horizontal != 0)
@@ -160,14 +165,27 @@ public class PlayerMovement : MonoBehaviour
         RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.up, distance, ladderLayer);
         if (hitInfo.collider != null)
         {
-            if (Input.GetKeyDown(KeyCode.W))
+            if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S))
             {
                 playerController.state.climb = true;
+                if (hitInfo.collider.gameObject.TryGetComponent<LadderConstrainter>(out var con))
+                {
+                    currentLadderHorizontalMoveConstraint = !con.allowPlayerToLeaveWithLeftOrRight;
+                    currClimbSpeed = con.speed;
+                }
+                else
+                {
+                    currentLadderHorizontalMoveConstraint = false;
+                    currClimbSpeed = climbSpeed;
+                }
                 transform.position = new Vector3(hitInfo.collider.transform.position.x, transform.position.y, 0);
             }
             else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D))//this would take a long time to be detected too
             {
-                playerController.state.climb = false;
+                if (!currentLadderHorizontalMoveConstraint)
+                {
+                    playerController.state.climb = false;
+                }
             }
         }
         else
@@ -178,7 +196,7 @@ public class PlayerMovement : MonoBehaviour
         if (playerController.state.climb && hitInfo.collider != null)
         {
             vertical = Input.GetAxisRaw("Vertical");
-            rb.velocity = new Vector2(rb.velocity.x, vertical * climbSpeed);
+            rb.velocity = new Vector2(rb.velocity.x, vertical * currClimbSpeed);
             rb.gravityScale = 0;
         }
         else

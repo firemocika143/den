@@ -146,4 +146,9 @@ public class PlayerManager : MonoBehaviour
             rb.velocity = force;
         }
     }
+
+    public void PlayerStopClimbing()
+    {
+        player.GetComponent<PlayerController>().state.climb = false;
+    }
 }
