@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using System;
+using UnityEngine.WSA;
 
-public class Device : MonoBehaviour
+public abstract class Device : MonoBehaviour
 {
     [SerializeField]
     private Light2D timeLight;
@@ -29,6 +30,9 @@ public class Device : MonoBehaviour
     private float interruptTime = 1f;
     private bool charging = false;
 
+    public abstract void ActivatedAbility();
+    public abstract void DeactivatedDevice();
+
     private void Start()
     {
         timeLight.pointLightOuterRadius = 0;
@@ -45,7 +49,6 @@ public class Device : MonoBehaviour
         if (col.CompareTag("Player"))
         {
             playerIsInArea = true;
-            Debug.Log("Enter");
         }
     }
 
@@ -54,7 +57,6 @@ public class Device : MonoBehaviour
         if (col.CompareTag("Player"))
         {
             playerIsInArea = false;
-            Debug.Log("Leave");
         }
     }
 
@@ -78,6 +80,11 @@ public class Device : MonoBehaviour
                 // play uninteractable animation
             }
         }
+
+        if (charged)
+        {
+            DeactivatedDevice();
+        }
     }
 
     private void OnDestroy()
@@ -92,16 +99,13 @@ public class Device : MonoBehaviour
         StopAllCoroutines();
 
         charging = true;
-        Debug.Log("start charging");
         ResetDevice();
         StartCoroutine(AdjustLightRadius(extendTime, 1, null));
-        Debug.Log("Extend");
         // Player Stop losing light
         // Fix Player Camera
         CameraManager.Instance.SwitchOtherCamera(focusCam);
         // Start To shrink the radius
         StartCoroutine(AdjustLightRadius(timeLength, 0, Success));
-        Debug.Log("Shrink");
     }
 
     private void ResetDevice()
@@ -116,8 +120,8 @@ public class Device : MonoBehaviour
         charging = false;
         charged = true;
         // play success animation
-        Debug.Log("success");
         hintArea.SetActive(false);
+        ActivatedAbility();
     }
 
     private void InterruptCharging()
@@ -125,7 +129,6 @@ public class Device : MonoBehaviour
         if (interrupting) return;
 
         charging = false;
-        Debug.Log("interrupt");
         StopAllCoroutines();
         // return camera
         CameraManager.Instance.SwitchBackToCurrentCamera();
@@ -182,5 +185,12 @@ public class Device : MonoBehaviour
         }
         timeLight.intensity = 0;
         interrupting = false;
+    }
+
+    public void DeactivateDeviceReset()
+    {
+        ResetDevice();
+        charged = false;
+        hintArea.SetActive(true);
     }
 }

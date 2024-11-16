@@ -134,4 +134,13 @@ public class PlayerManager : MonoBehaviour
 
         player.GetComponent<PlayerController>().state.maxLightEnergy += val;
     }
+
+    public void GivePlayerForce(Vector2 force)
+    {
+        Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            rb.velocity = force;
+        }
+    }
 }

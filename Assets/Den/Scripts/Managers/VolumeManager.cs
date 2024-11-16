@@ -23,6 +23,11 @@ public class VolumeManager : MonoBehaviour
 
     private void Update()
     {
+        UpdateVisionVolume();
+    }
+
+    private void UpdateVisionVolume()
+    {
         if (PlayerManager.Instance == null) return;
         else
         {
@@ -36,6 +41,4 @@ public class VolumeManager : MonoBehaviour
             }
         }
     }
-
-
 }
