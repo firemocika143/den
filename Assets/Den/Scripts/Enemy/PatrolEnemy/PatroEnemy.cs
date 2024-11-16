@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class PatroEnemy : Enemy
 {
+    [Header("Patro Enemy Set")]
+    public GameObject patroEnemySet;
+
     //health
     [Header("Health")]
     public int maxHealth = 10;
@@ -12,11 +15,18 @@ public class PatroEnemy : Enemy
     [Header("Attack")]
     public int attack = 1;
 
+    [Header("Invincible Time")]
     public float invincibleTime = 1.0f;
     private bool invincible;
 
     // Start is called before the first frame update
     void Start()
+    {
+        health = maxHealth;
+        invincible = false;
+    }
+
+    void OnEnable()
     {
         health = maxHealth;
         invincible = false;
@@ -52,7 +62,8 @@ public class PatroEnemy : Enemy
 
             if (health <= 0)
             {
-                Destroy(gameObject);
+                //Destroy(gameObject);
+                patroEnemySet.SetActive(false);
             }
 
             StartCoroutine(invincibleTimeCount());

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class HangAroundEnemy : Enemy
 {
+    [Header("Hang Around Enemy set")]
+    public GameObject hangAroundEnemySet;
 
     //health
     [Header("Health")]
@@ -18,6 +20,12 @@ public class HangAroundEnemy : Enemy
 
     // Start is called before the first frame update
     void Start()
+    {
+        health = maxHealth;
+        invincible = false;
+    }
+
+    void OnEnable()
     {
         health = maxHealth;
         invincible = false;
@@ -59,7 +67,8 @@ public class HangAroundEnemy : Enemy
 
             if (health <= 0)
             {
-                Destroy(gameObject);
+                //Destroy(gameObject);
+                hangAroundEnemySet.SetActive(false);
             }
 
             StartCoroutine(invincibleTimeCount());

@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class BossDarkKnight : Enemy
 {
+    [Header("Boss Dark Knight Set")]
+    public GameObject bossDarkKnightSet;
+
     //health
     [Header("Health")]
     public int maxHealth = 500;
@@ -67,6 +70,12 @@ public class BossDarkKnight : Enemy
         skill2Knight.SetActive(false);
     }
 
+    void OnEnable()
+    {
+        health = maxHealth;
+        invincible = false;
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -97,7 +106,8 @@ public class BossDarkKnight : Enemy
 
             if (health <= 0)
             {
-                Destroy(gameObject);
+                //Destroy(gameObject);
+                bossDarkKnightSet.SetActive(false);
             }
 
             StartCoroutine(invincibleTimeCount());

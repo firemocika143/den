@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class BulletEnemy : Enemy
 {
+    [Header("Bullet Enemy")]
+    public GameObject bulletEnemySet;
+
     //health
     [Header("Health")]
     public int maxHealth = 10;
@@ -23,12 +26,18 @@ public class BulletEnemy : Enemy
 
     [Header("Invincible Time")]
     public float invincibleTime = 1.0f;
-    private bool invincible = false;
+    private bool invincible;
 
     // Start is called before the first frame update
     void Start()
     {
+        invincible = false;
+    }
+
+    void OnEnable()
+    {
         health = maxHealth;
+        invincible = false;
     }
 
     void Update()
@@ -48,7 +57,8 @@ public class BulletEnemy : Enemy
 
             if (health <= 0)
             {
-                Destroy(gameObject);
+                //Destroy(gameObject);\
+                bulletEnemySet.SetActive(false);
             }
 
             StartCoroutine(InvincibleTimeCount());
