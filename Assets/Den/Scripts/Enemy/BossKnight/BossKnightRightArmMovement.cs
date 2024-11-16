@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Boss1LeftUpperArmMovementTest : MonoBehaviour
+public class BossKnightRightArmMovement : MonoBehaviour
 {
     [Header("Right Upper Arm")]
     public Rigidbody2D rightUpperArmRigidbody;
@@ -15,7 +15,7 @@ public class Boss1LeftUpperArmMovementTest : MonoBehaviour
     public Rigidbody2D rightLowerArmRigidbody;
     public HingeJoint2D rightLowerArmJoint;  // HingeJoint2D on the lower arm (right)
     public float rightLowerArmMaxAngle = 60f;  // Maximum raising angle for lower arm (positive for right hand)
-    public float rightLowerArmMinAngle = 0f;   // Minimum angle for lower arm (when hand is down, positive for right hand)
+    public float rightLowerArmMinAngle = 30f;   // Minimum angle for lower arm (when hand is down, positive for right hand)
     public float rightLowerArmSpeed = 50f;   // Speed at which lower arm rotates
 
     [Header("Left Upper Arm")]
@@ -50,19 +50,19 @@ public class Boss1LeftUpperArmMovementTest : MonoBehaviour
     {
         //leftUpperArmSpeed = (leftUpperArmMaxAngle - leftUpperArmMinAngle) / ((rightUpperArmMaxAngle - rightUpperArmMinAngle) / rightUpperArmSpeed);
         //leftLowerArmSpeed = (leftLowerArmMaxAngle - leftLowerArmMinAngle) / ((rightLowerArmMaxAngle - rightLowerArmMinAngle) / rightLowerArmSpeed);
-        
-        // Set limits for both joints to prevent over-rotation
-        //JointAngleLimits2D rightUpperArmLimits = new JointAngleLimits2D();
-        //rightUpperArmLimits.max = rightUpperArmMaxAngle;
-        //rightUpperArmLimits.min = rightUpperArmMinAngle;
-        //rightUpperArmJoint.limits = rightUpperArmLimits;
-        //rightUpperArmJoint.useLimits = true;
 
-        //JointAngleLimits2D rightLowerArmLimits = new JointAngleLimits2D();
-        //rightLowerArmLimits.max = rightLowerArmMaxAngle;
-        //rightLowerArmLimits.min = rightLowerArmMinAngle;
-        //rightLowerArmJoint.limits = rightLowerArmLimits;
-        //rightLowerArmJoint.useLimits = true;
+        // Set limits for both joints to prevent over-rotation
+        JointAngleLimits2D rightUpperArmLimits = new JointAngleLimits2D();
+        rightUpperArmLimits.max = rightUpperArmMaxAngle;
+        rightUpperArmLimits.min = rightUpperArmMinAngle;
+        rightUpperArmJoint.limits = rightUpperArmLimits;
+        rightUpperArmJoint.useLimits = true;
+
+        JointAngleLimits2D rightLowerArmLimits = new JointAngleLimits2D();
+        rightLowerArmLimits.max = rightLowerArmMaxAngle;
+        rightLowerArmLimits.min = rightLowerArmMinAngle;
+        rightLowerArmJoint.limits = rightLowerArmLimits;
+        rightLowerArmJoint.useLimits = true;
 
         JointAngleLimits2D leftUpperArmLimits = new JointAngleLimits2D();
         leftUpperArmLimits.max = leftUpperArmMaxAngle;
@@ -189,6 +189,7 @@ public class Boss1LeftUpperArmMovementTest : MonoBehaviour
             else
             {
                 rightUpperMotor.motorSpeed = 0;
+                rightUpperArmRigidbody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
             }
 
             if (rightLowerArmAngle > rightLowerArmMinAngle)
@@ -198,6 +199,10 @@ public class Boss1LeftUpperArmMovementTest : MonoBehaviour
             else
             {
                 rightLowerMotor.motorSpeed = 0;
+                if (rightUpperMotor.motorSpeed == 0)
+                {
+                    rightLowerArmRigidbody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+                }
             }
 
             //if (leftUpperArmAngle > leftUpperArmMinAngle)  // Lowering back to negative angle
@@ -225,6 +230,10 @@ public class Boss1LeftUpperArmMovementTest : MonoBehaviour
             else
             {
                 swordMotor.motorSpeed = 0;
+                if (rightUpperMotor.motorSpeed == 0 && rightLowerMotor.motorSpeed == 0)
+                {
+                    swordRigidbody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+                }
             }
 
             // If both arms reach their min angles, switch to raising
@@ -237,6 +246,9 @@ public class Boss1LeftUpperArmMovementTest : MonoBehaviour
             {
                 raising = true;
                 needRecovery = true;
+                swordRigidbody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+                rightUpperArmRigidbody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+                rightLowerArmRigidbody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
             }
         }
 
@@ -247,10 +259,10 @@ public class Boss1LeftUpperArmMovementTest : MonoBehaviour
         //leftLowerArmJoint.motor = leftLowerMotor;
         swordJoint.motor = swordMotor;
 
-        if (needRecovery)
-        {
-            StartCoroutine(recoveryTimeCount());
-        }
+        //if (needRecovery)
+        //{
+        //    StartCoroutine(recoveryTimeCount());
+        //}
     }
 
     private IEnumerator recoveryTimeCount()
@@ -302,5 +314,12 @@ public class Boss1LeftUpperArmMovementTest : MonoBehaviour
         //swordRigidbody.angularDrag = 0.01f;
 
         yield return null;
+    }
+
+    public void startMoving()
+    {
+        swordRigidbody.constraints = RigidbodyConstraints2D.None;
+        rightUpperArmRigidbody.constraints = RigidbodyConstraints2D.None;
+        rightLowerArmRigidbody.constraints = RigidbodyConstraints2D.None;
     }
 }

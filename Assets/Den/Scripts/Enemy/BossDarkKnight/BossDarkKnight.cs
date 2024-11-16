@@ -42,6 +42,9 @@ public class BossDarkKnight : Enemy
     [Header("Boss Dark Knight Area")]
     public Transform bossDarkKnightAreaTRansform;
 
+    [Header("Boss Knight Right Arm Movement")]
+    public BossKnightRightArmMovement bossKnightRightArmMovement;
+
     private Rigidbody2D rb;
     private PlayerController pc;
     private Transform targetTRansform;
@@ -74,7 +77,7 @@ public class BossDarkKnight : Enemy
             {
                 Skill1();
             }
-            else if (!skill2Cooldown)
+            else if (!skill2Cooldown && targetTRansform.position.x - bossDarkKnightAreaTRansform.position.x - 9.0f < 0)
             {
                 Skill2();
             }
@@ -147,7 +150,7 @@ public class BossDarkKnight : Enemy
         }
 
         // Temporarily increase gravity scale to land faster
-        rb.gravityScale = 10f;
+        rb.gravityScale = 20f;
 
         // Wait until object lands
         while (rb.velocity.y < 0)
@@ -189,6 +192,7 @@ public class BossDarkKnight : Enemy
         yield return new WaitForSeconds(skill2stunningTime); // stunning before summon knight
 
         skill2Knight.SetActive(true);
+        bossKnightRightArmMovement.startMoving();
         //bool right = false;
         //if (targetTRansform.position.x - bossDarkKnightAreaTRansform.position.x < 0)
         //{
@@ -202,7 +206,7 @@ public class BossDarkKnight : Enemy
         //    skill2Knight.transform.localScale = localScale;
         //    right = true;
         //}
-        skill2Knight.transform.position = new Vector3(targetTRansform.position.x + 9.0f, rb.transform.position.y - 2.0f, rb.transform.position.z); // set knight position
+        skill2Knight.transform.position = new Vector3(targetTRansform.position.x + 9.0f, rb.transform.position.y + 1.0f, rb.transform.position.z); // set knight position
         yield return new WaitForSeconds(skill2KnightTime);
         skill2Knight.SetActive(false);
         //skill2Knight.transform.position = new Vector3(23.15f, 2.327281f, rb.transform.position.z); // set knight
