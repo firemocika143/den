@@ -101,9 +101,8 @@ public abstract class Device : MonoBehaviour
         charging = true;
         ResetDevice();
         StartCoroutine(AdjustLightRadius(extendTime, 1, null));
-        // Player Stop losing light
         // Fix Player Camera
-        CameraManager.Instance.SwitchOtherCamera(focusCam);
+        //CameraManager.Instance.SwitchOtherCamera(focusCam);
         // Start To shrink the radius
         StartCoroutine(AdjustLightRadius(timeLength, 0, Success));
     }
@@ -121,7 +120,7 @@ public abstract class Device : MonoBehaviour
         charged = true;
         // play success animation
         hintArea.SetActive(false);
-        CameraManager.Instance.SwitchBackToCurrentCamera();
+        //CameraManager.Instance.SwitchBackToCurrentCamera();
         ActivatedAbility();
     }
 
@@ -132,7 +131,7 @@ public abstract class Device : MonoBehaviour
         charging = false;
         StopAllCoroutines();
         // return camera
-        CameraManager.Instance.SwitchBackToCurrentCamera();
+        //CameraManager.Instance.SwitchBackToCurrentCamera();
         focusCam.enabled = false;
         // Player Start Losing Light
 

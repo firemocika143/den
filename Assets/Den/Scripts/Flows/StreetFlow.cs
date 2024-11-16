@@ -10,11 +10,14 @@ public class StreetFlow : Flow //, IDataPersistence
     [Serializable]
     public class StreetItemSettings
     {
-        [Header("Page 1 Settings")]
-        public PageItemInfo page1Info;
+        [Header("Page 4 Settings")]
+        public PageItemInfo page4Info;
 
         [Header("Page 2 Settings")]
         public PageItemInfo page2Info;
+
+        [Header("Page 1 Settings")]
+        public PageItemInfo page1Info;
 
         [Header("Lantern Piece Settings")]
         public List<LanternItemInfo> lanternItems = new List<LanternItemInfo>();
@@ -92,6 +95,13 @@ public class StreetFlow : Flow //, IDataPersistence
             ItemManager.Instance.GeneratePageItem(streetItemSettings.page2Info, () =>
             {
                 GameManager.Instance.progress.getPage2 = true;
+            });
+        }
+        if (!GameManager.Instance.progress.getPage4)
+        {
+            ItemManager.Instance.GeneratePageItem(streetItemSettings.page4Info, () =>
+            {
+                GameManager.Instance.progress.getPage4 = true;
             });
         }
         if (!GameManager.Instance.progress.getPage1)

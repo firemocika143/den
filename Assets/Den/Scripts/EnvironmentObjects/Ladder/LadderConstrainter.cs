@@ -4,6 +4,6 @@ using UnityEngine;
 
 public class LadderConstrainter : MonoBehaviour
 {
-    public bool allowPlayerToLeaveWithLeftOrRight = true;
+    public bool allowPlayerToLeave = true;
     public float speed;
 }

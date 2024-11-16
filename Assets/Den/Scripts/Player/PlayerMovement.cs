@@ -30,7 +30,7 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D rb;
     private Vector3 size;
 
-    private bool currentLadderHorizontalMoveConstraint = false;
+    private bool currentLadderMoveConstraint = false;
 
     //sorry for this note! I just tried to test the higher ladder and I find this have some problem unsolved, so I decided to note it first.
     //if a ladder is here, this should mean that you would assign a ladder to it whenever the player starts to climb, just for sure
@@ -100,7 +100,7 @@ public class PlayerMovement : MonoBehaviour
 
             // Moving left or right
             // I should change this into transform.position to precisely control the player position
-            if (!(playerController.state.climb && currentLadderHorizontalMoveConstraint))
+            if (!(playerController.state.climb && currentLadderMoveConstraint))
             {
                 rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
             }
@@ -134,7 +134,7 @@ public class PlayerMovement : MonoBehaviour
                 }
 
                 if (isGrounded) rb.velocity = new Vector2(rb.velocity.x, jumpPower);
-                else if (playerController.state.climb)
+                else if (playerController.state.climb && !currentLadderMoveConstraint)
                 {
                     //you can jump while you are climbing
                     //this is dangerous
@@ -170,19 +170,19 @@ public class PlayerMovement : MonoBehaviour
                 playerController.state.climb = true;
                 if (hitInfo.collider.gameObject.TryGetComponent<LadderConstrainter>(out var con))
                 {
-                    currentLadderHorizontalMoveConstraint = !con.allowPlayerToLeaveWithLeftOrRight;
+                    currentLadderMoveConstraint = !con.allowPlayerToLeave;
                     currClimbSpeed = con.speed;
                 }
                 else
                 {
-                    currentLadderHorizontalMoveConstraint = false;
+                    currentLadderMoveConstraint = false;
                     currClimbSpeed = climbSpeed;
                 }
                 transform.position = new Vector3(hitInfo.collider.transform.position.x, transform.position.y, 0);
             }
             else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D))//this would take a long time to be detected too
             {
-                if (!currentLadderHorizontalMoveConstraint)
+                if (!currentLadderMoveConstraint)
                 {
                     playerController.state.climb = false;
                 }

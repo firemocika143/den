@@ -1,19 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using UnityEngine;
 
-public class JumpDevice : Device
+public class TransportDevice : Device
 {
-    public float countInterval = 2f;
-    public float force = 30f;
+    public Transform destination;
     public float deactivateDeviceIntervel;
 
-    private float countDown;
     private float deactivateCountDown;
 
     public override void ActivatedAbility()
     {
-        PlayerManager.Instance.GivePlayerForce(new Vector2(0, force));
+        PlayerManager.Instance.PlayerTransform().position = destination.position;
         deactivateCountDown = Time.time;
     }
 
