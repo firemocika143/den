@@ -41,7 +41,7 @@ public class StreetFlow : Flow //, IDataPersistence
 
     public void Awake()
     {
-        name = "Street";
+        name = "Street";// this actually change its name in the scene
     }
 
     public void Start()

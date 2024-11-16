@@ -133,6 +133,9 @@ public class PlayerManager : MonoBehaviour
         }
 
         player.GetComponent<PlayerController>().state.maxLightEnergy += val;
+        player.GetComponent<PlayerController>().state.lightEnergy = player.GetComponent<PlayerController>().state.maxLightEnergy;
+        UIManager.Instance.UpdatePlayerMaxLight(player.GetComponent<PlayerController>().state.maxLightEnergy);
+        UIManager.Instance.UpdatePlayerLight(player.GetComponent<PlayerController>().state.lightEnergy);
     }
 
     public void GivePlayerForce(Vector2 force)
