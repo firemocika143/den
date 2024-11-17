@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using System;
-using UnityEngine.WSA;
 
 public abstract class Device : MonoBehaviour
 {
