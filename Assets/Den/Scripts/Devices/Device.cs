@@ -150,7 +150,7 @@ public abstract class Device : MonoBehaviour
             while (percentage < targetPercentage)
             {
                 timeLight.pointLightOuterRadius = Mathf.Lerp(0, maxRadius, percentage);
-                percentage += Time.deltaTime / switchTime;
+                percentage += ((Time.deltaTime / switchTime) * 2);
                 yield return null;
             }
             timeLight.pointLightOuterRadius = maxRadius;
