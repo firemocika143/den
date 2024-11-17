@@ -41,11 +41,6 @@ public class LibraryFlow : Flow
         {
             PlayerManager.Instance.InstantKillPlayer();
         }
-
-        if (PlayerManager.Instance.PlayerLightEnergy() <= 0)
-        {
-            SoundManager.Instance.ChangeClip(SoundManager.ClipEnum.DANGER);
-        }
     }
 
     public override void StartFlow()

@@ -10,15 +10,12 @@ public abstract class Device : MonoBehaviour
     [SerializeField]
     private Light2D timeLight;
     [SerializeField]
-    private CinemachineVirtualCamera focusCam;
-    [SerializeField]
     private float timeLength;
     [SerializeField]
     private GameObject hintArea;
 
     private bool charged = false;
     private float radiusMultiplier = 4f;
-    private bool playerIsInArea = false;
     private float percentage = 0;
     private float maxRadius = 0;
     private float extendTime = 0.5f;
@@ -29,18 +26,15 @@ public abstract class Device : MonoBehaviour
     private float interruptTime = 1f;
     private bool charging = false;
 
+    [HideInInspector]
+    public bool playerIsInArea = false;
+
     public abstract void ActivatedAbility();
     public abstract void DeactivatedDevice();
 
     private void Start()
     {
-        timeLight.pointLightOuterRadius = 0;
-        timeLight.pointLightInnerRadius = 0;
-        timeLight.intensity = 0;
-        percentage = 0;
-        maxRadius = radiusMultiplier * timeLength;
-
-        focusCam.enabled = false;
+        StartReset();
     }
 
     private void OnTriggerEnter2D(Collider2D col)
@@ -61,29 +55,7 @@ public abstract class Device : MonoBehaviour
 
     private void Update()
     {
-        if (!charged && !interrupting)
-        {
-            if (playerIsInArea && Input.GetKeyDown(GameManager.Instance.keySettings.LightLantern))
-            {
-                StartCharging();
-            }
-            if (charging && (!playerIsInArea || Input.GetKeyUp(GameManager.Instance.keySettings.LightLantern) || PlayerManager.Instance.PlayerLightEnergy() <= 0))
-            {
-                InterruptCharging();
-            }
-        }
-        else if (!charged && interrupting)
-        {
-            if (Input.GetKeyDown(GameManager.Instance.keySettings.LightLantern))
-            {
-                // play uninteractable animation
-            }
-        }
-
-        if (charged)
-        {
-            DeactivatedDevice();
-        }
+        UpdateCheck();
     }
 
     private void OnDestroy()
@@ -100,8 +72,6 @@ public abstract class Device : MonoBehaviour
         charging = true;
         ResetDevice();
         StartCoroutine(AdjustLightRadius(extendTime, 1, null));
-        // Fix Player Camera
-        //CameraManager.Instance.SwitchOtherCamera(focusCam);
         // Start To shrink the radius
         StartCoroutine(AdjustLightRadius(timeLength, 0, Success));
     }
@@ -118,7 +88,7 @@ public abstract class Device : MonoBehaviour
         charging = false;
         charged = true;
         // play success animation
-        hintArea.SetActive(false);
+        if (hintArea != null) hintArea.SetActive(false);
         //CameraManager.Instance.SwitchBackToCurrentCamera();
         ActivatedAbility();
     }
@@ -129,9 +99,6 @@ public abstract class Device : MonoBehaviour
 
         charging = false;
         StopAllCoroutines();
-        // return camera
-        //CameraManager.Instance.SwitchBackToCurrentCamera();
-        focusCam.enabled = false;
         // Player Start Losing Light
 
         StartCoroutine(KilLight(interruptTime));
@@ -190,6 +157,42 @@ public abstract class Device : MonoBehaviour
     {
         ResetDevice();
         charged = false;
-        hintArea.SetActive(true);
+        if (hintArea != null) hintArea.SetActive(true);
+    }
+
+    public void StartReset()
+    {
+        timeLight.pointLightOuterRadius = 0;
+        timeLight.pointLightInnerRadius = 0;
+        timeLight.intensity = 0;
+        percentage = 0;
+        maxRadius = radiusMultiplier * timeLength;
+    }
+
+    public void UpdateCheck()
+    {
+        if (!charged && !interrupting)
+        {
+            if (playerIsInArea && Input.GetKeyDown(GameManager.Instance.keySettings.LightLantern))
+            {
+                StartCharging();
+            }
+            if (charging && (!playerIsInArea || Input.GetKeyUp(GameManager.Instance.keySettings.LightLantern) || PlayerManager.Instance.PlayerLightEnergy() <= 0))
+            {
+                InterruptCharging();
+            }
+        }
+        else if (!charged && interrupting)
+        {
+            if (Input.GetKeyDown(GameManager.Instance.keySettings.LightLantern))
+            {
+                // play uninteractable animation
+            }
+        }
+
+        if (charged)
+        {
+            DeactivatedDevice();
+        }
     }
 }

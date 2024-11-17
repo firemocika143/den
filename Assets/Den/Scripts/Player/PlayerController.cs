@@ -375,11 +375,11 @@ public class PlayerController : MonoBehaviour, IDataPersistence
                 //vfx is too hard to see
             }
 
-            //if (state.lightEnergy <= 0 && !state.inDanger)
-            //{
-            //    SoundManager.Instance.ChangeClip(SoundManager.Instance.clips.DANGER);
-            //    state.inDanger = true;
-            //}
+            if (state.lightEnergy <= 0 && !state.inDanger)
+            {
+                SoundManager.Instance.ChangeClip(SoundManager.Instance.clips.DANGER);
+                state.inDanger = true;
+            }
         }
 
         UIManager.Instance.UpdatePlayerLight(state.lightEnergy);

@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
-public class LightOn : MonoBehaviour
+public class LightOn : MonoBehaviour//LampDevice
 {
     [SerializeField]
     private Light2D lanternLight;
@@ -21,7 +21,7 @@ public class LightOn : MonoBehaviour
     [SerializeField]
     private Animator animator;
 
-    private bool trigger = false;
+    private bool triggered = false;
     public bool castRequest, castSuccess, castInProgress;
     public float castTime;
     private float castStartTime;
@@ -42,10 +42,65 @@ public class LightOn : MonoBehaviour
         castTime = 1.5f;
     }
 
+    //public override void LampStartSetting()
+    //{
+    //    playerController = FindObjectOfType<PlayerController>();//can this find the script for other objects in the same scene? 
+    //    lanternSprite = GetComponent<SpriteRenderer>();
+    //    animator = GetComponent<Animator>();
+    //    animator.enabled = false;
+
+    //    lanternLight.enabled = false;
+    //    lightAreaForEnemy.SetActive(false);
+    //    lightArea.SetActive(false);
+    //    castTime = 1.5f;
+    //}
+
+    //public override void LampUpdate()
+    //{
+    //    // When the player is closed enough, press e will change the state of light (on -> off; off -> on)
+    //    if (playerIsInArea & !lanternLight.enabled && Input.GetKeyDown(GameManager.Instance.keySettings.LightLantern) && playerController.state.lightEnergy > 0)
+    //    {
+    //        if (!castInProgress)
+    //        {
+    //            StartCoroutine(Cast());
+    //        }
+    //    }
+
+    //    if (castRequest)
+    //    {
+    //        InProgress();
+
+    //        if (Input.GetKeyUp(GameManager.Instance.keySettings.LightLantern) || playerController.state.isDamaged)
+    //        {
+    //            CastFail();
+    //        }
+    //    }
+
+    //    if (playerIsInArea && !(lanternLight.enabled || playerController.state.lightEnergy <= 0))
+    //    {
+    //        lanternSprite.material = outline;
+    //    }
+    //    else
+    //    {
+    //        lanternSprite.material = original;
+    //    }
+    //}
+
+    //public override void ActivatedAbility()
+    //{
+
+    //}
+
+    //public override void DeactivatedDevice()
+    //{
+
+    //}
+
+
     void Update()
     {
         // When the player is closed enough, press e will change the state of light (on -> off; off -> on)
-        if (trigger & !lanternLight.enabled && Input.GetKeyDown(GameManager.Instance.keySettings.LightLantern) && playerController.state.lightEnergy > 0)
+        if (triggered & !lanternLight.enabled && Input.GetKeyDown(GameManager.Instance.keySettings.LightLantern) && playerController.state.lightEnergy > 0)
         {
             if (!castInProgress)
             {
@@ -58,7 +113,7 @@ public class LightOn : MonoBehaviour
             InProgress();
 
             if (Input.GetKeyUp(GameManager.Instance.keySettings.LightLantern) || playerController.state.isDamaged)
-            {   
+            {
                 CastFail();
             }
             //else
@@ -71,7 +126,7 @@ public class LightOn : MonoBehaviour
             //}
         }
 
-        if (trigger && !(lanternLight.enabled || playerController.state.lightEnergy <= 0))
+        if (triggered && !(lanternLight.enabled || playerController.state.lightEnergy <= 0))
         {
             lanternSprite.material = outline;
         }
@@ -138,16 +193,12 @@ public class LightOn : MonoBehaviour
 
     public void OnTrigger()
     {
-        trigger = true;
-        //This function should be called by the trigger of the lantern in the inspector
-        //TODO - when the player touched the trigger, and if they still have their light on them, show them there is a lantern here
+        triggered = true;
     }
 
     public void OffTrigger()
     {
-        trigger = false;
-        //This function should be called by the trigger of the lantern in the inspector
-        //TODO - Stop showing anything to player because they had left the detector
+        triggered = true;
     }
 }
 
