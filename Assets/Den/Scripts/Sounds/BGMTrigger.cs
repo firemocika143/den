@@ -7,7 +7,11 @@ public class BGMTrigger : MonoBehaviour
     [SerializeField]
     private SoundManager.ClipEnum EnterClip;
     [SerializeField]
+    private bool enterClipLoop = true;
+    [SerializeField]
     private SoundManager.ClipEnum LeaveClip;
+    [SerializeField] 
+    private bool leaveClipLoop = true;
     [SerializeField]
     private bool replayable = true;
 
@@ -18,7 +22,7 @@ public class BGMTrigger : MonoBehaviour
         if (col.CompareTag("Player") && (!played || replayable))
         {
             played = true;
-            SoundManager.Instance.ChangeClip(EnterClip);
+            SoundManager.Instance.ChangeClip(EnterClip, enterClipLoop);
         }
     }
 
@@ -26,7 +30,7 @@ public class BGMTrigger : MonoBehaviour
     {
         if (col.CompareTag("Player") && (!played||replayable))
         {
-            SoundManager.Instance.ChangeClip(LeaveClip);
+            SoundManager.Instance.ChangeClip(LeaveClip, leaveClipLoop);
         }
     }
 }

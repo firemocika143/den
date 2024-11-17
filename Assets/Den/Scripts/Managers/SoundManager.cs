@@ -58,12 +58,13 @@ public class SoundManager : MonoBehaviour
         BGMSource.Stop();
     }
 
-    public void ChangeClip(AudioClip ac, float switchTime = 3f)
+    public void ChangeClip(AudioClip ac, float switchTime = 3f, bool loop = true)
     {
         StopAllCoroutines();
 
         if (BGMSource != null)
         {
+            BGMSource.loop = loop;
             if (BGMSource.clip == null)
             {
                 Debug.Log("last clip is null");
@@ -90,10 +91,10 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-    public void ChangeClip(ClipEnum ac_name)
+    public void ChangeClip(ClipEnum ac_name, bool loop = true)
     {
         AudioClip ac = EnumToAC(ac_name);
-        ChangeClip(ac);
+        ChangeClip(ac, 3f, loop);
     }
 
     private IEnumerator FadeOut(float switchTime, Action after_fade_out = null)
