@@ -191,6 +191,22 @@ public class LightOn : MonoBehaviour//LampDevice
         Debug.Log(timePassed);
     }
 
+    public void TurnOff()
+    {
+        lanternSprite.material = original;
+        lanternLight.enabled = false;
+        lightAreaForEnemy.SetActive(false);
+        lightArea.SetActive(false);
+
+        animator.enabled = false;
+    }
+
+    public bool LightIsOn()
+    {
+        return lanternLight.enabled;
+    }
+    
+
     public void OnTrigger()
     {
         triggered = true;

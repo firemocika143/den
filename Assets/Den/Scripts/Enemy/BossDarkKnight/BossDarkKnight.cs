@@ -48,6 +48,18 @@ public class BossDarkKnight : Enemy
     [Header("Boss Knight Right Arm Movement")]
     public BossKnightRightArmMovement bossKnightRightArmMovement;
 
+    [Header("Skill3 Lanterns")]
+    [SerializeField]
+    private LightOn lantern1;
+    [SerializeField]
+    private LightOn lantern2;
+    [SerializeField]
+    private float skill3BlowingTime = 1.0f;
+    [SerializeField]
+    private float skill3CooldownTime = 20.0f;
+    private bool skill3Cooldown = false;
+
+
     private Rigidbody2D rb;
     private PlayerController pc;
     private Transform targetTRansform;
@@ -80,7 +92,11 @@ public class BossDarkKnight : Enemy
         Debug.Log(cooldown);
         if (!cooldown && playerIsInBossDarkKnightArea)
         {
-            if (!skill1Cooldown)
+            if (!skill3Cooldown && (lantern1.LightIsOn() || lantern2.LightIsOn()))
+            {
+                Skill3();
+            }
+            else if (!skill1Cooldown)
             {
                 Skill1();
             }
@@ -223,6 +239,35 @@ public class BossDarkKnight : Enemy
         // skill 2 cooldown
         yield return new WaitForSeconds(skill2CooldownTime);
         skill2Cooldown = false;
+    }
+
+    private void Skill3()
+    {
+        StartCoroutine(TurnOffLights());
+    }
+
+    private IEnumerator TurnOffLights()
+    {
+        cooldown = true;
+        skill3Cooldown = true;
+
+        yield return new WaitForSeconds(skill3BlowingTime);
+
+        if (lantern1.LightIsOn())
+        {
+            lantern1.TurnOff();
+        }
+
+        if (lantern2.LightIsOn())
+        {
+            lantern2.TurnOff();
+        }
+
+        cooldown = false; // set cooldown to false, can use other skills
+
+        // skill 2 cooldown
+        yield return new WaitForSeconds(skill3CooldownTime);
+        skill3Cooldown = false;
     }
 
     public void BossStart()
