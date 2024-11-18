@@ -89,7 +89,7 @@ public class BossDarkKnight : Enemy
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(cooldown);
+        // Debug.Log(cooldown);
         if (!cooldown && playerIsInBossDarkKnightArea)
         {
             if (!skill3Cooldown && (lantern1.LightIsOn() || lantern2.LightIsOn()))

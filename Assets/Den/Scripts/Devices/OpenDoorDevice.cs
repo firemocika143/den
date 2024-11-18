@@ -7,6 +7,7 @@ public class OpenDoorDevice : Device
     public float countInterval = 2f;
     public Animator animator;
     public float deactivateDeviceIntervel;
+    public GameObject door;
 
     private float countDown;
     private float deactivateCountDown;
@@ -21,6 +22,12 @@ public class OpenDoorDevice : Device
         } else
         {
             animator.SetBool("trigger", false);
+        }
+        BoxCollider2D collider2D = door.GetComponent<BoxCollider2D>();
+        if (collider2D != null)
+        {
+            Debug.Log("Trigger");
+            collider2D.enabled = !collider2D.enabled;
         }
         deactivateCountDown = Time.time;
     }

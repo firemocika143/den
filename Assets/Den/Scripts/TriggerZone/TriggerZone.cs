@@ -7,6 +7,13 @@ public class TriggerZone : MonoBehaviour
     public bool solved = false;
     public List<LightTrigger> lightTriggers = new List<LightTrigger>();
     public bool returning = false;
+    public string triggerLanternItemName;
+    private LibraryFlow libraryFlow;
+
+    private void Start()
+    {
+        libraryFlow = FindObjectOfType<LibraryFlow>();
+    }
 
     private void Update()
     {
@@ -16,6 +23,14 @@ public class TriggerZone : MonoBehaviour
             foreach (LightTrigger trigger in lightTriggers)
             {
                 StartCoroutine(trigger.Shake());
+                foreach (LanternItemInfo li in libraryFlow.libraryItemSettings.lanternItems)
+                {
+                    if (li.name == triggerLanternItemName)
+                    {
+                        ItemManager.Instance.GenerateLanternItem(li);
+                        break;
+                    }
+                }
             }
         }
         if (AllWaiting() && returning)

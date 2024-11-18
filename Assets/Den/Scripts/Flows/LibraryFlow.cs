@@ -21,7 +21,7 @@ public class LibraryFlow : Flow
     [SerializeField]
     private SoundManager.ClipEnum exploringClip;
     [SerializeField]
-    private LibraryItemSettings libraryItemSettings;
+    public LibraryItemSettings libraryItemSettings;
 
     public void Awake()
     {
@@ -81,7 +81,10 @@ public class LibraryFlow : Flow
     {
         foreach (LanternItemInfo li in libraryItemSettings.lanternItems)
         {
-            ItemManager.Instance.GenerateLanternItem(li);
+            if (!li.name.Contains("D"))
+            {
+                ItemManager.Instance.GenerateLanternItem(li);
+            }
         }
     }
 }

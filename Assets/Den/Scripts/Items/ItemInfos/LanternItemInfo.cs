@@ -7,4 +7,5 @@ using System;
 public class LanternItemInfo : ItemInfo
 {
     public int energy;
+    public string name;
 }
