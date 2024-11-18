@@ -19,18 +19,21 @@ public class PatroEnemy : Enemy
     public float invincibleTime = 1.0f;
     private bool invincible;
 
+    private Vector2 orig_pos;
+
     // Start is called before the first frame update
     void Start()
     {
-        health = maxHealth;
-        invincible = false;
+        orig_pos = transform.position;
+
+        Spawn();
     }
 
-    void OnEnable()
-    {
-        health = maxHealth;
-        invincible = false;
-    }
+    //void OnEnable()
+    //{
+    //    health = maxHealth;
+    //    invincible = false;
+    //}
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -53,6 +56,15 @@ public class PatroEnemy : Enemy
         }
     }
 
+    private IEnumerator InvincibleTimeCount()
+    {
+        invincible = true;
+
+        yield return new WaitForSeconds(invincibleTime);
+
+        invincible = false;
+    }
+
     //Damage Function for Player to Call
     public override void Damage(int d)
     {
@@ -62,22 +74,26 @@ public class PatroEnemy : Enemy
 
             if (health <= 0)
             {
-                //Destroy(gameObject);
-                patroEnemySet.SetActive(false);
+                Kill();
             }
 
-            StartCoroutine(invincibleTimeCount());
+            StartCoroutine(InvincibleTimeCount());
         }
 
     }
 
-    private IEnumerator invincibleTimeCount()
+    public override void Spawn()
     {
-        invincible = true;
-
-        yield return new WaitForSeconds(invincibleTime);
-
+        transform.position = orig_pos;
+        health = maxHealth;
         invincible = false;
+    }
+
+    public override void Kill()
+    {
+        StopAllCoroutines();
+        //Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 }
 

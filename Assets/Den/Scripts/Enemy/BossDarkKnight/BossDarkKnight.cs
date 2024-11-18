@@ -51,6 +51,7 @@ public class BossDarkKnight : Enemy
     private Rigidbody2D rb;
     private PlayerController pc;
     private Transform targetTRansform;
+    private Vector2 orig_pos;
 
     [HideInInspector]
     public bool playerIsInBossDarkKnightArea = false;
@@ -58,23 +59,20 @@ public class BossDarkKnight : Enemy
     // Start is called before the first frame update
     void Start()
     {
-        health = maxHealth;
-        invincible = false;
+        orig_pos = transform.position;
 
         rb = GetComponent<Rigidbody2D>();
         pc = FindFirstObjectByType<PlayerController>();
         targetTRansform = PlayerManager.Instance.PlayerTransform();
 
-        normalAttack.SetActive(false);
-        skill1FireArea.SetActive(false);
-        skill2Knight.SetActive(false);
+        Spawn();
     }
 
-    void OnEnable()
-    {
-        health = maxHealth;
-        invincible = false;
-    }
+    //void OnEnable()
+    //{
+    //    health = maxHealth;
+    //    invincible = false;
+    //}
 
     // Update is called once per frame
     void Update()
@@ -97,25 +95,7 @@ public class BossDarkKnight : Enemy
         }
     }
 
-    //Damage Function for Player to Call
-    public override void Damage(int d)
-    {
-        if (!invincible)
-        {
-            health = health - d >= 0 ? health - d : 0;
-
-            if (health <= 0)
-            {
-                //Destroy(gameObject);
-                bossDarkKnightSet.SetActive(false);
-            }
-
-            StartCoroutine(invincibleTimeCount());
-        }
-
-    }
-
-    private IEnumerator invincibleTimeCount()
+    private IEnumerator InvincibleTimeCount()
     {
         invincible = true;
 
@@ -248,5 +228,41 @@ public class BossDarkKnight : Enemy
     public void BossStart()
     {
         playerIsInBossDarkKnightArea = true;
+    }
+
+    public override void Damage(int d)
+    {
+        if (!invincible)
+        {
+            health = health - d >= 0 ? health - d : 0;
+
+            if (health <= 0)
+            {
+                Kill();
+            }
+
+            StartCoroutine(InvincibleTimeCount());
+        }
+
+    }
+
+    public override void Spawn()
+    {
+        if (GameManager.Instance.progress.defeatDarkKnight)
+        health = maxHealth;
+        invincible = false;
+        transform.position = orig_pos;
+
+        normalAttack.SetActive(false);
+        skill1FireArea.SetActive(false);
+        skill2Knight.SetActive(false);
+    }
+
+    public override void Kill()
+    {
+        StopAllCoroutines();
+        //Destroy(gameObject);
+        GameManager.Instance.progress.defeatDarkKnight = true;
+        gameObject.SetActive(false);
     }
 }

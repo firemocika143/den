@@ -28,17 +28,21 @@ public class BulletEnemy : Enemy
     public float invincibleTime = 1.0f;
     private bool invincible;
 
+    private Vector2 orig_pos;
+
     // Start is called before the first frame update
     void Start()
     {
-        invincible = false;
+        orig_pos = transform.position;
+
+        Spawn();
     }
 
-    void OnEnable()
-    {
-        health = maxHealth;
-        invincible = false;
-    }
+    //void OnEnable()
+    //{
+    //    health = maxHealth;
+    //    invincible = false;
+    //}
 
     void Update()
     {
@@ -46,24 +50,6 @@ public class BulletEnemy : Enemy
         {
             shooting();
         }
-    }
-
-    //Damage Function for Player to Call
-    public override void Damage(int d)
-    {
-        if (!invincible)
-        {
-            health = health - d >= 0 ? health - d : 0;
-
-            if (health <= 0)
-            {
-                //Destroy(gameObject);\
-                bulletEnemySet.SetActive(false);
-            }
-
-            StartCoroutine(InvincibleTimeCount());
-        }
-
     }
 
     private void shooting()
@@ -99,5 +85,35 @@ public class BulletEnemy : Enemy
         yield return new WaitForSeconds(cooldown);
 
         iscooldown = false;
+    }
+
+    public override void Damage(int d)
+    {
+        if (!invincible)
+        {
+            health = health - d >= 0 ? health - d : 0;
+
+            if (health <= 0)
+            {
+                Kill();
+            }
+
+            StartCoroutine(InvincibleTimeCount());
+        }
+
+    }
+
+    public override void Spawn()
+    {
+        health = maxHealth;
+        invincible = false;
+        transform.position = orig_pos;
+    }
+
+    public override void Kill()
+    {
+        StopAllCoroutines();
+        //Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 }
