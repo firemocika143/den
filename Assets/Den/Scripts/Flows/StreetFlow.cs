@@ -36,7 +36,8 @@ public class StreetFlow : Flow //, IDataPersistence
 
     public void Awake()
     {
-        name = "Street";// this actually change its name in the scene
+        flowName = "Street";// this actually change its name in the scene
+        GameManager.Instance.StartNewScene();
     }
 
     public void Start()

@@ -217,6 +217,8 @@ public class PlayerController : MonoBehaviour, IDataPersistence
                 Debug.LogError("no flow in this scene");
             }
             else GameManager.Instance.flow.ReloadFlow();
+            //EnemyManager.Instance.RespawnAllEnemy();
+            //PlayerManager.Instance.PlayerRespawn();
             ReloadAfterKilled();
         }));
 
@@ -378,7 +380,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
                 //vfx is too hard to see
             }
 
-            if (state.lightEnergy <= 0 && !state.inDanger)
+            if (state.lightEnergy <= 0 && !state.inDanger && GameManager.Instance.CurrScene != "Street")// 
             {
                 SoundManager.Instance.ChangeClip(SoundManager.Instance.clips.DANGER);
                 state.inDanger = true;

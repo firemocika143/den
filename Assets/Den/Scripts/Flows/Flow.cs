@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class Flow: MonoBehaviour
 {
-    private new string name;
+    public string flowName;
 
     public abstract void StartFlow(); 
 

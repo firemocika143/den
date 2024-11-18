@@ -19,15 +19,14 @@ public class LibraryFlow : Flow
     }
 
     [SerializeField]
-    private GameObject playerPrefab;
-    [SerializeField]
     private SoundManager.ClipEnum exploringClip;
     [SerializeField]
     private LibraryItemSettings libraryItemSettings;
 
     public void Awake()
     {
-        name = "Library";
+        flowName = "Library";
+        GameManager.Instance.StartNewScene();
     }
 
     public void Start()

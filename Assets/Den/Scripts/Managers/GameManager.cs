@@ -93,14 +93,21 @@ public class GameManager : MonoBehaviour
 
     public bool gamePaused = false;// Can utilize this variable to adjust some settings when game is paused
 
-    private void Start()
+    /// <summary>
+    /// This will be called in flows, because DontDestroyOnLoadObjects seems not run Start again in new scenes
+    /// </summary>
+    public void StartNewScene()
+    {
+        GetReferences();
+    }
+
+    private void GetReferences()
     {
         // TODO - wait for everything to be set up (but how? game manager is always at the first place to run)
         // How to call start flow? should flow be a class or an interface (this should be an easy decision)
         flow = FindFirstObjectByType<Flow>();
-        if (flow != null) CurrScene = flow.name;
-
-        
+        if (flow != null) CurrScene = flow.flowName;
+        else Debug.LogError("no flow!");
     }
 
     public void ManualSave()

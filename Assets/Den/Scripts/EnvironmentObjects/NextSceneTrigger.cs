@@ -14,7 +14,7 @@ public class NextSceneTrigger : MonoBehaviour
         {
             //LoadSceneMode scene after a light
             DataPersistenceManager.instance.SaveGame();
-            GameManager.Instance.CurrScene = nextSceneName;
+            //GameManager.Instance.CurrScene = nextSceneName;
             StartCoroutine(FadeOutCoroutine());
         }
     }
