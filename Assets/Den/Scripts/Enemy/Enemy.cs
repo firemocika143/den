@@ -5,4 +5,7 @@ using UnityEngine;
 public abstract class Enemy: MonoBehaviour
 {
     public abstract void Damage(int d);
+    public abstract void Spawn();
+
+    public abstract void Kill();
 }

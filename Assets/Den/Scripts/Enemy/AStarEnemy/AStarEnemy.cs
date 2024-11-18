@@ -18,22 +18,25 @@ public class AStarEnemy : Enemy
 
     private AIPath aipath;
 
+    private Vector2 orig_pos;
+
     // Start is called before the first frame update
     void Start()
     {
-        health = maxHealth;
-        invincible = false;
+        orig_pos = transform.position;
+        
+        Spawn();
 
         aipath = GetComponent<AIPath>();
     }
 
-    void OnEnable()
-    {
-        health = maxHealth;
-        invincible = false;
+    //void OnEnable()
+    //{
+    //    health = maxHealth;
+    //    invincible = false;
 
-        //aipath = GetComponent<AIPath>();
-    }
+    //    //aipath = GetComponent<AIPath>();
+    //}
 
     void Update()
     {
@@ -47,7 +50,15 @@ public class AStarEnemy : Enemy
         }
     }
 
-    //Damage Function for Player to Call
+    private IEnumerator InvincibleTimeCount()
+    {
+        invincible = true;
+
+        yield return new WaitForSeconds(invincibleTime);
+
+        invincible = false;
+    }
+
     public override void Damage(int d)
     {
         if (!invincible)
@@ -56,22 +67,26 @@ public class AStarEnemy : Enemy
 
             if (health <= 0)
             {
-                //Destroy(gameObject);
-                aStarEnemySet.SetActive(false);
+                Kill();
             }
 
-            StartCoroutine(invincibleTimeCount());
+            StartCoroutine(InvincibleTimeCount());
         }
 
     }
 
-    private IEnumerator invincibleTimeCount()
+    public override void Spawn()
     {
-        invincible = true;
-
-        yield return new WaitForSeconds(invincibleTime);
-
+        health = maxHealth;
         invincible = false;
+        transform.position = orig_pos;
+    }
+
+    public override void Kill()
+    {
+        StopAllCoroutines();
+        //Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 }
 

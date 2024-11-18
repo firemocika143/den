@@ -210,11 +210,14 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         StopPlayer();
         SoundManager.Instance.ResetBGM();
         StartCoroutine(playerAnimation.PlayerDieAnimation(() => 
-        { 
-            PlayerManager.Instance.PlayerRespawn();
-            playerAnimation.PlayerRespawnAnimation();
-            state.dying = false;
-            state.stop = false;
+        {
+            // well, this is readible and free to customize in every scene, but quite inefficient and is actually weird for calling variable in this script out in the other script
+            if (GameManager.Instance.flow == null)
+            {
+                Debug.LogError("no flow in this scene");
+            }
+            else GameManager.Instance.flow.ReloadFlow();
+            ReloadAfterKilled();
         }));
 
         // Actually, most things went wrong if I really destroy the player, maybe this is not a good solution
@@ -385,13 +388,19 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         UIManager.Instance.UpdatePlayerLight(state.lightEnergy);
     }
 
+    public void ReloadAfterKilled()
+    {
+        playerAnimation.PlayerRespawnAnimation();
+        state.dying = false;
+        state.stop = false;
+    }
+
     public void LoadData(GameData gameData)
     {
         //this.state.maxHealth = gameData.maxHealth;
         //this.state.maxLightEnergy = gameData.maxLightEnergy;
 
         if (GameManager.Instance.progress.getLightDraw) ObtainLightDraw();
-        if (GameManager.Instance.progress.getLantern) GetLantern();
 
         AllRecover();
     }

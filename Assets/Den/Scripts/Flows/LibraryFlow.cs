@@ -60,6 +60,12 @@ public class LibraryFlow : Flow
         SoundManager.Instance.ResetBGM();
     }
 
+    public override void ReloadFlow()
+    {
+        EnemyManager.Instance.RespawnAllEnemy();
+        PlayerManager.Instance.PlayerRespawn();
+    }
+
     private void GenerateAllItems()
     {
         if (!GameManager.Instance.progress.getLightDraw)

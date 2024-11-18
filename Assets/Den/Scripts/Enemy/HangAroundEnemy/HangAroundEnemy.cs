@@ -17,24 +17,20 @@ public class HangAroundEnemy : Enemy
 
     public float invincibleTime = 1.0f;
     private bool invincible;
+    private Vector2 orig_pos;
 
     // Start is called before the first frame update
     void Start()
     {
-        health = maxHealth;
-        invincible = false;
+        orig_pos = transform.position;
+
+        Spawn();
     }
 
     void OnEnable()
     {
         health = maxHealth;
         invincible = false;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -58,7 +54,15 @@ public class HangAroundEnemy : Enemy
         }
     }
 
-    //Damage Function for Player to Call
+    private IEnumerator InvincibleTimeCount()
+    {
+        invincible = true;
+
+        yield return new WaitForSeconds(invincibleTime);
+
+        invincible = false;
+    }
+
     public override void Damage(int d)
     {
         if (!invincible)
@@ -67,21 +71,25 @@ public class HangAroundEnemy : Enemy
 
             if (health <= 0)
             {
-                //Destroy(gameObject);
-                hangAroundEnemySet.SetActive(false);
+                Kill();
             }
 
-            StartCoroutine(invincibleTimeCount());
+            StartCoroutine(InvincibleTimeCount());
         }
 
     }
 
-    private IEnumerator invincibleTimeCount()
+    public override void Spawn()
     {
-        invincible = true;
-
-        yield return new WaitForSeconds(invincibleTime);
-
+        health = maxHealth;
         invincible = false;
+        transform.position = orig_pos;
+    }
+
+    public override void Kill()
+    {
+        StopAllCoroutines();
+        //Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 }

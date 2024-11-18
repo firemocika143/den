@@ -88,6 +88,11 @@ public class StreetFlow : Flow //, IDataPersistence
         SoundManager.Instance.ResetBGM();
     }
 
+    public override void ReloadFlow()
+    {
+        //throw new NotImplementedException();
+    }
+
     private void GenerateAllItems()
     {
         if (!GameManager.Instance.progress.getPage2)

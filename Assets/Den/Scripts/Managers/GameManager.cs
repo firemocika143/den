@@ -76,8 +76,12 @@ public class GameManager : MonoBehaviour
         public bool getPage1 = false;
         public bool firstTimeLightOff = true;
         public bool finishLightOff = false;
-        public bool getLightDraw = false;
+        
         public bool getLantern = false;
+
+        [Header("Library")]
+        public bool getLightDraw = false;
+        public bool defeatDarkKnight = false;
     }
 
     public GameProgress progress;
