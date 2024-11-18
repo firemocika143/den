@@ -76,8 +76,10 @@ public class PatroEnemy : Enemy
             {
                 Kill();
             }
-
-            StartCoroutine(InvincibleTimeCount());
+            else
+            {
+                StartCoroutine(InvincibleTimeCount());
+            }
         }
 
     }

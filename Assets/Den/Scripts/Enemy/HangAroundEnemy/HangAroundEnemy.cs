@@ -73,8 +73,10 @@ public class HangAroundEnemy : Enemy
             {
                 Kill();
             }
-
-            StartCoroutine(InvincibleTimeCount());
+            else
+            {
+                StartCoroutine(InvincibleTimeCount());
+            }
         }
 
     }
