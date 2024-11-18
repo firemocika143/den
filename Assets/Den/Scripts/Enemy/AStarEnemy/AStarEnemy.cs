@@ -69,8 +69,10 @@ public class AStarEnemy : Enemy
             {
                 Kill();
             }
-
-            StartCoroutine(InvincibleTimeCount());
+            else
+            {
+                StartCoroutine(InvincibleTimeCount());
+            }
         }
 
     }

@@ -97,8 +97,10 @@ public class BulletEnemy : Enemy
             {
                 Kill();
             }
-
-            StartCoroutine(InvincibleTimeCount());
+            else
+            {
+                StartCoroutine(InvincibleTimeCount());
+            }
         }
 
     }
@@ -106,8 +108,9 @@ public class BulletEnemy : Enemy
     public override void Spawn()
     {
         health = maxHealth;
-        invincible = false;
         transform.position = orig_pos;
+        iscooldown = false;
+        invincible = false;
     }
 
     public override void Kill()
