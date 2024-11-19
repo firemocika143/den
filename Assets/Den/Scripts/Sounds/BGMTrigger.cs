@@ -30,6 +30,7 @@ public class BGMTrigger : MonoBehaviour
     {
         if (col.CompareTag("Player") && (!played||replayable))
         {
+            if (SoundManager.Instance == null) return;
             SoundManager.Instance.ChangeClip(LeaveClip, leaveClipLoop);
         }
     }
