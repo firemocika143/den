@@ -6,13 +6,14 @@ public class HangAroundEnemyMovement : MonoBehaviour
 {
     [SerializeField]
     private float speed = 5f;
-    [SerializeField]
-    private Transform groundCheck;
-    [SerializeField]
-    private LayerMask groundLayer;
+    //[SerializeField]
+    //private LayerMask groundLayer;
     
     public Rigidbody2D rb;
-    public GameObject lightSourceDetector;
+    [Header("Light Source Detector")]
+    //public GameObject lightSourceDetector;
+    public HangAroundEnemyLightSourceDetector lightSourceDetector;
+
     private bool reachLight;
     private bool escaping;
     private float escapeTime = 2.0f;
@@ -25,7 +26,7 @@ public class HangAroundEnemyMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         size = GetComponent<Transform>().localScale;
-        reachLight = lightSourceDetector.GetComponent<HangAroundEnemyLightSourceDetector>().reachLight;
+        //reachLight = lightSourceDetector.GetComponent<HangAroundEnemyLightSourceDetector>().reachLight;
         escaping = false;
 
         float num = Random.Range(0.0f, 1.0f);
@@ -60,8 +61,8 @@ public class HangAroundEnemyMovement : MonoBehaviour
         {
             horizontal = 1;
         }
-        reachLight = lightSourceDetector.GetComponent<HangAroundEnemyLightSourceDetector>().reachLight;
-        if (reachLight)
+        //reachLight = lightSourceDetector.GetComponent<HangAroundEnemyLightSourceDetector>().reachLight;
+        if (lightSourceDetector.reachLight && escaping == false)
         {
             horizontal *= -1;
 
