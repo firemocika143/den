@@ -20,6 +20,7 @@ public class PatroEnemyMovement : MonoBehaviour
     private Vector3 size;
     private Transform currentTarget;
 
+
     // Start is called before the first frame update
     void Start()
     {
