@@ -99,41 +99,41 @@ public class UIManager : MonoBehaviour
 
     public void UpdatePlayerMaxHealth(int max)
     {
-        if (playerPanel == null || !playerPanel.activeSelf) return;
+        //if (playerPanel == null || !playerPanel.activeSelf) return;
 
-        if (playerPanel.TryGetComponent<PlayerUI>(out var playerUI))
-        {
-            playerUI.UpdateMaxHealth(max);
-        }
+        //if (playerPanel.TryGetComponent<PlayerUI>(out var playerUI))
+        //{
+        //    playerUI.UpdateMaxHealth(max);
+        //}
     }
     public void UpdatePlayerLight(int val)
     {
-        if (playerPanel == null || !playerPanel.activeSelf) return;
+        //if (playerPanel == null || !playerPanel.activeSelf) return;
 
-        if (playerPanel.TryGetComponent<PlayerUI>(out var playerUI))
-        {
-            playerUI.UpdateLightEnergy(val);
-        }
+        //if (playerPanel.TryGetComponent<PlayerUI>(out var playerUI))
+        //{
+        //    playerUI.UpdateLightEnergy(val);
+        //}
     }
 
     public void UpdatePlayerMaxLight(int max)
     {
-        if (playerPanel == null || !playerPanel.activeSelf) return;
+        //if (playerPanel == null || !playerPanel.activeSelf) return;
 
-        if (playerPanel.TryGetComponent<PlayerUI>(out var playerUI))
-        {
-            playerUI.UpdateMaxLightEnergy(max);
-        }
+        //if (playerPanel.TryGetComponent<PlayerUI>(out var playerUI))
+        //{
+        //    playerUI.UpdateMaxLightEnergy(max);
+        //}
     }
 
     public void UpdatePlayerAllState(int h_max, int h_val, int l_max, int l_val)
     {
-        if (playerPanel == null || !playerPanel.activeSelf) return;
+        //if (playerPanel == null || !playerPanel.activeSelf) return;
 
-        if (playerPanel.TryGetComponent<PlayerUI>(out var playerUI))
-        {
-            playerUI.UpdateAll(h_max, h_val, l_max, l_val);
-        }
+        //if (playerPanel.TryGetComponent<PlayerUI>(out var playerUI))
+        //{
+        //    playerUI.UpdateAll(h_max, h_val, l_max, l_val);
+        //}
     }
 
     // Book

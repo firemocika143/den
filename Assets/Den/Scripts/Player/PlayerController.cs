@@ -185,7 +185,9 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         state.health = state.maxHealth;
         state.lightEnergy = state.maxLightEnergy;
 
-        UIManager.Instance.UpdatePlayerAllState(state.maxHealth, state.health, state.maxLightEnergy, state.lightEnergy);
+        UIManager.Instance.UpdatePlayerHealth(state.health);
+
+        //UIManager.Instance.UpdatePlayerAllState(state.maxHealth, state.health, state.maxLightEnergy, state.lightEnergy);
     }
 
     public void UseLightEnergy(int val)
