@@ -27,7 +27,7 @@ public class AStarChase: MonoBehaviour
         if (ai.target != null && ASEDetector.chase) // if can chase
         {
             //Debug.Log("chase")
-            if (pc.isInLightSource) // player is in light source
+            if (pc.state.isInLightSource) // player is in light source
             {
                 SafeOrNot();
             }

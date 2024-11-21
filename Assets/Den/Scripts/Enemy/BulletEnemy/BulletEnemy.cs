@@ -38,12 +38,6 @@ public class BulletEnemy : Enemy
         Spawn();
     }
 
-    //void OnEnable()
-    //{
-    //    health = maxHealth;
-    //    invincible = false;
-    //}
-
     void Update()
     {
         if (BEDetector.shoot)
@@ -54,11 +48,8 @@ public class BulletEnemy : Enemy
 
     private void shooting()
     {
-        //Debug.Log("iscooldown: " + iscooldown);
-        //Debug.Log("shoot: " + shoot);
         if (!iscooldown && BEDetector.target != null)
         {
-            //Debug.Log("shoot2: " + BEDetector.shoot);
             GameObject bullet = GameObject.Instantiate(bulletPrefab);
                 
             bullet.transform.position = transform.position;
@@ -102,9 +93,7 @@ public class BulletEnemy : Enemy
                 StartCoroutine(InvincibleTimeCount());
             }
         }
-
     }
-
     public override void Spawn()
     {
         health = maxHealth;
@@ -116,7 +105,6 @@ public class BulletEnemy : Enemy
     public override void Kill()
     {
         StopAllCoroutines();
-        //Destroy(gameObject);
         gameObject.SetActive(false);
     }
 }

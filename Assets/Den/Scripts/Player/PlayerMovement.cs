@@ -88,7 +88,7 @@ public class PlayerMovement : MonoBehaviour
 
             rb.velocity = new Vector2(0, rb.velocity.y);
         }
-        else if (!playerController.state.stop)
+        else if (!playerController.state.stop && ! playerController.state.hitback)
         {
             horizontal = Input.GetAxisRaw("Horizontal");//-1->left, 1->right
 

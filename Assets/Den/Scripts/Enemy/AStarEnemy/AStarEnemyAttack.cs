@@ -14,7 +14,7 @@ public class AStarEnemyAttack : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             PlayerController playerController = other.GetComponent<PlayerController>();
-            playerController.Damage(attack);
+            playerController.Damage(attack, transform.position);
         }
     }
 
@@ -24,7 +24,7 @@ public class AStarEnemyAttack : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             PlayerController playerController = other.GetComponent<PlayerController>();
-            playerController.Damage(attack);
+            playerController.Damage(attack, transform.position);
         }
     }
 }

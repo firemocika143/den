@@ -30,14 +30,6 @@ public class AStarEnemy : Enemy
         aipath = GetComponent<AIPath>();
     }
 
-    //void OnEnable()
-    //{
-    //    health = maxHealth;
-    //    invincible = false;
-
-    //    //aipath = GetComponent<AIPath>();
-    //}
-
     void Update()
     {
         if (aipath.desiredVelocity.x >= 0.01f) // change direction
@@ -74,7 +66,6 @@ public class AStarEnemy : Enemy
                 StartCoroutine(InvincibleTimeCount());
             }
         }
-
     }
 
     public override void Spawn()
@@ -90,5 +81,32 @@ public class AStarEnemy : Enemy
         //Destroy(gameObject);
         gameObject.SetActive(false);
     }
+
+    //private void HitBack(Vector2 from)
+    //{
+    //    float dir = from.x - player.transform.position.x;
+
+    //    if (dir <= 0)
+    //    {
+    //        // TODO - go right up
+    //        Vector2 force = new Vector2(hitBackHorizontalForce, hitBackVerticalForce);
+    //        StartCoroutine(PerformHitBack(force));
+    //    }
+    //    else if (dir > 0)
+    //    {
+    //        // TODO - go left up
+    //        Vector2 force = new Vector2(-hitBackHorizontalForce, hitBackVerticalForce);
+    //        StartCoroutine(PerformHitBack(force));
+    //    }
+    //}
+
+    //private IEnumerator PerformHitBack(Vector2 force)
+    //{
+    //    player.GetComponent<Rigidbody2D>().velocity = force;
+    //    PlayerController pc = player.GetComponent<PlayerController>();
+    //    pc.state.hitback = true;
+    //    yield return new WaitForSeconds(hitbackInterval);
+    //    pc.state.hitback = false;
+    //}
 }
 

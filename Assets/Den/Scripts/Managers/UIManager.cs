@@ -16,6 +16,8 @@ public class UIManager : MonoBehaviour
     }
 
     [SerializeField]
+    private GameObject Canvas;
+    [SerializeField]
     private GameObject pauseMenuPanel;
     [SerializeField]
     private GameObject playerPanel;
@@ -23,10 +25,12 @@ public class UIManager : MonoBehaviour
     private GameObject fadePanel;
     [SerializeField]
     private GameObject bookPanel;
-    [SerializeField] 
-    private PlayableDirector hintTimeLine;
+    //[SerializeField] 
+    //private PlayableDirector hintTimeLine;
+    //[SerializeField]
+    //private TMP_Text hintText;
     [SerializeField]
-    private TMP_Text hintText;
+    private GameObject hintPanelPrefab;
 
     private List<GameObject> pagePanels = new List<GameObject>();
 
@@ -97,44 +101,44 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void UpdatePlayerMaxHealth(int max)
-    {
-        //if (playerPanel == null || !playerPanel.activeSelf) return;
+    //public void UpdatePlayerMaxHealth(int max)
+    //{
+    //    //if (playerPanel == null || !playerPanel.activeSelf) return;
 
-        //if (playerPanel.TryGetComponent<PlayerUI>(out var playerUI))
-        //{
-        //    playerUI.UpdateMaxHealth(max);
-        //}
-    }
-    public void UpdatePlayerLight(int val)
-    {
-        //if (playerPanel == null || !playerPanel.activeSelf) return;
+    //    //if (playerPanel.TryGetComponent<PlayerUI>(out var playerUI))
+    //    //{
+    //    //    playerUI.UpdateMaxHealth(max);
+    //    //}
+    //}
+    //public void UpdatePlayerLight(int val)
+    //{
+    //    //if (playerPanel == null || !playerPanel.activeSelf) return;
 
-        //if (playerPanel.TryGetComponent<PlayerUI>(out var playerUI))
-        //{
-        //    playerUI.UpdateLightEnergy(val);
-        //}
-    }
+    //    //if (playerPanel.TryGetComponent<PlayerUI>(out var playerUI))
+    //    //{
+    //    //    playerUI.UpdateLightEnergy(val);
+    //    //}
+    //}
 
-    public void UpdatePlayerMaxLight(int max)
-    {
-        //if (playerPanel == null || !playerPanel.activeSelf) return;
+    //public void UpdatePlayerMaxLight(int max)
+    //{
+    //    //if (playerPanel == null || !playerPanel.activeSelf) return;
 
-        //if (playerPanel.TryGetComponent<PlayerUI>(out var playerUI))
-        //{
-        //    playerUI.UpdateMaxLightEnergy(max);
-        //}
-    }
+    //    //if (playerPanel.TryGetComponent<PlayerUI>(out var playerUI))
+    //    //{
+    //    //    playerUI.UpdateMaxLightEnergy(max);
+    //    //}
+    //}
 
-    public void UpdatePlayerAllState(int h_max, int h_val, int l_max, int l_val)
-    {
-        //if (playerPanel == null || !playerPanel.activeSelf) return;
+    //public void UpdatePlayerAllState(int h_max, int h_val, int l_max, int l_val)
+    //{
+    //    //if (playerPanel == null || !playerPanel.activeSelf) return;
 
-        //if (playerPanel.TryGetComponent<PlayerUI>(out var playerUI))
-        //{
-        //    playerUI.UpdateAll(h_max, h_val, l_max, l_val);
-        //}
-    }
+    //    //if (playerPanel.TryGetComponent<PlayerUI>(out var playerUI))
+    //    //{
+    //    //    playerUI.UpdateAll(h_max, h_val, l_max, l_val);
+    //    //}
+    //}
 
     // Book
     public void OpenBook()
@@ -226,7 +230,11 @@ public class UIManager : MonoBehaviour
     // Hint
     public void ShowHint(string text)
     {
-        hintText.text = text;
-        hintTimeLine.Play();
+        GameObject hintPanel = Instantiate(hintPanelPrefab, Canvas.transform);
+        TMP_Text t = hintPanel.transform.GetChild(0).GetComponent<TMP_Text>();
+        t.text = text;
+        PlayableDirector hintTimeline = hintPanel.GetComponent<PlayableDirector>();
+        hintTimeline.Play();
+        Destroy(hintPanel, (float) hintTimeline.duration);
     }
 }

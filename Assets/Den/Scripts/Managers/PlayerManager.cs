@@ -71,13 +71,6 @@ public class PlayerManager : MonoBehaviour
         player.GetComponent<PlayerController>().StopPlayer();
     }
 
-    //public void DisableLightOn()
-    //{
-    //    PlayerLightSystem pls = player.GetComponent<PlayerLightSystem>();
-    //    pls.ChangeLight(false, false);
-    //    pls.enabled = false;
-    //}
-
     public void EnableLightOn()
     {
         PlayerLightSystem pls = player.GetComponent<PlayerLightSystem>();
@@ -105,7 +98,7 @@ public class PlayerManager : MonoBehaviour
 
     public bool PlayerIsInLightSource()
     {
-        return player.GetComponent<PlayerController>().isInLightSource;
+        return player.GetComponent<PlayerController>().state.isInLightSource;
     }
 
     public bool PlayerGetLightDraw()
@@ -134,8 +127,6 @@ public class PlayerManager : MonoBehaviour
 
         player.GetComponent<PlayerController>().state.maxLightEnergy += val;
         player.GetComponent<PlayerController>().state.lightEnergy = player.GetComponent<PlayerController>().state.maxLightEnergy;
-        UIManager.Instance.UpdatePlayerMaxLight(player.GetComponent<PlayerController>().state.maxLightEnergy);
-        UIManager.Instance.UpdatePlayerLight(player.GetComponent<PlayerController>().state.lightEnergy);
     }
 
     public void GivePlayerForce(Vector2 force)
@@ -143,7 +134,7 @@ public class PlayerManager : MonoBehaviour
         Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
         if (rb != null)
         {
-            rb.velocity = force;
+            rb.velocity += force;
         }
     }
 

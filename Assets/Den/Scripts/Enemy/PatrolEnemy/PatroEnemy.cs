@@ -29,20 +29,12 @@ public class PatroEnemy : Enemy
         Spawn();
     }
 
-    //void OnEnable()
-    //{
-    //    health = maxHealth;
-    //    invincible = false;
-    //}
-
     private void OnTriggerEnter2D(Collider2D other)
     {
-        //Debug.Log(other.gameObject.name);
-        // if I touch player
         if (other.CompareTag("Player"))
         {
             PlayerController playerController = other.GetComponent<PlayerController>();
-            playerController.Damage(attack);
+            playerController.Damage(attack, transform.position);
         }
     }
 
@@ -52,7 +44,7 @@ public class PatroEnemy : Enemy
         if (other.CompareTag("Player"))
         {
             PlayerController playerController = other.GetComponent<PlayerController>();
-            playerController.Damage(attack);
+            playerController.Damage(attack, transform.position);
         }
     }
 
@@ -81,7 +73,6 @@ public class PatroEnemy : Enemy
                 StartCoroutine(InvincibleTimeCount());
             }
         }
-
     }
 
     public override void Spawn()
@@ -94,7 +85,6 @@ public class PatroEnemy : Enemy
     public override void Kill()
     {
         StopAllCoroutines();
-        //Destroy(gameObject);
         gameObject.SetActive(false);
     }
 }

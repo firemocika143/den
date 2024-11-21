@@ -39,6 +39,8 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         public bool isDamaged = false;
         public bool dying = false;
         public bool inDanger = false;
+        public bool isInLightSource = false;
+        public bool hitback = false;
 
         [Header("Skill Obtaining States")]
         public bool getLightDraw = false;
@@ -47,6 +49,14 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     public PlayerState state;
     public PlayerAnimationState currState;
 
+    [Header("Hitback Settings")]
+    [SerializeField]
+    private float hitBackHorizontalForce = 4f;
+    [SerializeField]
+    private float hitBackVerticalForce = 8f;
+    [SerializeField]
+    private float hitbackInterval = 0.5f;
+
     //light
     [Header("Other Light Settings")]
     public int lowLight = 20;
@@ -54,7 +64,6 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     private float gainLightTime = 0.2f;
     [SerializeField]
     private float loseLightTime = 1f;
-    public bool isInLightSource = false;
 
     [Header("Handlers")]
     [SerializeField]
@@ -79,7 +88,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     
     private void Start()
     {
-        isInLightSource = false;
+        state.isInLightSource = false;
         gainLightTimer = Time.time;
         loseLightTimer = Time.time;
         //loseLightCoroutine = StartCoroutine(LoseLight());
@@ -101,21 +110,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
 
     private void Update()
     {
-        if (lightSystem.enabled)
-        {
-            // this is double check
-            if (state.lightEnergy <= 0 && lightSystem.Lighting())
-            {
-                //lightSystem.LightOff();
-            }
-            else if (state.lightEnergy > 0 && !lightSystem.Lighting() && !isInLightSource && !state.dying)
-            {
-                //lightSystem.LightOn();
-            }
-        }
-
         UpdatePlayerLightEnergy();
-
         DecidePlayerAnimation();
 
         // Update player light
@@ -134,7 +129,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     {
         if (col.gameObject.CompareTag("LightSource"))
         {
-            isInLightSource = true;
+            state.isInLightSource = true;
         }
     }
 
@@ -165,7 +160,38 @@ public class PlayerController : MonoBehaviour, IDataPersistence
             }
             else
             {
-                StartCoroutine(PlayerUnhittable(2f));
+                StartCoroutine(PlayerUnhittable(1.5f));
+            }
+            //state.isDamaged = false;
+
+            LanternManager.Instance.AllCastFail();
+        }
+    }
+
+    public void Damage(int damage, Vector2 enemyPosition)
+    {
+        if (state.isHittable)
+        {
+            //state.isDamaged = true;
+            if (state.lightEnergy > 0) state.health -= damage;
+            else state.health -= damage * damageMultiplier;
+
+
+            if (state.health > 0)
+            {
+                HitBackPlayer(enemyPosition);
+            }
+
+            state.health = state.health > 0 ? state.health : 0;
+            UIManager.Instance.UpdatePlayerHealth(state.health);
+
+            if (state.health <= 0)
+            {
+                PlayerKilled();
+            }
+            else
+            {
+                StartCoroutine(PlayerUnhittable(1.5f));
             }
             //state.isDamaged = false;
 
@@ -186,15 +212,11 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         state.lightEnergy = state.maxLightEnergy;
 
         UIManager.Instance.UpdatePlayerHealth(state.health);
-
-        //UIManager.Instance.UpdatePlayerAllState(state.maxHealth, state.health, state.maxLightEnergy, state.lightEnergy);
     }
 
     public void UseLightEnergy(int val)
     {
         state.lightEnergy = state.lightEnergy - val >= 0 ? state.lightEnergy - val : 0;
-
-        UIManager.Instance.UpdatePlayerLight(state.lightEnergy);
     }
 
     //Events functions
@@ -212,8 +234,9 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     {
         // TODO - player dying Animation
         state.dying = true;
+        state.isHittable = false;
         StopPlayer();
-        SoundManager.Instance.ResetBGM();
+        //SoundManager.Instance.ResetBGM();
         StartCoroutine(playerAnimation.PlayerDieAnimation(() => 
         {
             // well, this is readible and free to customize in every scene, but quite inefficient and is actually weird for calling variable in this script out in the other script
@@ -233,7 +256,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     public void GetIntoLightSource()
     {
         //Called in OnCollisionEnter2D when the player lights on this lantern and when they enters the light area of this lantern
-        isInLightSource = true;
+        state.isInLightSource = true;
         gainLightTimer = Time.time;
 
         state.inDanger = false;
@@ -243,7 +266,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     public void LeaveLightSource()
     {
         //Called by OnCollisionExit2D when the player exits the light area
-        isInLightSource = false;
+        state.isInLightSource = false;
         loseLightTimer = Time.time;
         //TODO - Call function in playerStatus to stop adding their light energy, but I don't know how to use coroutine
 
@@ -252,7 +275,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
 
     private IEnumerator PlayerUnhittable(float time)
     {
-        StartCoroutine(PlayerFlash(4, time));
+        StartCoroutine(PlayerFlash(3, time));
 
         state.isHittable = false;
         yield return new WaitForSeconds(time);
@@ -281,7 +304,35 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     {
         PlayerManager.Instance.PlayerRespawn();//this is so weird, very weird
         SoundManager.Instance.ResetBGM();
-        StartCoroutine(PlayerUnhittable(2f));
+        StartCoroutine(PlayerUnhittable(1.5f));
+    }
+
+    private void HitBackPlayer(Vector2 from)
+    {
+        float dir = from.x - transform.position.x;
+
+        if (dir <= 0)
+        {
+            // TODO - go right up
+            Vector2 force = new Vector2(hitBackHorizontalForce, hitBackVerticalForce);
+            StartCoroutine(PerformHitBack(force));
+        }
+        else if (dir > 0)
+        {
+            // TODO - go left up
+            Vector2 force = new Vector2(-hitBackHorizontalForce, hitBackVerticalForce);
+            StartCoroutine(PerformHitBack(force));
+        }
+    }
+
+    private IEnumerator PerformHitBack(Vector2 force)
+    {
+        state.hitback = true;
+        yield return new WaitForSeconds(0.1f);
+
+        GetComponent<Rigidbody2D>().velocity = force;
+        yield return new WaitForSeconds(hitbackInterval);
+        state.hitback = false;
     }
 
     //Player skill
@@ -327,22 +378,24 @@ public class PlayerController : MonoBehaviour, IDataPersistence
 
     private IEnumerator PlayerFlash(int times, float time)
     {
-        float pretime = 0.2f;
-        yield return new WaitForSeconds(pretime);
+        playerSprite.enabled = false;
+        yield return new WaitForSeconds(0.125f);
+        playerSprite.enabled = true;
+        yield return new WaitForSeconds(0.125f);
 
         for (int i = 0; i < times; i++)
         {
             playerSprite.enabled = false;
-            yield return new WaitForSeconds((time - pretime) / (float)times / 2);
+            yield return new WaitForSeconds((time - 0.125f) / (float)times / 2);
             playerSprite.enabled = true;
-            yield return new WaitForSeconds((time - pretime) / (float)times / 2);
+            yield return new WaitForSeconds((time - 0.125f) / (float)times / 2);
         }
     }
 
     //UI
     private void UpdatePlayerLightEnergy()
     {
-        if (isInLightSource)
+        if (state.isInLightSource)
         {
             if (Time.time - gainLightTimer >= gainLightTime && state.lightEnergy < state.maxLightEnergy)
             {
@@ -368,23 +421,12 @@ public class PlayerController : MonoBehaviour, IDataPersistence
                 loseLightTimer = Time.time;
             }
 
-            if (state.lightEnergy < lowLight)
-            {
-                //TODO - Change volume intensity
-
-                //this should be in update()
-                //and I need a alternative way to show this by playing sfx
-                //vfx is too hard to see
-            }
-
             if (state.lightEnergy <= 0 && !state.inDanger && GameManager.Instance.CurrScene != "Street")// 
             {
                 SoundManager.Instance.ChangeClip(SoundManager.Instance.clips.DANGER);
                 state.inDanger = true;
             }
         }
-
-        UIManager.Instance.UpdatePlayerLight(state.lightEnergy);
     }
 
     public void ReloadAfterKilled()
@@ -392,13 +434,11 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         playerAnimation.PlayerRespawnAnimation();
         state.dying = false;
         state.stop = false;
+        state.isHittable = true;
     }
 
     public void LoadData(GameData gameData)
     {
-        //this.state.maxHealth = gameData.maxHealth;
-        //this.state.maxLightEnergy = gameData.maxLightEnergy;
-
         if (GameManager.Instance.progress.getLightDraw) ObtainLightDraw();
 
         AllRecover();
@@ -406,7 +446,6 @@ public class PlayerController : MonoBehaviour, IDataPersistence
 
     public void SaveData(ref GameData gameData)
     {
-        //gameData.maxHealth = this.state.maxHealth;
-        //gameData.maxLightEnergy = this.state.maxLightEnergy;
+
     }
 }

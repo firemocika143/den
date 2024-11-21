@@ -11,7 +11,7 @@ public class LightDraw
     public LineRenderer lineRenderer;
     public bool isDrawing = false;
 
-    public float costTime = 0.2f;
+    public float costTime = 0.05f;
     public int costPerTime = 1;
     public float costTimer;
 

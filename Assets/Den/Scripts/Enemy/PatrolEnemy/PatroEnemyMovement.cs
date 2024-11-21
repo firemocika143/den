@@ -7,10 +7,6 @@ public class PatroEnemyMovement : MonoBehaviour
     [SerializeField]
     private float speed = 3f;
     [SerializeField]
-    private Transform groundCheck;
-    [SerializeField]
-    private LayerMask groundLayer;
-    [SerializeField]
     private GameObject leftTarget;
     [SerializeField]
     private GameObject rightTarget;

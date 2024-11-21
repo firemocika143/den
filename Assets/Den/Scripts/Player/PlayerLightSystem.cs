@@ -236,7 +236,9 @@ public class PlayerLightSystem : MonoBehaviour
                 {
                     playerLight.pointLightOuterRadius = Mathf.Lerp(minRadius, maxRadius, percentage);
                     percentage += (float)addAmount / (float) currentPlayerMaxE;
-                    yield return new WaitForSeconds(normalUpdateInterval);
+
+                    float interval = targetPercentage - percentage >= 0.1 ? fastUpdateInterval : normalUpdateInterval;
+                    yield return new WaitForSeconds(interval);
 
                     currentLightRadius = playerLight.pointLightOuterRadius;
                 }

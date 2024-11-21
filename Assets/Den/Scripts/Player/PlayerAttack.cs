@@ -25,6 +25,7 @@ public class PlayerAttack : MonoBehaviour
         drawLight.SetActive(false);
         playerController = GetComponent<PlayerController>();
         skill = GetComponent<PlayerSkill>();
+        lightSystem = GetComponent<PlayerLightSystem>();
     }
 
     private void Update()

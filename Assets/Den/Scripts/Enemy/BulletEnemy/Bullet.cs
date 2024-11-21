@@ -10,11 +10,6 @@ public class Bullet : MonoBehaviour
 
     public int groundLayerNumber;
 
-    private void Update()
-    {
-
-    }
-
     private void OnTriggerEnter2D(Collider2D other)
     {
         //Debug.Log(other.gameObject.name);
@@ -22,7 +17,7 @@ public class Bullet : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             PlayerController playerController = other.GetComponent<PlayerController>();
-            playerController.Damage(attack);
+            playerController.Damage(attack, transform.position);
 
             Destroy(gameObject);
         }
