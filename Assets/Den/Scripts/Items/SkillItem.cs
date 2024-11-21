@@ -32,9 +32,6 @@ public class SkillItem : MonoBehaviour, IItem// hum... this is actually a light 
     {
         switch (skill_id)
         {
-            case 0:
-                pc.GetLantern();
-                break;
             case 1:
                 GameManager.Instance.progress.getLightDraw = true;// and this is very possible to be remake
                 pc.ObtainLightDraw(); ;

@@ -5,18 +5,24 @@ using UnityEngine.Rendering;
 
 public class VolumeManager : MonoBehaviour
 {
+    public static VolumeManager Instance { get; private set; }
+
     [SerializeField]
     private VolumeProfile volumeProfile;
     [SerializeField]
-    private int lowValue = 5;
-    [SerializeField]
-    private float maxBlur = 0.3f;
+    private float maxBlur = 0.2f;
     [SerializeField]
     private float minBlur = 0.02f;
 
     // You can leave this variable out of your function, so you can reuse it throughout your class.
     private UnityEngine.Rendering.Universal.FilmGrain filmGrain;
-    
+    private int lowValue = 20;
+
+    private void Awake()
+    {
+        Instance = this;        
+    }
+
 
     private void Start()
     {
@@ -46,5 +52,10 @@ public class VolumeManager : MonoBehaviour
                 filmGrain.intensity.Override(minBlur);
             }
         }
+    }
+
+    public void SetPlayerLowLightValue(int low_val)
+    {
+        lowValue = low_val;
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 using UnityEngine;
 
-public class TransportDevice : Device
+public class TeleportDevice : Device
 {
     public Transform destination;
     public float deactivateDeviceIntervel;

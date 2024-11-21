@@ -8,7 +8,6 @@ public class PlayerAttack : MonoBehaviour
     public float attackRange;
     public LayerMask enemyLayer;
     public LayerMask triggerLayer;
-    public float maxDistanceToStart = 10f;
     public int attack;
 
     [SerializeField]
@@ -19,6 +18,7 @@ public class PlayerAttack : MonoBehaviour
     private Vector3 pos;
     private PlayerController playerController;
     private PlayerSkill skill;
+    private PlayerLightSystem lightSystem;
 
     private void Start()
     {
@@ -93,7 +93,7 @@ public class PlayerAttack : MonoBehaviour
         pos = Input.mousePosition;
         pos.z = 0;
         //TODO - detect if the player is clicking in the attack trigger zone
-        if (Input.GetMouseButtonDown(0) && Vector2.Distance(transform.position, Camera.main.ScreenToWorldPoint(pos)) < maxDistanceToStart)//  -> but I can also use the collider to restrict the range
+        if (Input.GetMouseButtonDown(0) && Vector2.Distance(transform.position, Camera.main.ScreenToWorldPoint(pos)) < lightSystem.currentLightRadius)//  -> but I can also use the collider to restrict the range
         {
             attackPoint.position = Camera.main.ScreenToWorldPoint(pos);
             Attack();

@@ -49,7 +49,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
 
     //light
     [Header("Other Light Settings")]
-    public int lowLight = 5;
+    public int lowLight = 20;
     [SerializeField]
     private float gainLightTime = 0.2f;
     [SerializeField]
@@ -95,6 +95,8 @@ public class PlayerController : MonoBehaviour, IDataPersistence
 
         InitPlayerState();
         LeaveLightSource();
+
+        VolumeManager.Instance.SetPlayerLowLightValue(lowLight);
     }
 
     private void Update()
@@ -105,18 +107,19 @@ public class PlayerController : MonoBehaviour, IDataPersistence
             if (state.lightEnergy <= 0 && lightSystem.Lighting())
             {
                 //lightSystem.LightOff();
-                lightSystem.ChangeLight(PlayerLightSystem.LightState.NOLIGHTENERGY);
             }
             else if (state.lightEnergy > 0 && !lightSystem.Lighting() && !isInLightSource && !state.dying)
             {
                 //lightSystem.LightOn();
-                lightSystem.ChangeLight(PlayerLightSystem.LightState.WITHLIGHTENERGY);
             }
         }
 
         UpdatePlayerLightEnergy();
 
         DecidePlayerAnimation();
+
+        // Update player light
+        lightSystem.UpdatePlayerLight(state.lightEnergy, state.maxLightEnergy);
     }
 
     private void OnTriggerEnter2D(Collider2D col)
@@ -217,9 +220,8 @@ public class PlayerController : MonoBehaviour, IDataPersistence
                 Debug.LogError("no flow in this scene");
             }
             else GameManager.Instance.flow.ReloadFlow();
-            //EnemyManager.Instance.RespawnAllEnemy();
-            //PlayerManager.Instance.PlayerRespawn();
             ReloadAfterKilled();
+            // play sfx
         }));
 
         // Actually, most things went wrong if I really destroy the player, maybe this is not a good solution
@@ -284,12 +286,6 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     public void ObtainLightDraw()
     {
         playerAttack.ObtainLightDraw();
-    }
-
-    public void GetLantern()
-    {
-        state.maxLightEnergy = 50;
-        AllRecover();
     }
 
     //PlayerAnimation
@@ -372,8 +368,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
 
             if (state.lightEnergy < lowLight)
             {
-                //if (lightSystem.enabled) lightSystem.LowLightEnergyWarning();
-                //TODO - SFX
+                //TODO - Change volume intensity
 
                 //this should be in update()
                 //and I need a alternative way to show this by playing sfx
