@@ -165,7 +165,7 @@ public class PlayerMovement : MonoBehaviour
         RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.up, distance, ladderLayer);
         if (hitInfo.collider != null)
         {
-            if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S))
+            if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S)) && !playerController.state.stop)
             {
                 playerController.state.climb = true;
                 if (hitInfo.collider.gameObject.TryGetComponent<LadderConstrainter>(out var con))
@@ -180,7 +180,7 @@ public class PlayerMovement : MonoBehaviour
                 }
                 transform.position = new Vector3(hitInfo.collider.transform.position.x, transform.position.y, 0);
             }
-            else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D))//this would take a long time to be detected too
+            else if ((Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D)) && !playerController.state.stop)//this would take a long time to be detected too
             {
                 if (!currentLadderMoveConstraint)
                 {
@@ -193,11 +193,15 @@ public class PlayerMovement : MonoBehaviour
             playerController.state.climb = false;
         }
 
-        if (playerController.state.climb && hitInfo.collider != null)
+        if (playerController.state.climb && hitInfo.collider != null && !playerController.state.stop)
         {
             vertical = Input.GetAxisRaw("Vertical");
-            rb.velocity = new Vector2(rb.velocity.x, vertical * currClimbSpeed);
+            rb.velocity = new Vector2(0, vertical * currClimbSpeed);
             rb.gravityScale = 0;
+        }
+        else if (playerController.state.climb && hitInfo.collider != null && playerController.state.stop)
+        {
+            rb.velocity = new Vector2(0, 0);
         }
         else
         {

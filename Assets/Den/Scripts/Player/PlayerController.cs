@@ -41,6 +41,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         public bool inDanger = false;
         public bool isInLightSource = false;
         public bool hitback = false;
+        public bool onObstacle = false;
 
         [Header("Skill Obtaining States")]
         public bool getLightDraw = false;
@@ -63,7 +64,9 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     [SerializeField]
     private float gainLightTime = 0.2f;
     [SerializeField]
-    private float loseLightTime = 1f;
+    private float normalLoseLightTime = 1f;
+    [SerializeField]
+    private float onObstacleLoseLightTime = 0.5f;
 
     [Header("Handlers")]
     [SerializeField]
@@ -85,7 +88,8 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     private PlayerSFX playerSFX;
     private PlayerParticle playerParticle;
     private float unhittableTimer;
-    
+    private float loseLightTime = 1f;
+
     private void Start()
     {
         state.isInLightSource = false;
@@ -104,6 +108,8 @@ public class PlayerController : MonoBehaviour, IDataPersistence
 
         InitPlayerState();
         LeaveLightSource();
+
+        loseLightTime = normalLoseLightTime;
 
         VolumeManager.Instance.SetPlayerLowLightValue(lowLight);
     }
@@ -139,6 +145,24 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         if (col.gameObject.CompareTag("LightSource"))
         {
             LeaveLightSource();
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.gameObject.CompareTag("Obstacle"))
+        {
+            HitOnObstacle();
+            loseLightTime = onObstacleLoseLightTime;
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D col)
+    {
+        if (col.gameObject.CompareTag("Obstacle"))
+        {
+            LeaveObstacle();
+            loseLightTime = normalLoseLightTime;
         }
     }
 
@@ -333,6 +357,26 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         GetComponent<Rigidbody2D>().velocity = force;
         yield return new WaitForSeconds(hitbackInterval);
         state.hitback = false;
+    }
+
+    private void HitOnObstacle()
+    {
+        // higher light intensity
+        lightSystem.SetIntensity(1.3f);
+        // TODO - enhance volume
+        VolumeManager.Instance.QuickFilmIn();
+        // TODO - slowdown player
+        GameManager.Instance.SlowDown(0.6f);
+        state.onObstacle = true;
+    }
+
+    private void LeaveObstacle()
+    {
+        lightSystem.SetBackIntensity();
+        // return volume
+        VolumeManager.Instance.QuickFilmOut();
+        GameManager.Instance.BackToNormalSpeed();
+        state.onObstacle = true;
     }
 
     //Player skill

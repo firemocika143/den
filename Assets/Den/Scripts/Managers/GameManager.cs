@@ -93,6 +93,8 @@ public class GameManager : MonoBehaviour
 
     public bool gamePaused = false;// Can utilize this variable to adjust some settings when game is paused
 
+    private float currTimeScale = 1f;
+
     /// <summary>
     /// This will be called in flows, because DontDestroyOnLoadObjects seems not run Start again in new scenes
     /// </summary>
@@ -127,18 +129,20 @@ public class GameManager : MonoBehaviour
 
     public void ResumeGame()
     {
-        Time.timeScale = 1f;
+        Time.timeScale = currTimeScale;
         gamePaused = false;
         // TODO - restore volume of music and SFX
     }
 
-    public void SlowDown()
+    public void SlowDown(float val)
     {
-        Time.timeScale = 0.3f;
+        currTimeScale = val;
+        Time.timeScale = val;
     }
 
     public void BackToNormalSpeed()
     {
+        currTimeScale = 1f;
         Time.timeScale = 1f;
     }
 

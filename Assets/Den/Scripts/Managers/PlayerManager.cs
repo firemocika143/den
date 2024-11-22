@@ -125,8 +125,9 @@ public class PlayerManager : MonoBehaviour
             return;
         }
 
-        player.GetComponent<PlayerController>().state.maxLightEnergy += val;
-        player.GetComponent<PlayerController>().state.lightEnergy = player.GetComponent<PlayerController>().state.maxLightEnergy;
+        PlayerController pc = player.GetComponent<PlayerController>();
+        pc.state.maxLightEnergy += val;
+        pc.state.lightEnergy += val;
     }
 
     public void GivePlayerForce(Vector2 force)
@@ -141,5 +142,10 @@ public class PlayerManager : MonoBehaviour
     public void PlayerStopClimbing()
     {
         player.GetComponent<PlayerController>().state.climb = false;
+    }
+
+    public bool PlayerOnObstacle()
+    {
+        return player.GetComponent<PlayerController>().state.onObstacle;
     }
 }

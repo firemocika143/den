@@ -35,6 +35,8 @@ public class SoundManager : MonoBehaviour
 
     public Clips clips;
 
+    private float vMultiplier = 1;
+
     private Coroutine switchCoroutine;
 
     private void Start()
@@ -101,7 +103,7 @@ public class SoundManager : MonoBehaviour
     {
         while (fadePercentage > 0)
         {
-            BGMSource.volume = Mathf.Lerp(0, defaultVolume, fadePercentage);
+            BGMSource.volume = Mathf.Lerp(0, defaultVolume * vMultiplier, fadePercentage);
             fadePercentage -= Time.deltaTime / switchTime;
             yield return null;
         }
@@ -117,7 +119,7 @@ public class SoundManager : MonoBehaviour
         if (!BGMSource.isPlaying) BGMSource.Play();
         while (fadePercentage < 1)
         {
-            BGMSource.volume = Mathf.Lerp(0, defaultVolume, fadePercentage);
+            BGMSource.volume = Mathf.Lerp(0, defaultVolume * vMultiplier, fadePercentage);
             fadePercentage += Time.deltaTime / switchTime;
             yield return null;
         }
@@ -145,5 +147,20 @@ public class SoundManager : MonoBehaviour
 
         Debug.LogError("No this clip");
         return null;
+    }
+
+    public void SetVolume(float multiplier_val)
+    {
+        vMultiplier = multiplier_val;
+        if (BGMSource.isPlaying)
+        {
+            BGMSource.volume = defaultVolume * vMultiplier;
+        }
+    }
+
+    public void SetBackVolume()
+    {
+        vMultiplier = 1;
+        BGMSource.volume = defaultVolume * vMultiplier;
     }
 }
