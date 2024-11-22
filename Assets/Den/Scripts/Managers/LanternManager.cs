@@ -16,7 +16,7 @@ public class LanternManager : MonoBehaviour
         this.lanterns = findAllLLanterns();
     }
 
-    public void AllCastFail()// well, this is quite inefficient for now, the better way is to check the casting ones only, maybe we can do that in PlayerController
+    /*public void AllCastFail()// well, this is quite inefficient for now, the better way is to check the casting ones only, maybe we can do that in PlayerController
     {
         foreach (LightOn l in lanterns)
         {
@@ -25,7 +25,7 @@ public class LanternManager : MonoBehaviour
                 l.CastFail();
             }
         }
-    }
+    }*/
 
     private List<LightOn> findAllLLanterns()
     {
