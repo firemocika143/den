@@ -90,6 +90,8 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     private float loseLightTimeMultiplier = 1f;
 
     private Device activatingDevice = null;
+    [SerializeField]
+    private AudioSource returnPlayer;
 
     private void Start()
     {
@@ -279,6 +281,8 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         }
 
         //SoundManager.Instance.ResetBGM();
+        returnPlayer.Play();
+        UIManager.Instance.FadeOut();
         StartCoroutine(playerAnimation.PlayerDieAnimation(() => 
         {
             // well, this is readible and free to customize in every scene, but quite inefficient and is actually weird for calling variable in this script out in the other script
@@ -287,7 +291,6 @@ public class PlayerController : MonoBehaviour, IDataPersistence
                 Debug.LogError("no flow in this scene");
             }
             else GameManager.Instance.flow.ReloadFlow();
-            ReloadAfterKilled();
             // play sfx
         }));
 

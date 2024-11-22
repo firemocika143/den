@@ -80,8 +80,6 @@ public class GameManager : MonoBehaviour
         public bool getPage7 = false;
         public bool firstTimeLightOff = true;
         public bool finishLightOff = false;
-        
-        public bool getLantern = false;
 
         [Header("Library")]
         public bool getLightDraw = false;
@@ -100,6 +98,7 @@ public class GameManager : MonoBehaviour
     private float currTimeScale = 1f;
 
     public int killTimes = 0;
+    public int playerFirmPiece = 0;
 
     /// <summary>
     /// This will be called in flows, because DontDestroyOnLoadObjects seems not run Start again in new scenes

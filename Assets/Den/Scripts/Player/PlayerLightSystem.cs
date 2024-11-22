@@ -25,12 +25,14 @@ public class PlayerLightSystem : MonoBehaviour
     private int currentPlayerE;
     private int addAmount = 1;
     private float origIntensity;
+    private float origMaxRadius;
 
     private Coroutine co_checker = null;
 
     private void Start()
     {
         origIntensity = playerLight.intensity;
+        origMaxRadius = maxRadius;
 
         StartUpdatePlayerLight();
     }
@@ -52,9 +54,14 @@ public class PlayerLightSystem : MonoBehaviour
         currentPlayerMaxE = totalLightEnergyAmount;
     }
 
-    public void UpdateMaxRadius(float newMaxRadius)
+    public void AddMaxRadius(float val)
     {
-        maxRadius = newMaxRadius;
+        maxRadius += val;
+    }
+
+    public void ResetMaxRadius()
+    {
+        maxRadius = origMaxRadius;
     }
 
     public void StartUpdatePlayerLight()

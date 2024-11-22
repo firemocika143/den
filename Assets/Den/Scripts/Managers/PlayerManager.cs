@@ -15,6 +15,7 @@ public class PlayerManager : MonoBehaviour
     private GameObject playerPrefab;
 
     private GameObject player;
+    public int playerLanternPiece = 0;
 
     private void Awake()
     {
@@ -149,5 +150,27 @@ public class PlayerManager : MonoBehaviour
     public bool PlayerOnObstacle()
     {
         return player.GetComponent<PlayerController>().state.onObstacle;
+    }
+
+    public void ResetPlayerLanternPiece(int left)
+    {
+        playerLanternPiece = left;
+        SetPlayerMaxLightEnergy(120 + left * 60);
+        UIManager.Instance.UpdatePlayerPiece(playerLanternPiece);
+        player.GetComponent<PlayerLightSystem>().ResetMaxRadius();
+    }
+
+    public void AddPlayerLanternPiece()
+    {
+        playerLanternPiece++;
+        AddPlayerMaxLightEnergy(60);
+        UIManager.Instance.UpdatePlayerPiece(playerLanternPiece);
+        player.GetComponent<PlayerLightSystem>().AddMaxRadius(0.5f);
+    }
+
+    public void PlayerReload()
+    {
+        PlayerController pc = player.GetComponent<PlayerController>();
+        pc.ReloadAfterKilled();
     }
 }

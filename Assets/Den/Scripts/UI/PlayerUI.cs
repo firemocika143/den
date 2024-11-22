@@ -11,11 +11,18 @@ public class PlayerUI : MonoBehaviour
     //private BarHandler lightEnergyBar;
 
     [SerializeField]
-    private TMP_Text amount;
+    private TMP_Text health_amount;
+    [SerializeField]
+    private TMP_Text piece_amount;
 
     public void UpdateHealth(int val)
     {
-        amount.text = val.ToString();
+        health_amount.text = val.ToString();
+    }
+
+    public void UpdatePiece(int val)
+    {
+        piece_amount.text = val.ToString();
     }
 
     //public void UpdateMaxHealth(int max)

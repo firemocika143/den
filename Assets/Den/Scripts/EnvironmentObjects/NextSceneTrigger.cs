@@ -10,10 +10,11 @@ public class NextSceneTrigger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.CompareTag("Player") && ! triggered)
+        if (col.CompareTag("Player") && !triggered)
         {
             //LoadSceneMode scene after a light
             DataPersistenceManager.instance.SaveGame();
+            GameManager.Instance.playerFirmPiece += PlayerManager.Instance.playerLanternPiece;
             //GameManager.Instance.CurrScene = nextSceneName;
             StartCoroutine(FadeOutCoroutine());
         }

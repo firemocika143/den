@@ -20,7 +20,7 @@ public class LanternItem: MonoBehaviour, IItem
     {
         UIManager.Instance.ShowHint(info.hintText);
         info.gameRecord?.Invoke();
-        PlayerManager.Instance.AddPlayerMaxLightEnergy(info.energy);
+        PlayerManager.Instance.AddPlayerLanternPiece();
         Destroy(gameObject);
     }
 }

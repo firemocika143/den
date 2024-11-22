@@ -105,6 +105,16 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void UpdatePlayerPiece(int val)
+    {
+        if (playerPanel == null || !playerPanel.activeSelf) return;
+
+        if (playerPanel.TryGetComponent<PlayerUI>(out var playerUI))
+        {
+            playerUI.UpdatePiece(val);
+        }
+    }
+
     //public void UpdatePlayerMaxHealth(int max)
     //{
     //    //if (playerPanel == null || !playerPanel.activeSelf) return;
@@ -213,22 +223,36 @@ public class UIManager : MonoBehaviour
     }
 
     // Fade
-    public void FadeIn()
+    public void FadeIn(Action after = null)
     {
         fadePanel.SetActive(true);
         fadePanel.GetComponent<Fade>().FadeIn();
+        if (after != null)
+        {
+            StartCoroutine(FadeWait(2f, after));
+        }
     }
 
-    public void FadeOut()
+    public void FadeOut(Action after = null)
     {
         fadePanel.SetActive(true);
         fadePanel.GetComponent<Fade>().FadeOut();
+        if (after != null)
+        {
+            StartCoroutine(FadeWait(2f, after));
+        }
     }
 
     public void FadeMaskOn()
     {
         fadePanel.SetActive(true);
         // TODO - set the opacity of the mask to 255 (full)
+    }
+
+    private IEnumerator FadeWait(float waitTime, Action after = null)
+    {
+        yield return new WaitForSeconds(waitTime);
+        after?.Invoke();
     }
 
     // Hint

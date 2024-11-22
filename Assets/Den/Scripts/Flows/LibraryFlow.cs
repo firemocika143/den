@@ -67,6 +67,11 @@ public class LibraryFlow : Flow
     {
         EnemyManager.Instance.RespawnAllEnemy();
         PlayerManager.Instance.PlayerRespawn();
+        PlayerManager.Instance.ResetPlayerLanternPiece(GameManager.Instance.playerFirmPiece);
+        GenerateAllLanternItems();
+        // TODO - UI fade in
+        UIManager.Instance.FadeIn();
+        PlayerManager.Instance.PlayerReload();
     }
 
     private void GenerateAllItems()
