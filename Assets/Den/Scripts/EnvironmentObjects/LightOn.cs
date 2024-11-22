@@ -10,8 +10,6 @@ public class LightOn : MonoBehaviour//LampDevice
     [SerializeField]
     private Light2D lanternLight;
     [SerializeField]
-    private GameObject lightAreaForEnemy;
-    [SerializeField]
     private GameObject lightArea;
 
     [SerializeField]
@@ -30,7 +28,6 @@ public class LightOn : MonoBehaviour//LampDevice
         lanternSprite = GetComponent<SpriteRenderer>();
 
         lanternLight.enabled = false;
-        lightAreaForEnemy.SetActive(false);
         lightArea.SetActive(false);
     }
 
@@ -105,7 +102,6 @@ public class LightOn : MonoBehaviour//LampDevice
     {
         lanternSprite.material = original;
         lanternLight.enabled = true;
-        lightAreaForEnemy.SetActive(true);
         lightArea.SetActive(true);
     }
 
@@ -113,7 +109,6 @@ public class LightOn : MonoBehaviour//LampDevice
     {
         lanternSprite.material = original;
         lanternLight.enabled = false;
-        lightAreaForEnemy.SetActive(false);
         lightArea.SetActive(false);
     }
 
@@ -121,17 +116,17 @@ public class LightOn : MonoBehaviour//LampDevice
     {
         return lanternLight.enabled;
     }
-    
 
-    public void OnTrigger()
-    {
-        triggered = true;
-    }
 
-    public void OffTrigger()
-    {
-        triggered = true;
-    }
+    //public void OnTrigger()
+    //{
+    //    triggered = true;
+    //}
+
+    //public void OffTrigger()
+    //{
+    //    triggered = true;
+    //}
 }
 
 //// Adjust layers based on light state
