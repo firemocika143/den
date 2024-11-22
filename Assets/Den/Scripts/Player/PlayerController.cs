@@ -188,7 +188,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
             }
             //state.isDamaged = false;
 
-            LanternManager.Instance.AllCastFail();
+            //LanternManager.Instance.AllCastFail();
         }
     }
 
@@ -219,7 +219,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
             }
             //state.isDamaged = false;
 
-            LanternManager.Instance.AllCastFail();
+            //LanternManager.Instance.AllCastFail();
         }
     }
 

@@ -19,27 +19,19 @@ public class LightOn : MonoBehaviour//LampDevice
     [SerializeField]
     private Material outline;
     [SerializeField]
-    private Animator animator;
+    private SpriteRenderer lanternSprite;
+    public Charging chargingDevice;
 
     private bool triggered = false;
-    public bool castRequest, castSuccess, castInProgress;
-    public float castTime;
-    private float castStartTime;
-    private PlayerController playerController;
-    private SpriteRenderer lanternSprite;
 
     // Use this for initialization
     void Start()
     {
-        playerController = FindObjectOfType<PlayerController>();//can this find the script for other objects in the same scene? 
         lanternSprite = GetComponent<SpriteRenderer>();
-        animator = GetComponent<Animator>();
-        animator.enabled = false;
 
         lanternLight.enabled = false;
         lightAreaForEnemy.SetActive(false);
         lightArea.SetActive(false);
-        castTime = 1.5f;
     }
 
     //public override void LampStartSetting()
@@ -99,34 +91,7 @@ public class LightOn : MonoBehaviour//LampDevice
 
     void Update()
     {
-        // When the player is closed enough, press e will change the state of light (on -> off; off -> on)
-        if (triggered & !lanternLight.enabled && Input.GetKeyDown(GameManager.Instance.keySettings.LightLantern) && playerController.state.lightEnergy > 0)
-        {
-            if (!castInProgress)
-            {
-                StartCoroutine(Cast());
-            }
-        }
-
-        if (castRequest)
-        {
-            InProgress();
-
-            if (Input.GetKeyUp(GameManager.Instance.keySettings.LightLantern) || playerController.state.isDamaged)
-            {
-                CastFail();
-            }
-            //else
-            //{
-            //    (I think the player should probably to be able to move or attack when lighting up the lantern, that may be more fun? though if this can prompt the player to attack or not... idk) (well, might need to fix the camera if We do this)
-            //    if (Input.anyKeyDown && !Input.GetKeyDown(GameManager.Instance.keySettings.LightLantern))
-            //    {
-            //        CastFail();
-            //    }
-            //}
-        }
-
-        if (triggered && !(lanternLight.enabled || playerController.state.lightEnergy <= 0))
+        if (triggered && !lanternLight.enabled)
         {
             lanternSprite.material = outline;
         }
@@ -134,61 +99,14 @@ public class LightOn : MonoBehaviour//LampDevice
         {
             lanternSprite.material = original;
         }
-        //Debug.Log(playerController.state.isDamaged);
     }
 
-    private IEnumerator Cast()
+    public void TurnOn()
     {
-        castInProgress = true;
-
-        RequestCast();
-        yield return new WaitUntil (() => castRequest == false);
-
-        if(castSuccess)
-        {
-            Debug.Log("Cast was successful");
-            lanternLight.enabled = true;
-            lightAreaForEnemy.SetActive(true);
-            lightArea.SetActive(true);
-        } else
-        {
-            animator.Play("Lantern 1 - Orange Light", 0, 0.0f);
-            animator.speed = 0;
-            Debug.Log("Cast was fail");
-        }
-
-        castInProgress = false;
-    }
-
-    private void RequestCast()
-    {
-        castRequest = true;
-        castSuccess = false;
-        castStartTime = Time.time;
-        animator.enabled = true;
-        animator.speed = 1;
-        animator.Play("Lantern 1 - Orange Light", 0, 0.0f);
-        Invoke(nameof(CastSuccess), castTime);
-    }
-
-    private void CastSuccess()
-    {
-        Debug.Log("Invoke");
-        castRequest = false;
-        castSuccess = true;
-    }
-
-    public void CastFail()
-    {
-        castRequest = false;
-        castSuccess = false;
-        CancelInvoke(nameof(CastSuccess));
-    }
-
-    private void InProgress()
-    {
-        float timePassed = Time.time - castStartTime;
-        Debug.Log(timePassed);
+        lanternSprite.material = original;
+        lanternLight.enabled = true;
+        lightAreaForEnemy.SetActive(true);
+        lightArea.SetActive(true);
     }
 
     public void TurnOff()
@@ -197,8 +115,6 @@ public class LightOn : MonoBehaviour//LampDevice
         lanternLight.enabled = false;
         lightAreaForEnemy.SetActive(false);
         lightArea.SetActive(false);
-
-        animator.enabled = false;
     }
 
     public bool LightIsOn()
