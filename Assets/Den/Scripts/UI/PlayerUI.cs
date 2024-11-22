@@ -16,7 +16,6 @@ public class PlayerUI : MonoBehaviour
     public void UpdateHealth(int val)
     {
         amount.text = val.ToString();
-        //healthBar.SetValue(val);
     }
 
     //public void UpdateMaxHealth(int max)

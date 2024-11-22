@@ -90,6 +90,8 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     private float unhittableTimer;
     private float loseLightTime = 1f;
 
+    private Device activatingDevice = null;
+
     private void Start()
     {
         state.isInLightSource = false;
@@ -118,6 +120,10 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     {
         UpdatePlayerLightEnergy();
         DecidePlayerAnimation();
+        if (activatingDevice != null)
+        {
+            CheckActivatingDeviceState();
+        }
 
         // Update player light
         lightSystem.UpdatePlayerLight(state.lightEnergy, state.maxLightEnergy);
@@ -171,9 +177,15 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     {
         if (state.isHittable)
         {
+            UIManager.Instance.GetDamage();
             //state.isDamaged = true;
             if (state.lightEnergy > 0) state.health -= damage;
             else state.health -= damage * damageMultiplier;
+
+            if (activatingDevice != null)
+            {
+                activatingDevice.InterruptCharging();
+            }
 
             state.health = state.health > 0 ? state.health : 0;
             UIManager.Instance.UpdatePlayerHealth(state.health);
@@ -186,9 +198,6 @@ public class PlayerController : MonoBehaviour, IDataPersistence
             {
                 StartCoroutine(PlayerUnhittable(1.5f));
             }
-            //state.isDamaged = false;
-
-            //LanternManager.Instance.AllCastFail();
         }
     }
 
@@ -196,10 +205,15 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     {
         if (state.isHittable)
         {
+            UIManager.Instance.GetDamage();
             //state.isDamaged = true;
             if (state.lightEnergy > 0) state.health -= damage;
             else state.health -= damage * damageMultiplier;
 
+            if (activatingDevice != null)
+            {
+                activatingDevice.InterruptCharging();
+            }
 
             if (state.health > 0)
             {
@@ -260,6 +274,13 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         state.dying = true;
         state.isHittable = false;
         StopPlayer();
+
+        if (activatingDevice != null)
+        {
+            activatingDevice.InterruptCharging();
+            LeaveDevice();
+        }
+
         //SoundManager.Instance.ResetBGM();
         StartCoroutine(playerAnimation.PlayerDieAnimation(() => 
         {
@@ -377,6 +398,27 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         VolumeManager.Instance.QuickFilmOut();
         GameManager.Instance.BackToNormalSpeed();
         state.onObstacle = true;
+    }
+
+    public void MatchDevice(Device device)
+    {
+        activatingDevice = device;
+    }
+
+    public void LeaveDevice()
+    {
+        activatingDevice = null;
+    }
+
+    private void CheckActivatingDeviceState()
+    {
+        if (activatingDevice == null)
+        {
+            Debug.LogError("How?");
+            return;
+        }
+
+        if (activatingDevice.charged) activatingDevice = null;
     }
 
     //Player skill

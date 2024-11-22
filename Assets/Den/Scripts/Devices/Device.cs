@@ -14,7 +14,7 @@ public abstract class Device : MonoBehaviour
     [SerializeField]
     private GameObject hintArea;
 
-    private bool charged = false;
+    public bool charged {get; private set;}
     private float radiusMultiplier = 4f;
     private float percentage = 0;
     private float maxRadius = 0;
@@ -42,6 +42,7 @@ public abstract class Device : MonoBehaviour
         if (col.CompareTag("Player"))
         {
             playerIsInArea = true;
+            col.gameObject.GetComponent<PlayerController>().MatchDevice(this);
         }
     }
 
@@ -50,6 +51,7 @@ public abstract class Device : MonoBehaviour
         if (col.CompareTag("Player"))
         {
             playerIsInArea = false;
+            col.gameObject.GetComponent<PlayerController>().LeaveDevice();
         }
     }
 
@@ -93,16 +95,15 @@ public abstract class Device : MonoBehaviour
         ActivatedAbility();
     }
 
-    private void InterruptCharging()
+    public void InterruptCharging()
     {
-        if (interrupting) return;
+        if (interrupting || !charging) return;
 
         charging = false;
         StopAllCoroutines();
         // Player Start Losing Light
 
         StartCoroutine(KilLight(interruptTime));
-        
         // maybe I need a player charging manager to be called if the player is damaged or have no light energy left
     }
 
@@ -162,6 +163,7 @@ public abstract class Device : MonoBehaviour
 
     public void StartReset()
     {
+        charged = false;
         timeLight.pointLightOuterRadius = 0;
         timeLight.pointLightInnerRadius = 0;
         timeLight.intensity = 0;

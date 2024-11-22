@@ -14,7 +14,7 @@ public class ItemManager : MonoBehaviour
     [SerializeField]
     private GameObject lanternItemPrefab;
 
-    void Start()
+    void Awake()
     {
         Instance = this;
     }

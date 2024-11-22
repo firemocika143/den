@@ -14,6 +14,9 @@ public class LibraryFlow : Flow
         [Header("Light Draw Settings")]
         public SkillItemInfo lightDrawInfo;
 
+        [Header("Page 5 Settings")]// little map
+        public PageItemInfo page5Info;
+
         [Header("Lantern Piece Settings")]
         public List<LanternItemInfo> lanternItems = new List<LanternItemInfo>();
     }
@@ -74,6 +77,13 @@ public class LibraryFlow : Flow
                 GameManager.Instance.progress.getLightDraw = true;
             });
         }
+        if (!GameManager.Instance.progress.getPage5)
+        {
+            ItemManager.Instance.GeneratePageItem(libraryItemSettings.page5Info, () =>
+            {
+                GameManager.Instance.progress.getPage5 = true;
+            });
+        }
         GenerateAllLanternItems();
     }
 
@@ -81,7 +91,7 @@ public class LibraryFlow : Flow
     {
         foreach (LanternItemInfo li in libraryItemSettings.lanternItems)
         {
-            if (!li.name.Contains("D"))
+            if (!li.name.Contains("D"))// what's this?
             {
                 ItemManager.Instance.GenerateLanternItem(li);
             }

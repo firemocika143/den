@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Playables;
+using System;
 
 public class UIManager : MonoBehaviour
 {
@@ -24,6 +25,8 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private GameObject fadePanel;
     [SerializeField]
+    private GameObject DamagePanel;
+    [SerializeField]
     private GameObject bookPanel;
     //[SerializeField] 
     //private PlayableDirector hintTimeLine;
@@ -39,6 +42,7 @@ public class UIManager : MonoBehaviour
         pauseMenuPanel.SetActive(false);
         fadePanel.SetActive(false);
         bookPanel.SetActive(false);
+        DamagePanel.SetActive(false);
     }
 
     private void Update()
@@ -236,5 +240,23 @@ public class UIManager : MonoBehaviour
         PlayableDirector hintTimeline = hintPanel.GetComponent<PlayableDirector>();
         hintTimeline.Play();
         Destroy(hintPanel, (float) hintTimeline.duration);
+    }
+
+    // Damage
+    public void GetDamage()
+    {
+        DamagePanel.SetActive(true);
+        DamagePanel.GetComponent<AnimationHandler>().ChangeAnimationState("Damaged");
+        StartCoroutine(ResetPanel(0.2f, () =>
+        {
+            DamagePanel.GetComponent<AnimationHandler>().ChangeAnimationState("");
+            DamagePanel.SetActive(false);
+        }));
+    }
+
+    private IEnumerator ResetPanel(float time, Action after)
+    {
+        yield return new WaitForSeconds(time);
+        after?.Invoke();
     }
 }

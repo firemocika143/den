@@ -39,13 +39,14 @@ public class SoundManager : MonoBehaviour
 
     private Coroutine switchCoroutine;
 
-    private void Start()
+    private void Awake()
     {
         Instance = this;
+    }
 
+    private void Start()
+    {
         BGMSource.volume = 1f;
-
-        BGMSource.Play();
     }
 
     private void OnDestroy()

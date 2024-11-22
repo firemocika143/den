@@ -71,9 +71,13 @@ public class GameManager : MonoBehaviour
     public class GameProgress
     {
         [Header("Street")]
-        public bool getPage2 = false;
-        public bool getPage4 = false;
         public bool getPage1 = false;
+        public bool getPage2 = false;
+        public bool getPage3 = false;
+        public bool getPage4 = false;
+        public bool getPage5 = false;
+        public bool getPage6 = false;
+        public bool getPage7 = false;
         public bool firstTimeLightOff = true;
         public bool finishLightOff = false;
         
