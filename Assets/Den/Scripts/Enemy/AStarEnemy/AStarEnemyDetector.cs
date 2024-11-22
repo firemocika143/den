@@ -9,6 +9,9 @@ public class AStarEnemyDetector : MonoBehaviour
     [HideInInspector]
     public bool chase = false;
 
+    [SerializeField]
+    private AudioSource cry;
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         // if I enter light soruce
@@ -20,6 +23,7 @@ public class AStarEnemyDetector : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             chase = true;
+            if (!cry.isPlaying) cry.Play();
         }
     }
 

@@ -65,8 +65,6 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     private float gainLightTime = 0.2f;
     [SerializeField]
     private float normalLoseLightTime = 1f;
-    [SerializeField]
-    private float onObstacleLoseLightTime = 0.5f;
 
     [Header("Handlers")]
     [SerializeField]
@@ -89,6 +87,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     private PlayerParticle playerParticle;
     private float unhittableTimer;
     private float loseLightTime = 1f;
+    private float loseLightTimeMultiplier = 1f;
 
     private Device activatingDevice = null;
 
@@ -159,7 +158,6 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         if (col.gameObject.CompareTag("Obstacle"))
         {
             HitOnObstacle();
-            loseLightTime = onObstacleLoseLightTime;
         }
     }
 
@@ -168,7 +166,6 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         if (col.gameObject.CompareTag("Obstacle"))
         {
             LeaveObstacle();
-            loseLightTime = normalLoseLightTime;
         }
     }
 
@@ -252,10 +249,10 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         UIManager.Instance.UpdatePlayerHealth(state.health);
     }
 
-    public void UseLightEnergy(int val)
-    {
-        state.lightEnergy = state.lightEnergy - val >= 0 ? state.lightEnergy - val : 0;
-    }
+    //public void UseLightEnergy(int val)
+    //{
+    //    state.lightEnergy = state.lightEnergy - val >= 0 ? state.lightEnergy - val : 0;
+    //}
 
     //Events functions
     public void StopPlayer()
@@ -348,7 +345,6 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     public void InstantKill()
     {
         PlayerManager.Instance.PlayerRespawn();//this is so weird, very weird
-        SoundManager.Instance.ResetBGM();
         StartCoroutine(PlayerUnhittable(1.5f));
     }
 
@@ -389,6 +385,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         // TODO - slowdown player
         GameManager.Instance.SlowDown(0.6f);
         state.onObstacle = true;
+        loseLightTimeMultiplier = 0.5f;
     }
 
     private void LeaveObstacle()
@@ -398,6 +395,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         VolumeManager.Instance.QuickFilmOut();
         GameManager.Instance.BackToNormalSpeed();
         state.onObstacle = true;
+        loseLightTimeMultiplier = 1f;
     }
 
     public void MatchDevice(Device device)
@@ -419,6 +417,18 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         }
 
         if (activatingDevice.charged) activatingDevice = null;
+    }
+
+    public void ChangePlayerUseLightRate(float newInterval = 0.1f)
+    {
+        // be used for player attack and devices and obstacle
+        loseLightTime = newInterval;
+    }
+
+    public void ChangeBackPlayerUseLightRate()
+    {
+        // be used for player attack and devices and obstacle
+        loseLightTime = normalLoseLightTime;
     }
 
     //Player skill
@@ -501,7 +511,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
             playerSFX.StopGetSFX();
             playerParticle.StopRecoverParticle();
 
-            if (Time.time - loseLightTimer >= loseLightTime && state.lightEnergy > 0)
+            if (Time.time - loseLightTimer >= loseLightTime * loseLightTimeMultiplier && state.lightEnergy > 0)
             {
                 state.lightEnergy--;
                 loseLightTimer = Time.time;
@@ -532,6 +542,6 @@ public class PlayerController : MonoBehaviour, IDataPersistence
 
     public void SaveData(ref GameData gameData)
     {
-
+        
     }
 }

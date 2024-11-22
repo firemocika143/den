@@ -108,6 +108,7 @@ public class PlayerManager : MonoBehaviour
 
     public void SetPlayerMaxLightEnergy(int val)
     {
+        //this will be called in flows, actually a temporary solution
         if (player == null)
         {
             Debug.LogError("Try to change player energy while player is not on the field");
@@ -115,6 +116,7 @@ public class PlayerManager : MonoBehaviour
         }
 
         player.GetComponent<PlayerController>().state.maxLightEnergy = val;
+        player.GetComponent<PlayerController>().state.lightEnergy = val;
     }
 
     public void AddPlayerMaxLightEnergy(int val)

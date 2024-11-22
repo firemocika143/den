@@ -5,15 +5,13 @@ using static PlayerSkill;
 
 public class LightDraw
 {
-    public float minDistanceToStart = 0.1f;
-    public Vector3 previousPosition;
+    private float minDistanceToStart = 0.1f;
+    private Vector3 previousPosition;
 
     public LineRenderer lineRenderer;
     public bool isDrawing = false;
 
     public float costTime = 0.05f;
-    public int costPerTime = 1;
-    public float costTimer;
 
     // LightDraw(showing track of light here) -> if I don't put these in to the class, we wouldn't need to check if the player still haven't get lightDraw in PlayerAttack
     // or, maybe we should detect there to avoid useless calculations
@@ -23,7 +21,6 @@ public class LightDraw
         lineRenderer.SetPosition(0, startPos);
         previousPosition = startPos;
         isDrawing = true;
-        costTimer = Time.time;
     }
 
     public void LightDrawUpdate()

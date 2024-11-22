@@ -5,6 +5,10 @@ using UnityEngine;
 
 public class PlayerSkill : MonoBehaviour
 {
+    [Header("Drawing Settings")]
+    [SerializeField]
+    private float costTime;
+
     [HideInInspector]
     public LightDraw lightDraw = null;
 
@@ -36,6 +40,7 @@ public class PlayerSkill : MonoBehaviour
         if (lightDraw != null) return;
 
         lightDraw = new LightDraw();
+        lightDraw.costTime = costTime;
         lightDraw.lineRenderer = GetComponent<LineRenderer>();
         lightDraw.lineRenderer.enabled = true;
     }

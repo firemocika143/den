@@ -101,6 +101,7 @@ public class PlayerAttack : MonoBehaviour
             skill.lightDraw.LightDrawStart(attackPoint.position);
             playerController.state.attacking = true;
             playerController.state.attackEnd = false;
+            playerController.ChangePlayerUseLightRate(skill.lightDraw.costTime);
             //TODO - cost light energy with time
         }
     }
@@ -120,12 +121,6 @@ public class PlayerAttack : MonoBehaviour
             drawLight.transform.position = new Vector3(attackPoint.position.x, attackPoint.position.y, 0);
 
             Attack();
-
-            if (Time.time - skill.lightDraw.costTimer > skill.lightDraw.costTime)// this should be changed into cost by distance
-            {
-                playerController.UseLightEnergy(skill.lightDraw.costPerTime);
-                skill.lightDraw.costTimer = Time.time;
-            }
         }
     }
 
@@ -144,6 +139,7 @@ public class PlayerAttack : MonoBehaviour
         attackPoint.position = transform.position;
         drawLight.SetActive(false);
         skill.lightDraw.LightDrawEnd();
+        playerController.ChangeBackPlayerUseLightRate();
     }
 
     private void OnDrawGizmosSelected()

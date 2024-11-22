@@ -99,6 +99,8 @@ public class GameManager : MonoBehaviour
 
     private float currTimeScale = 1f;
 
+    public int killTimes = 0;
+
     /// <summary>
     /// This will be called in flows, because DontDestroyOnLoadObjects seems not run Start again in new scenes
     /// </summary>

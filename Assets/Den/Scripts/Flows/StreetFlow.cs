@@ -10,14 +10,11 @@ public class StreetFlow : Flow //, IDataPersistence
     [Serializable]
     public class StreetItemSettings
     {
-        [Header("Page 4 Settings")]
-        public PageItemInfo page4Info;
-
-        [Header("Page 2 Settings")]
-        public PageItemInfo page2Info;
-
         [Header("Page 1 Settings")]
         public PageItemInfo page1Info;
+
+        [Header("Page 4 Settings")]
+        public PageItemInfo page4Info;
 
         [Header("Lantern Piece Settings")]
         public List<LanternItemInfo> lanternItems = new List<LanternItemInfo>();
@@ -26,13 +23,15 @@ public class StreetFlow : Flow //, IDataPersistence
     // should I make an static instance for this script?
     [SerializeField]
     private StreetItemSettings streetItemSettings;
+
     [SerializeField]
-    private GameObject libraryBlocker;
-    [SerializeField]
-    private GameObject firstBlocker;
+    private AudioSource killSFXPlayer;
 
     public bool lightOffEnd = false;
     public bool isInLightOffEvent = false;
+
+    private float killTimer = 0;
+    private float killTime = 2f;
 
     public void Awake()
     {
@@ -56,19 +55,12 @@ public class StreetFlow : Flow //, IDataPersistence
             //PlayerManager.Instance.InstantKillPlayer();
         }
 
-        if (Input.GetKeyDown(KeyCode.K))
+        if (Input.GetKeyDown(KeyCode.K) && Time.time - killTimer > killTime)
         {
-            // TODO - play a sfx
+            // TODO - play a sfx of cancel
+            killTimer = Time.time;
+            killSFXPlayer.Play();
             PlayerManager.Instance.InstantKillPlayer();
-        }
-
-        if (firstBlocker.activeSelf && PlayerManager.Instance.PlayerLightEnergy() >= 10)
-        {
-            firstBlocker.SetActive(false);
-        }
-        if (libraryBlocker.activeSelf && PlayerManager.Instance.PlayerLightEnergy() >= 15)
-        {
-            libraryBlocker.SetActive(false);
         }
     }
 
@@ -79,7 +71,7 @@ public class StreetFlow : Flow //, IDataPersistence
         UIManager.Instance.FadeMaskOn();// this is like [loading...]
         // TODO - Loading
         // TODO - ResetPlayerState -> that might be right, respawning player in player manager is a little bit of weird, after all, I should set the player respawning point inn here probably
-        PlayerManager.Instance.SetPlayerMaxLightEnergy(180);
+        PlayerManager.Instance.SetPlayerMaxLightEnergy(120);
         // TODO - Generate all items
         GenerateAllItems();
 
@@ -96,13 +88,6 @@ public class StreetFlow : Flow //, IDataPersistence
 
     private void GenerateAllItems()
     {
-        if (!GameManager.Instance.progress.getPage2)
-        {
-            ItemManager.Instance.GeneratePageItem(streetItemSettings.page2Info, () =>
-            {
-                GameManager.Instance.progress.getPage2 = true;
-            });
-        }
         if (!GameManager.Instance.progress.getPage4)
         {
             ItemManager.Instance.GeneratePageItem(streetItemSettings.page4Info, () =>

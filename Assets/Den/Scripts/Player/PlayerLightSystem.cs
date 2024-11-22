@@ -15,7 +15,7 @@ public class PlayerLightSystem : MonoBehaviour
     [SerializeField]
     private float onObstacleLightIntensity;
 
-    private float minRadius = 1;
+    private float minRadius = 1.5f;
     private float normalUpdateInterval = 0.05f;
     private float fastUpdateInterval = 0.01f;
     private float percentage = 1;

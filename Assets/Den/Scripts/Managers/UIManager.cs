@@ -42,7 +42,7 @@ public class UIManager : MonoBehaviour
         pauseMenuPanel.SetActive(false);
         fadePanel.SetActive(false);
         bookPanel.SetActive(false);
-        DamagePanel.SetActive(false);
+        if (DamagePanel != null) DamagePanel.SetActive(false);
     }
 
     private void Update()

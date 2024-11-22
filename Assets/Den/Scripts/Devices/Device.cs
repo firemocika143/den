@@ -15,7 +15,7 @@ public abstract class Device : MonoBehaviour
     private GameObject hintArea;
 
     public bool charged {get; private set;}
-    private float radiusMultiplier = 4f;
+    private float radiusMultiplier = 2f;
     private float percentage = 0;
     private float maxRadius = 0;
     private float extendTime = 0.5f;
@@ -25,6 +25,7 @@ public abstract class Device : MonoBehaviour
     private bool interrupting = false;
     private float interruptTime = 1f;
     private bool charging = false;
+    private PlayerController pc = null;
 
     [HideInInspector]
     public bool playerIsInArea = false;
@@ -42,7 +43,8 @@ public abstract class Device : MonoBehaviour
         if (col.CompareTag("Player"))
         {
             playerIsInArea = true;
-            col.gameObject.GetComponent<PlayerController>().MatchDevice(this);
+            pc = col.gameObject.GetComponent<PlayerController>();
+            pc.MatchDevice(this);
         }
     }
 
@@ -50,8 +52,13 @@ public abstract class Device : MonoBehaviour
     {
         if (col.CompareTag("Player"))
         {
+            if (charging)
+            {
+                InterruptCharging();
+            }
             playerIsInArea = false;
             col.gameObject.GetComponent<PlayerController>().LeaveDevice();
+            pc = null;
         }
     }
 
@@ -72,6 +79,7 @@ public abstract class Device : MonoBehaviour
         StopAllCoroutines();
 
         charging = true;
+        pc.ChangePlayerUseLightRate(0.1f);
         ResetDevice();
         StartCoroutine(AdjustLightRadius(extendTime, 1, null));
         // Start To shrink the radius
@@ -88,6 +96,7 @@ public abstract class Device : MonoBehaviour
     private void Success()
     {
         charging = false;
+        pc.ChangeBackPlayerUseLightRate();
         charged = true;
         // play success animation
         if (hintArea != null) hintArea.SetActive(false);
@@ -100,6 +109,7 @@ public abstract class Device : MonoBehaviour
         if (interrupting || !charging) return;
 
         charging = false;
+        pc.ChangeBackPlayerUseLightRate();
         StopAllCoroutines();
         // Player Start Losing Light
 

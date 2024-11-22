@@ -42,6 +42,7 @@ public class LibraryFlow : Flow
         if (Input.GetKeyDown(KeyCode.K))
         {
             PlayerManager.Instance.InstantKillPlayer();
+            GameManager.Instance.killTimes++;
         }
     }
 
