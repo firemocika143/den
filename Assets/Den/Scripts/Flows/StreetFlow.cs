@@ -71,7 +71,7 @@ public class StreetFlow : Flow //, IDataPersistence
         UIManager.Instance.FadeMaskOn();// this is like [loading...]
         // TODO - Loading
         // TODO - ResetPlayerState -> that might be right, respawning player in player manager is a little bit of weird, after all, I should set the player respawning point inn here probably
-        PlayerManager.Instance.SetPlayerMaxLightEnergy(120);
+        PlayerManager.Instance.ResetPlayerLanternPiece();
         // TODO - Generate all items
         GenerateAllItems();
 

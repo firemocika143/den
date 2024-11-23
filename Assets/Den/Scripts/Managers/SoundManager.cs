@@ -21,6 +21,7 @@ public class SoundManager : MonoBehaviour
         public AudioClip DANGER;
         public AudioClip STREETLIGHTSOURCE;
         public AudioClip LIBRARYLIGHTSOURCE;
+        public AudioClip MEMORY;
     }
 
     [System.Serializable]
@@ -30,7 +31,8 @@ public class SoundManager : MonoBehaviour
         DANGER,
         STREETLIGHTSOURCE,
         LIBRARYLIGHTSOURCE,
-        NULL
+        NULL,
+        MEMORY,
     }
 
     public Clips clips;
@@ -142,6 +144,8 @@ public class SoundManager : MonoBehaviour
                 return clips.STREETLIGHTSOURCE;
             case ClipEnum.DANGER:
                 return clips.DANGER;
+            case ClipEnum.MEMORY:
+                return clips.MEMORY;
             case ClipEnum.NULL:
                 return null;
         }

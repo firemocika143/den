@@ -28,10 +28,6 @@ public class UIManager : MonoBehaviour
     private GameObject DamagePanel;
     [SerializeField]
     private GameObject bookPanel;
-    //[SerializeField] 
-    //private PlayableDirector hintTimeLine;
-    //[SerializeField]
-    //private TMP_Text hintText;
     [SerializeField]
     private GameObject hintPanelPrefab;
 
@@ -40,7 +36,6 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         pauseMenuPanel.SetActive(false);
-        fadePanel.SetActive(false);
         bookPanel.SetActive(false);
         if (DamagePanel != null) DamagePanel.SetActive(false);
     }
@@ -246,6 +241,8 @@ public class UIManager : MonoBehaviour
     public void FadeMaskOn()
     {
         fadePanel.SetActive(true);
+        Image image = fadePanel.GetComponent<Image>();
+        image.color = new Color(image.color.r, image.color.g, image.color.b, 1f);
         // TODO - set the opacity of the mask to 255 (full)
     }
 

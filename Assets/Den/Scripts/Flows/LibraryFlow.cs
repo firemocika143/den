@@ -53,7 +53,7 @@ public class LibraryFlow : Flow
         UIManager.Instance.FadeMaskOn();// this is like [loading...]
         // TODO - Loading
         // TODO - RespawnPlayer -> that might be right, respawning player in player manager is a little bit of weird, after all, I should set the player respawning point inn here probably
-        PlayerManager.Instance.SetPlayerMaxLightEnergy(180);
+        PlayerManager.Instance.ResetPlayerLanternPiece();
         // TODO - Generate all items
         GenerateAllItems();
 
@@ -67,7 +67,7 @@ public class LibraryFlow : Flow
     {
         EnemyManager.Instance.RespawnAllEnemy();
         PlayerManager.Instance.PlayerRespawn();
-        PlayerManager.Instance.ResetPlayerLanternPiece(GameManager.Instance.playerFirmPiece);
+        PlayerManager.Instance.ResetPlayerLanternPiece();
         GenerateAllLanternItems();
         // TODO - UI fade in
         UIManager.Instance.FadeIn();

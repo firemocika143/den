@@ -107,7 +107,7 @@ public class PlayerManager : MonoBehaviour
         return !(player.GetComponent<PlayerSkill>().lightDraw == null);
     }
 
-    public void SetPlayerMaxLightEnergy(int val)
+    private void SetPlayerMaxLightEnergy(int val)
     {
         //this will be called in flows, actually a temporary solution
         if (player == null)
@@ -152,10 +152,10 @@ public class PlayerManager : MonoBehaviour
         return player.GetComponent<PlayerController>().state.onObstacle;
     }
 
-    public void ResetPlayerLanternPiece(int left)
+    public void ResetPlayerLanternPiece()
     {
-        playerLanternPiece = left;
-        SetPlayerMaxLightEnergy(120 + left * 60);
+        playerLanternPiece = GameManager.Instance.playerFirmPiece;
+        SetPlayerMaxLightEnergy(120 + GameManager.Instance.playerFirmPiece * 60);
         UIManager.Instance.UpdatePlayerPiece(playerLanternPiece);
         player.GetComponent<PlayerLightSystem>().ResetMaxRadius();
     }
