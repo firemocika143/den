@@ -201,7 +201,6 @@ public class UIManager : MonoBehaviour
 
     public void FlipToPreviousPage()
     {
-        Debug.Log("Try to flip to previous page");
         Debug.Log(GameManager.Instance.currentPage);
         Debug.Log(pagePanels.Count);
         //but I think this will be better to be put in the other scripts like BookUI or something that is on the BookPanel, and maybe we should let the book panel itself to record the page panels
@@ -215,7 +214,6 @@ public class UIManager : MonoBehaviour
 
     public void FlipToNextPage()
     {
-        Debug.Log("Try to flip to next page");
         Debug.Log(GameManager.Instance.currentPage);
         Debug.Log(pagePanels.Count);
         if (GameManager.Instance.currentPage < pagePanels.Count - 1)
