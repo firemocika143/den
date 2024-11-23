@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,11 +25,10 @@ public class BulletEnemy : Enemy
     [Header("Detector")]
     public BulletEnemyDetector BEDetector;
 
-    [Header("Invincible Time")]
-    public float invincibleTime = 1.0f;
-    private bool invincible;
-
     private Vector2 orig_pos;
+
+    [SerializeField]
+    private FlashHandler flashHandler;
 
     // Start is called before the first frame update
     void Start()
@@ -60,15 +60,6 @@ public class BulletEnemy : Enemy
         }
     }
 
-    private IEnumerator InvincibleTimeCount()
-    {
-        invincible = true;
-
-        yield return new WaitForSeconds(invincibleTime);
-
-        invincible = false;
-    }
-
     private IEnumerator CooldownCount()
     {
         iscooldown = true;
@@ -86,10 +77,12 @@ public class BulletEnemy : Enemy
 
             if (health <= 0)
             {
-                Kill();
+                invincible = true;
+                HitFlash(() => { Kill(); });
             }
             else
             {
+                HitFlash();
                 StartCoroutine(InvincibleTimeCount());
             }
         }
@@ -106,5 +99,10 @@ public class BulletEnemy : Enemy
     {
         StopAllCoroutines();
         gameObject.SetActive(false);
+    }
+
+    protected override void HitFlash(Action after = null)
+    {
+        flashHandler.Flash(after);
     }
 }

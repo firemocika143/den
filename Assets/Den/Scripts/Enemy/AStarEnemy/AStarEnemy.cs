@@ -2,6 +2,7 @@ using Pathfinding;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class AStarEnemy : Enemy
 {
@@ -12,13 +13,13 @@ public class AStarEnemy : Enemy
     [Header("Health")]
     public int maxHealth = 10;
     private int health;
-
-    public float invincibleTime = 1.0f;
-    private bool invincible;
-
+   
     private AIPath aipath;
 
     private Vector2 orig_pos;
+
+    [SerializeField]
+    private FlashHandler flashHandler;
 
     // Start is called before the first frame update
     void Start()
@@ -42,15 +43,6 @@ public class AStarEnemy : Enemy
         }
     }
 
-    private IEnumerator InvincibleTimeCount()
-    {
-        invincible = true;
-
-        yield return new WaitForSeconds(invincibleTime);
-
-        invincible = false;
-    }
-
     public override void Damage(int d)
     {
         if (!invincible)
@@ -59,10 +51,12 @@ public class AStarEnemy : Enemy
 
             if (health <= 0)
             {
-                Kill();
+                invincible = true;
+                HitFlash(() => { Kill(); });
             }
             else
             {
+                HitFlash();
                 StartCoroutine(InvincibleTimeCount());
             }
         }
@@ -82,22 +76,24 @@ public class AStarEnemy : Enemy
         gameObject.SetActive(false);
     }
 
-    //private void HitBack(Vector2 from)
-    //{
-    //    float dir = from.x - player.transform.position.x;
+    protected override void HitFlash(Action after = null)
+    {
+        flashHandler.Flash(after);
+    }
 
-    //    if (dir <= 0)
-    //    {
-    //        // TODO - go right up
-    //        Vector2 force = new Vector2(hitBackHorizontalForce, hitBackVerticalForce);
-    //        StartCoroutine(PerformHitBack(force));
-    //    }
-    //    else if (dir > 0)
-    //    {
-    //        // TODO - go left up
-    //        Vector2 force = new Vector2(-hitBackHorizontalForce, hitBackVerticalForce);
-    //        StartCoroutine(PerformHitBack(force));
-    //    }
+    //float dir = from.x - player.transform.position.x;
+
+    //if (dir <= 0)
+    //{
+    //    // TODO - go right up
+    //    Vector2 force = new Vector2(hitBackHorizontalForce, hitBackVerticalForce);
+    //    StartCoroutine(PerformHitBack(force));
+    //}
+    //else if (dir > 0)
+    //{
+    //    // TODO - go left up
+    //    Vector2 force = new Vector2(-hitBackHorizontalForce, hitBackVerticalForce);
+    //    StartCoroutine(PerformHitBack(force));
     //}
 
     //private IEnumerator PerformHitBack(Vector2 force)

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class BossDarkKnight : Enemy
 {
@@ -14,10 +15,6 @@ public class BossDarkKnight : Enemy
 
     [Header("Attack")]
     public int attack = 1;
-
-    [Header("Invincible Time")]
-    public float invincibleTime = 1.0f;
-    private bool invincible = false;
 
     //private float cooldownTime = 1.0f;
     private bool cooldown = false;
@@ -68,6 +65,9 @@ public class BossDarkKnight : Enemy
     [HideInInspector]
     public bool playerIsInBossDarkKnightArea = false;
 
+    [SerializeField]
+    private FlashHandler flashHandler;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -109,15 +109,6 @@ public class BossDarkKnight : Enemy
                 StartCoroutine(ShowNormalAttackDetector());
             }
         }
-    }
-
-    private IEnumerator InvincibleTimeCount()
-    {
-        invincible = true;
-
-        yield return new WaitForSeconds(invincibleTime);
-
-        invincible = false;
     }
 
     private IEnumerator ShowNormalAttackDetector()
@@ -283,10 +274,14 @@ public class BossDarkKnight : Enemy
 
             if (health <= 0)
             {
-                Kill();
+                invincible = true;
+                HitFlash(() => { Kill(); });
             }
-
-            StartCoroutine(InvincibleTimeCount());
+            else
+            {
+                HitFlash();
+                StartCoroutine(InvincibleTimeCount());
+            }
         }
 
     }
@@ -309,5 +304,10 @@ public class BossDarkKnight : Enemy
         //Destroy(gameObject);
         GameManager.Instance.progress.defeatDarkKnight = true;
         gameObject.SetActive(false);
+    }
+
+    protected override void HitFlash(Action after = null)
+    {
+        flashHandler.Flash(after);
     }
 }

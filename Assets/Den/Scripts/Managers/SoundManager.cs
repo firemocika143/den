@@ -65,6 +65,7 @@ public class SoundManager : MonoBehaviour
 
     public void ChangeClip(AudioClip ac, float switchTime = 3f, bool loop = true)
     {
+        if (PlayerManager.Instance.PlayerIsInDanger()) return;
         StopAllCoroutines();
 
         if (BGMSource != null)

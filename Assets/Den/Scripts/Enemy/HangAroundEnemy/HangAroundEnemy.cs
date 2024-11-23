@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class HangAroundEnemy : Enemy
 {
@@ -14,10 +15,10 @@ public class HangAroundEnemy : Enemy
 
     [Header("Attack")]
     public int attack = 1;
-
-    public float invincibleTime = 1.0f;
-    private bool invincible;
     private Vector2 orig_pos;
+
+    [SerializeField]
+    private FlashHandler flashHandler;
 
     // Start is called before the first frame update
     void Start()
@@ -54,15 +55,6 @@ public class HangAroundEnemy : Enemy
         }
     }
 
-    private IEnumerator InvincibleTimeCount()
-    {
-        invincible = true;
-
-        yield return new WaitForSeconds(invincibleTime);
-
-        invincible = false;
-    }
-
     public override void Damage(int d)
     {
         if (!invincible)
@@ -71,10 +63,12 @@ public class HangAroundEnemy : Enemy
 
             if (health <= 0)
             {
-                Kill();
+                invincible = true;
+                HitFlash(() => { Kill(); });
             }
             else
             {
+                HitFlash();
                 StartCoroutine(InvincibleTimeCount());
             }
         }
@@ -93,5 +87,10 @@ public class HangAroundEnemy : Enemy
         StopAllCoroutines();
         //Destroy(gameObject);
         gameObject.SetActive(false);
+    }
+
+    protected override void HitFlash(Action after = null)
+    {
+        flashHandler.Flash(after);
     }
 }

@@ -173,4 +173,14 @@ public class PlayerManager : MonoBehaviour
         PlayerController pc = player.GetComponent<PlayerController>();
         pc.ReloadAfterKilled();
     }
+
+    public bool PlayerIsInDanger()
+    {
+        return player.GetComponent<PlayerController>().state.inDanger;
+    }
+
+    public void PlayerAllRecover()
+    {
+        player.GetComponent<PlayerController>().AllRecover();
+    }
 }

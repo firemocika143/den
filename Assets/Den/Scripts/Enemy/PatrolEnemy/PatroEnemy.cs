@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class PatroEnemy : Enemy
 {
@@ -15,11 +16,10 @@ public class PatroEnemy : Enemy
     [Header("Attack")]
     public int attack = 1;
 
-    [Header("Invincible Time")]
-    public float invincibleTime = 1.0f;
-    private bool invincible;
-
     private Vector2 orig_pos;
+
+    [SerializeField]
+    private FlashHandler flashHandler;
 
     // Start is called before the first frame update
     void Start()
@@ -48,15 +48,6 @@ public class PatroEnemy : Enemy
         }
     }
 
-    private IEnumerator InvincibleTimeCount()
-    {
-        invincible = true;
-
-        yield return new WaitForSeconds(invincibleTime);
-
-        invincible = false;
-    }
-
     //Damage Function for Player to Call
     public override void Damage(int d)
     {
@@ -66,10 +57,12 @@ public class PatroEnemy : Enemy
 
             if (health <= 0)
             {
-                Kill();
+                invincible = true;
+                HitFlash(() => { Kill(); });
             }
             else
             {
+                HitFlash();
                 StartCoroutine(InvincibleTimeCount());
             }
         }
@@ -86,6 +79,11 @@ public class PatroEnemy : Enemy
     {
         StopAllCoroutines();
         gameObject.SetActive(false);
+    }
+
+    protected override void HitFlash(Action after = null)
+    {
+        flashHandler.Flash(after);
     }
 }
 

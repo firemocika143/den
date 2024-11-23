@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 
 using UnityEngine;
@@ -48,7 +49,7 @@ public class FlashHandler : MonoBehaviour
 
     #endregion
 
-    public void Flash()
+    public void Flash(Action after = null)
     {
         // If the flashRoutine is not null, then it is currently running.
         if (flashRoutine != null)
@@ -59,10 +60,10 @@ public class FlashHandler : MonoBehaviour
         }
 
         // Start the Coroutine, and store the reference for it.
-        flashRoutine = StartCoroutine(FlashRoutine());
+        flashRoutine = StartCoroutine(FlashRoutine(after));
     }
 
-    private IEnumerator FlashRoutine()
+    private IEnumerator FlashRoutine(Action after = null)
     {
         // Swap to the flashMaterial.
         spriteRenderer.material = flashMaterial;
@@ -75,6 +76,8 @@ public class FlashHandler : MonoBehaviour
 
         // Set the routine to null, signaling that it's finished.
         flashRoutine = null;
+
+        after?.Invoke();
     }
 
     #endregion

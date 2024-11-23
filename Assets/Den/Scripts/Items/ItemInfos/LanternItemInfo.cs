@@ -6,5 +6,5 @@ using System;
 [Serializable]
 public class LanternItemInfo : ItemInfo
 {
-    public string name;
+    public string name = "Lantern Piece";
 }

@@ -41,8 +41,10 @@ public class LibraryFlow : Flow
     {
         if (Input.GetKeyDown(KeyCode.K))
         {
+            //this should be a normal kill but with dark fade in and out, and a number fade in at the same time displaying how many times the player had killed themselves
             PlayerManager.Instance.InstantKillPlayer();
             GameManager.Instance.killTimes++;
+            ReloadFlow();
         }
     }
 
@@ -87,6 +89,7 @@ public class LibraryFlow : Flow
         {
             ItemManager.Instance.GeneratePageItem(libraryItemSettings.page5Info, () =>
             {
+                Debug.Log("Record page 5");
                 GameManager.Instance.progress.getPage5 = true;
             });
         }

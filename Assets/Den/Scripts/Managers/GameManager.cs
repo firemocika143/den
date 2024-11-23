@@ -155,7 +155,9 @@ public class GameManager : MonoBehaviour
     public void ReloadGameProgress()
     {
         // book
+        Debug.Log("Reload Game Progress");
         if (UIManager.Instance != null) UIManager.Instance.ReloadBook(book);
+        Debug.Log(book.pages.Count);
         //player respawn point
         //player skill
     }
