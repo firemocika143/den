@@ -17,8 +17,6 @@ public class UIManager : MonoBehaviour
     }
 
     [SerializeField]
-    private GameObject Canvas;
-    [SerializeField]
     private GameObject pauseMenuPanel;
     [SerializeField]
     private GameObject playerPanel;
@@ -29,7 +27,11 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private GameObject bookPanel;
     [SerializeField]
+    private GameObject hintPanelParent;
+    [SerializeField]
     private GameObject hintPanelPrefab;
+    [SerializeField]
+    private GameObject playerKillTimePanel;
 
     private List<GameObject> pagePanels = new List<GameObject>();
 
@@ -262,9 +264,13 @@ public class UIManager : MonoBehaviour
     // Hint
     public void ShowHint(string text)
     {
-        GameObject hintPanel = Instantiate(hintPanelPrefab, Canvas.transform);
+        GameObject hintPanel = Instantiate(hintPanelPrefab, hintPanelParent.transform);
         TMP_Text t = hintPanel.transform.GetChild(0).GetComponent<TMP_Text>();
         t.text = text;
+
+        AudioSource hintSound = hintPanel.GetComponent<AudioSource>();
+        hintSound.Play();  
+
         PlayableDirector hintTimeline = hintPanel.GetComponent<PlayableDirector>();
         hintTimeline.Play();
         Destroy(hintPanel, (float) hintTimeline.duration);
@@ -286,5 +292,13 @@ public class UIManager : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
         after?.Invoke();
+    }
+
+    public void UpdatePlayerKillTime()
+    {
+        TMP_Text t = playerKillTimePanel.transform.GetChild(0).GetComponent<TMP_Text>();
+        t.text = GameManager.Instance.killTimes.ToString();
+        if (GameManager.Instance.killTimes == 0) t.color = Color.yellow;
+        else t.color = Color.red;
     }
 }

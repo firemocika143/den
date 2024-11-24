@@ -282,20 +282,28 @@ public class PlayerController : MonoBehaviour, IDataPersistence
 
         //SoundManager.Instance.ResetBGM();
         returnPlayer.Play();
-        UIManager.Instance.FadeOut();
+        
         StartCoroutine(playerAnimation.PlayerDieAnimation(() => 
         {
-            // well, this is readible and free to customize in every scene, but quite inefficient and is actually weird for calling variable in this script out in the other script
-            if (GameManager.Instance.flow == null)
+            UIManager.Instance.FadeOut(() => 
             {
-                Debug.LogError("no flow in this scene");
-            }
-            else GameManager.Instance.flow.ReloadFlow();
-            // play sfx
+                // well, this is readible and free to customize in every scene, but quite inefficient and is actually weird for calling variable in this script out in the other script
+                if (GameManager.Instance.flow == null)
+                {
+                    Debug.LogError("no flow in this scene");
+                }
+                else GameManager.Instance.flow.ReloadFlow();
+                // play sfx
+            });
         }));
 
         // Actually, most things went wrong if I really destroy the player, maybe this is not a good solution
         //Destroy(gameObject);
+    }
+
+    public void KillPlayer()
+    {
+        PlayerKilled();
     }
 
     public void GetIntoLightSource()

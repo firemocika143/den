@@ -26,6 +26,9 @@ public class LibraryFlow : Flow
     [SerializeField]
     public LibraryItemSettings libraryItemSettings;
 
+    private float killTimer;
+    private float killTime = 7f;
+
     public void Awake()
     {
         flowName = "Library";
@@ -39,12 +42,13 @@ public class LibraryFlow : Flow
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.K))
+        if (Input.GetKeyDown(KeyCode.K) && Time.time - killTimer > killTime)
         {
             //this should be a normal kill but with dark fade in and out, and a number fade in at the same time displaying how many times the player had killed themselves
-            PlayerManager.Instance.InstantKillPlayer();
+            PlayerManager.Instance.KillPlayer();
             GameManager.Instance.killTimes++;
-            ReloadFlow();
+            UIManager.Instance.UpdatePlayerKillTime();
+            killTimer = Time.time;
         }
     }
 

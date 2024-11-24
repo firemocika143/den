@@ -97,6 +97,11 @@ public class PlayerManager : MonoBehaviour
         player.GetComponent<PlayerController>().InstantKill();
     }
 
+    public void KillPlayer()
+    {
+        player.GetComponent<PlayerController>().KillPlayer();
+    }
+
     public bool PlayerIsInLightSource()
     {
         return player.GetComponent<PlayerController>().state.isInLightSource;
