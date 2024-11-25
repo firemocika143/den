@@ -19,9 +19,14 @@ public class PlayerManager : MonoBehaviour
 
     private void Awake()
     {
-        PlayerRespawn();
-
         Instance = this;
+
+        PlayerRespawn();
+    }
+
+    private void Start()
+    {
+        
     }
 
     public void PlayerRespawn()//passing in a game object is usually bad, this is a temp solution
@@ -39,6 +44,13 @@ public class PlayerManager : MonoBehaviour
         }
 
         player.transform.position = spawnPoint.position;
+
+        if (VolumeManager.Instance == null) Debug.LogError("No VolumeManager");
+        else
+        {
+            VolumeManager.Instance.ResetVolume();
+        }
+                
         StartCoroutine(WaitToStart(1f));
         //something work weird here
         if (DataPersistenceManager.instance != null) DataPersistenceManager.instance.LoadGame();

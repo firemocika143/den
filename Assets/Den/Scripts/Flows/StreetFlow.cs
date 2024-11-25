@@ -10,8 +10,8 @@ public class StreetFlow : Flow //, IDataPersistence
     [Serializable]
     public class StreetItemSettings
     {
-        [Header("Page 1 Settings")]
-        public PageItemInfo page1Info;
+        //[Header("Page 1 Settings")]
+        //public PageItemInfo page1Info;
 
         [Header("Page 4 Settings")]
         public PageItemInfo page4Info;
@@ -95,13 +95,13 @@ public class StreetFlow : Flow //, IDataPersistence
                 GameManager.Instance.progress.getPage4 = true;
             });
         }
-        if (!GameManager.Instance.progress.getPage1)
-        {
-            ItemManager.Instance.GeneratePageItem(streetItemSettings.page1Info, () =>
-            {
-                GameManager.Instance.progress.getPage1 = true;
-            });
-        }
+        //if (!GameManager.Instance.progress.getPage1)
+        //{
+        //    ItemManager.Instance.GeneratePageItem(streetItemSettings.page1Info, () =>
+        //    {
+        //        GameManager.Instance.progress.getPage1 = true;
+        //    });
+        //}
         GenerateAllLanternItems();
     }
 

@@ -155,7 +155,6 @@ public class UIManager : MonoBehaviour
     public void OpenBook()
     {
         if (pagePanels.Count != GameManager.Instance.book.pages.Count) ReloadBook(GameManager.Instance.book);
-        Debug.Log(pagePanels.Count);
 
         PlayerManager.Instance.StopPlayer();
         bookPanel.SetActive(true);
@@ -171,13 +170,11 @@ public class UIManager : MonoBehaviour
 
     public void LoadPage(Page newPage)
     {
-        Debug.Log("Loading page 1");
         GameObject newPagePanel = Instantiate(newPage.pagePanelPrefab, bookPanel.transform);
         pagePanels.Add(newPagePanel);
         newPagePanel.SetActive(false);
 
         bookPanel.GetComponent<BookUI>().MoveButtonPanelToTop();
-        Debug.Log("Loading page 2");
     }
 
     public void LoadBook(Book book)
@@ -203,8 +200,6 @@ public class UIManager : MonoBehaviour
 
     public void FlipToPreviousPage()
     {
-        Debug.Log(GameManager.Instance.currentPage);
-        Debug.Log(pagePanels.Count);
         //but I think this will be better to be put in the other scripts like BookUI or something that is on the BookPanel, and maybe we should let the book panel itself to record the page panels
         if (GameManager.Instance.currentPage > 0)
         {
@@ -216,8 +211,6 @@ public class UIManager : MonoBehaviour
 
     public void FlipToNextPage()
     {
-        Debug.Log(GameManager.Instance.currentPage);
-        Debug.Log(pagePanels.Count);
         if (GameManager.Instance.currentPage < pagePanels.Count - 1)
         {
             pagePanels[GameManager.Instance.currentPage].SetActive(false);
