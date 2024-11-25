@@ -7,11 +7,14 @@ public class AStarEnemyAttack : MonoBehaviour
     [Header("Attack")]
     public int attack = 1;
 
+    [SerializeField]
+    private AStarEnemy astarEnemy;
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         //Debug.Log(other.gameObject.name);
         // if I touch player
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && !astarEnemy.killed)
         {
             PlayerController playerController = other.GetComponent<PlayerController>();
             playerController.Damage(attack, transform.position);
@@ -21,7 +24,7 @@ public class AStarEnemyAttack : MonoBehaviour
     private void OnTriggerStay2D(Collider2D other)
     {
         // if I stay with player
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && !astarEnemy.killed)
         {
             PlayerController playerController = other.GetComponent<PlayerController>();
             playerController.Damage(attack, transform.position);

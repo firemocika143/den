@@ -160,17 +160,18 @@ public class PlayerManager : MonoBehaviour
     public void ResetPlayerLanternPiece()
     {
         playerLanternPiece = GameManager.Instance.playerFirmPiece;
-        SetPlayerMaxLightEnergy(120 + GameManager.Instance.playerFirmPiece * 60);
+        SetPlayerMaxLightEnergy(120 + GameManager.Instance.playerFirmPiece * 30);
         UIManager.Instance.UpdatePlayerPiece(playerLanternPiece);
         player.GetComponent<PlayerLightSystem>().ResetMaxRadius();
+        player.GetComponent<PlayerLightSystem>().AddMaxRadius(0.1f * (float)GameManager.Instance.playerFirmPiece);
     }
 
     public void AddPlayerLanternPiece()
     {
         playerLanternPiece++;
-        AddPlayerMaxLightEnergy(60);
+        AddPlayerMaxLightEnergy(30);
         UIManager.Instance.UpdatePlayerPiece(playerLanternPiece);
-        player.GetComponent<PlayerLightSystem>().AddMaxRadius(0.5f);
+        player.GetComponent<PlayerLightSystem>().AddMaxRadius(0.1f);
     }
 
     public void PlayerReload()

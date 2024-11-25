@@ -5,9 +5,6 @@ using UnityEngine;
 
 public class BulletEnemy : Enemy
 {
-    [Header("Bullet Enemy")]
-    public GameObject bulletEnemySet;
-
     //health
     [Header("Health")]
     public int maxHealth = 10;
@@ -30,6 +27,8 @@ public class BulletEnemy : Enemy
     [SerializeField]
     private FlashHandler flashHandler;
 
+    private bool killed = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -48,7 +47,7 @@ public class BulletEnemy : Enemy
 
     private void shooting()
     {
-        if (!iscooldown && BEDetector.target != null)
+        if (!iscooldown && BEDetector.target != null && !killed)
         {
             GameObject bullet = GameObject.Instantiate(bulletPrefab);
                 
@@ -78,6 +77,7 @@ public class BulletEnemy : Enemy
             if (health <= 0)
             {
                 invincible = true;
+                killed = true;
                 HitFlash(() => { Kill(); });
             }
             else
@@ -93,6 +93,7 @@ public class BulletEnemy : Enemy
         transform.position = orig_pos;
         iscooldown = false;
         invincible = false;
+        killed = false;
     }
 
     public override void Kill()

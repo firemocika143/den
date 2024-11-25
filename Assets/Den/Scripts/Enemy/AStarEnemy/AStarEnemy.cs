@@ -21,6 +21,8 @@ public class AStarEnemy : Enemy
     [SerializeField]
     private FlashHandler flashHandler;
 
+    public bool killed = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -52,6 +54,7 @@ public class AStarEnemy : Enemy
             if (health <= 0)
             {
                 invincible = true;
+                killed = true;
                 HitFlash(() => { Kill(); });
             }
             else
@@ -65,6 +68,7 @@ public class AStarEnemy : Enemy
     public override void Spawn()
     {
         health = maxHealth;
+        killed = false;
         invincible = false;
         transform.position = orig_pos;
     }

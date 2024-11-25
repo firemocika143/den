@@ -18,15 +18,12 @@ public class LightOn : MonoBehaviour//LampDevice
     private Material outline;
     [SerializeField]
     private SpriteRenderer lanternSprite;
-    public Charging chargingDevice;
 
     private bool triggered = false;
 
     // Use this for initialization
     void Start()
     {
-        lanternSprite = GetComponent<SpriteRenderer>();
-
         lanternLight.enabled = false;
         lightArea.SetActive(false);
     }

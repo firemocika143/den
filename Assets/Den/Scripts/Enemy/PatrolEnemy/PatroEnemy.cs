@@ -21,6 +21,8 @@ public class PatroEnemy : Enemy
     [SerializeField]
     private FlashHandler flashHandler;
 
+    private bool killed = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,7 +33,7 @@ public class PatroEnemy : Enemy
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && !killed)
         {
             PlayerController playerController = other.GetComponent<PlayerController>();
             playerController.Damage(attack, transform.position);
@@ -41,7 +43,7 @@ public class PatroEnemy : Enemy
     private void OnTriggerStay2D(Collider2D other)
     {
         // if I stay with player
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && !killed)
         {
             PlayerController playerController = other.GetComponent<PlayerController>();
             playerController.Damage(attack, transform.position);
@@ -58,6 +60,7 @@ public class PatroEnemy : Enemy
             if (health <= 0)
             {
                 invincible = true;
+                killed = true;
                 HitFlash(() => { Kill(); });
             }
             else
@@ -73,6 +76,7 @@ public class PatroEnemy : Enemy
         transform.position = orig_pos;
         health = maxHealth;
         invincible = false;
+        killed = false;
     }
 
     public override void Kill()
