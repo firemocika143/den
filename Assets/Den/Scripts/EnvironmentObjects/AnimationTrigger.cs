@@ -10,12 +10,17 @@ public class AnimationTrigger : MonoBehaviour
     private string enterAnimation;
     [SerializeField]
     private string exitAnimation;
+    [SerializeField]
+    private bool dontShowIfPlayerIsInDanger = true;
 
     private void OnTriggerEnter2D(Collider2D col)
     {
         if (col.CompareTag("Player"))
         {
-            animHandler.ChangeAnimationState(enterAnimation);
+            if (!PlayerManager.Instance.PlayerIsInDanger() || !dontShowIfPlayerIsInDanger)
+            {
+                animHandler.ChangeAnimationState(enterAnimation);
+            }
         }
     }
 

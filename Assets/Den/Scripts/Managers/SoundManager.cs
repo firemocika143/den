@@ -19,9 +19,10 @@ public class SoundManager : MonoBehaviour
     {
         public AudioClip EXPLORING;
         public AudioClip DANGER;
-        public AudioClip STREETLIGHTSOURCE;
-        public AudioClip LIBRARYLIGHTSOURCE;
+        public AudioClip ONSTREETLADDER;
+        public AudioClip LIGHTSOURCE;
         public AudioClip MEMORY;
+        public AudioClip HALL;
     }
 
     [System.Serializable]
@@ -29,10 +30,11 @@ public class SoundManager : MonoBehaviour
     {
         EXPLORING, 
         DANGER,
-        STREETLIGHTSOURCE,
-        LIBRARYLIGHTSOURCE,
+        ONSTREETLADDER,
+        LIGHTSOURCE,
         NULL,
         MEMORY,
+        HALL
     }
 
     public Clips clips;
@@ -139,14 +141,16 @@ public class SoundManager : MonoBehaviour
         {
             case ClipEnum.EXPLORING:
                 return clips.EXPLORING;
-            case ClipEnum.LIBRARYLIGHTSOURCE:
-                return clips.LIBRARYLIGHTSOURCE;
-            case ClipEnum.STREETLIGHTSOURCE:
-                return clips.STREETLIGHTSOURCE;
+            case ClipEnum.LIGHTSOURCE:
+                return clips.LIGHTSOURCE;
+            case ClipEnum.ONSTREETLADDER:
+                return clips.ONSTREETLADDER;
             case ClipEnum.DANGER:
                 return clips.DANGER;
             case ClipEnum.MEMORY:
                 return clips.MEMORY;
+            case ClipEnum.HALL:
+                return clips.HALL;
             case ClipEnum.NULL:
                 return null;
         }
