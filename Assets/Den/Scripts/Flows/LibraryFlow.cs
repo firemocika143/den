@@ -93,7 +93,6 @@ public class LibraryFlow : Flow
         {
             ItemManager.Instance.GeneratePageItem(libraryItemSettings.page5Info, () =>
             {
-                Debug.Log("Record page 5");
                 GameManager.Instance.progress.getPage5 = true;
             });
         }

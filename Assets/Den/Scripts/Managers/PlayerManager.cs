@@ -31,16 +31,18 @@ public class PlayerManager : MonoBehaviour
 
     public void PlayerRespawn()//passing in a game object is usually bad, this is a temp solution
     {
-        // Maybe I need to find if destroying the player is the correct decision, and also the way to controll the progress and the camera
-        PlayerController pc = FindFirstObjectByType<PlayerController>();// does anyone really do this?
-        if (pc != null)
-        {
-            player = pc.gameObject;
-        }
-
         if (player == null)
         {
-            player = Instantiate(playerPrefab, spawnPoint.position, Quaternion.identity);
+            // Maybe I need to find if destroying the player is the correct decision, and also the way to controll the progress and the camera
+            PlayerController pc = FindFirstObjectByType<PlayerController>();// does anyone really do this?
+            if (pc != null)
+            {
+                player = pc.gameObject;
+            }
+            else
+            {
+                player = Instantiate(playerPrefab, spawnPoint.position, Quaternion.identity);
+            }
         }
 
         player.transform.position = spawnPoint.position;

@@ -273,6 +273,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         state.dying = true;
         state.isHittable = false;
         StopPlayer();
+        SoundManager.Instance.ChangeClip(SoundManager.ClipEnum.NULL);
 
         if (activatingDevice != null)
         {
@@ -455,7 +456,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         {
             return;
         }
-        else if (state.attacking)
+        else if (state.attacking || state.attackEnd)
         {
             if (!state.attackEnd) currState = PlayerAnimationState.ATTACK;
             else currState = PlayerAnimationState.ATTACKEND;

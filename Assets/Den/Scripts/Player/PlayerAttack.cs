@@ -59,8 +59,6 @@ public class PlayerAttack : MonoBehaviour
 
         foreach (Collider2D enemy in hitEnemies)
         {
-            //TODO - give damage to target enemy
-
             if (enemy.TryGetComponent<Enemy>(out var e))
             {
                 e.Damage(attack);
@@ -71,9 +69,6 @@ public class PlayerAttack : MonoBehaviour
 
         foreach (Collider2D trigger in hitTriggers)
         {
-            Debug.Log("hitting a light trigger");
-            //TODO - give damage to target enemy
-
             if (trigger.TryGetComponent<LightTrigger>(out var lt))
             {
                 lt.Triggered();
@@ -134,8 +129,9 @@ public class PlayerAttack : MonoBehaviour
 
     private void EndDraw()
     {
-        //playerController.state.attacking = false;//uh... now this should be in playeranimation for deciding the animation for player controller, that's bad
+        // attackend would be set to false in PlayerAnimation
         playerController.state.attackEnd = true;
+        playerController.state.attacking = false;
         attackPoint.position = transform.position;
         drawLight.SetActive(false);
         skill.lightDraw.LightDrawEnd();
