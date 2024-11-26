@@ -44,13 +44,11 @@ public class BossKnightRightArmMovement : MonoBehaviour
     private bool raising = true;  // Control whether arm is raising or lowering
 
     private bool reocvery = false;
-    private float recoveryTime = 1.5f;
+    //private float recoveryTime = 1.5f;
+    private float raisingStunTime = 0.5f;
 
     void Start()
     {
-        //leftUpperArmSpeed = (leftUpperArmMaxAngle - leftUpperArmMinAngle) / ((rightUpperArmMaxAngle - rightUpperArmMinAngle) / rightUpperArmSpeed);
-        //leftLowerArmSpeed = (leftLowerArmMaxAngle - leftLowerArmMinAngle) / ((rightLowerArmMaxAngle - rightLowerArmMinAngle) / rightLowerArmSpeed);
-
         // Set limits for both joints to prevent over-rotation
         JointAngleLimits2D rightUpperArmLimits = new JointAngleLimits2D();
         rightUpperArmLimits.max = rightUpperArmMaxAngle;
@@ -113,7 +111,7 @@ public class BossKnightRightArmMovement : MonoBehaviour
         //float leftUpperArmAngle = leftUpperArmJoint.jointAngle;
         //float leftLowerArmAngle = leftLowerArmJoint.jointAngle;
         float swordAngle = swordJoint.jointAngle;
-        bool needRecovery = false;
+        //bool needRecovery = false;
 
         JointMotor2D rightUpperMotor = rightUpperArmJoint.motor;
         JointMotor2D rightLowerMotor = rightLowerArmJoint.motor;
@@ -169,11 +167,6 @@ public class BossKnightRightArmMovement : MonoBehaviour
                 swordMotor.motorSpeed = 0;
             }
 
-            // If both arms reach their max angles, switch to lowering
-            //if (rightUpperArmAngle >= rightUpperArmMaxAngle && rightLowerArmAngle >= rightLowerArmMaxAngle && leftUpperArmAngle >= leftUpperArmMaxAngle && leftLowerArmAngle >= leftLowerArmMaxAngle && swordAngle >= swordMaxAngle)
-            //{
-            //    raising = false;
-            //}
             if (rightUpperArmAngle >= rightUpperArmMaxAngle && rightLowerArmAngle >= rightLowerArmMaxAngle && swordAngle >= swordMaxAngle)
             {
                 raising = false;
@@ -245,7 +238,7 @@ public class BossKnightRightArmMovement : MonoBehaviour
             if (rightUpperArmAngle <= rightUpperArmMinAngle && rightLowerArmAngle <= rightLowerArmMinAngle && swordAngle <= swordMinAngle)
             {
                 raising = true;
-                needRecovery = true;
+                //needRecovery = true;
                 swordRigidbody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
                 rightUpperArmRigidbody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
                 rightLowerArmRigidbody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
@@ -265,56 +258,27 @@ public class BossKnightRightArmMovement : MonoBehaviour
         //}
     }
 
-    private IEnumerator recoveryTimeCount()
-    {
-        reocvery = true;
-        //JointAngleLimits2D rightUpperArmLimits = new JointAngleLimits2D();
-        //rightUpperArmLimits.max = rightUpperArmMinAngle;
-        //rightUpperArmLimits.min = rightUpperArmMinAngle;
-        //rightUpperArmJoint.limits = rightUpperArmLimits;
-        //rightUpperArmJoint.useLimits = true;
+    //private IEnumerator recoveryTimeCount()
+    //{
+    //    reocvery = true;
 
-        //JointAngleLimits2D rightLowerArmLimits = new JointAngleLimits2D();
-        //rightLowerArmLimits.max = rightLowerArmMinAngle;
-        //rightLowerArmLimits.min = rightLowerArmMinAngle;
-        //rightLowerArmJoint.limits = rightLowerArmLimits;
-        //rightLowerArmJoint.useLimits = true;
+    //    swordRigidbody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+    //    rightUpperArmRigidbody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+    //    rightLowerArmRigidbody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
 
-        //JointAngleLimits2D swordLimits = new JointAngleLimits2D();
-        //swordLimits.max = swordMaxAngle;
-        //swordLimits.min = swordMinAngle;
-        //swordJoint.limits = swordLimits;
-        //swordJoint.useLimits = true;
+    //    //yield return new WaitForSeconds(recoveryTime);
 
-        swordRigidbody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
-        rightUpperArmRigidbody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
-        rightLowerArmRigidbody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+    //    reocvery = false;
+    //    rightUpperArmJoint.useLimits = false;
+    //    rightLowerArmJoint.useLimits = false;
+    //    swordJoint.useLimits = false;
 
-        //rightUpperArmRigidbody.angularDrag = 100000000f;
-        //rightLowerArmRigidbody.angularDrag = 100000000f;
-        //leftUpperArmRigidbody.angularDrag = 100000000f;
-        //leftLowerArmRigidbody.angularDrag = 100000000f;
-        //swordRigidbody.angularDrag = 100000000f;
+    //    swordRigidbody.constraints = RigidbodyConstraints2D.None;
+    //    rightUpperArmRigidbody.constraints = RigidbodyConstraints2D.None;
+    //    rightLowerArmRigidbody.constraints = RigidbodyConstraints2D.None;
 
-        //yield return new WaitForSeconds(recoveryTime);
-
-        reocvery = false;
-        rightUpperArmJoint.useLimits = false;
-        rightLowerArmJoint.useLimits = false;
-        swordJoint.useLimits = false;
-
-        swordRigidbody.constraints = RigidbodyConstraints2D.None;
-        rightUpperArmRigidbody.constraints = RigidbodyConstraints2D.None;
-        rightLowerArmRigidbody.constraints = RigidbodyConstraints2D.None;
-
-        //rightUpperArmRigidbody.angularDrag = 0.01f;
-        //rightLowerArmRigidbody.angularDrag = 0.01f;
-        //leftUpperArmRigidbody.angularDrag = 0.01f;
-        //leftLowerArmRigidbody.angularDrag = 0.01f;
-        //swordRigidbody.angularDrag = 0.01f;
-
-        yield return null;
-    }
+    //    yield return null;
+    //}
 
     public void startMoving()
     {
