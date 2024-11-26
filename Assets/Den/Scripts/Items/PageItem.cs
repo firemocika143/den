@@ -21,7 +21,6 @@ public class PageItem : MonoBehaviour, IItem
         GameManager.Instance.book.AddPage(info.page);
         UIManager.Instance.ShowHint(info.hintText);
         info.gameRecord?.Invoke();
-        Debug.Log("Get page");
         // TODO - some animation that shows the player has get the page
         Destroy(gameObject);
     }

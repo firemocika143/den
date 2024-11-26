@@ -21,9 +21,6 @@ public class Book
 
         pages.Add(newPage);
         UIManager.Instance.LoadPage(newPage);
-
-        Debug.Log("AddPage");
-        Debug.Log(pages.Count);
     }
 }
 

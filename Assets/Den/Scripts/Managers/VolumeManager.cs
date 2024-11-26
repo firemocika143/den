@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using System;
 
+[DefaultExecutionOrder(-9100)]
 public class VolumeManager : MonoBehaviour
 {
     public static VolumeManager Instance { get; private set; }
@@ -25,16 +26,16 @@ public class VolumeManager : MonoBehaviour
 
     private void Awake()
     {
-        Instance = this;        
+        Instance = this;
+
+        if (!volumeProfile) throw new System.NullReferenceException(nameof(UnityEngine.Rendering.VolumeProfile));
+
+        if (!volumeProfile.TryGet(out filmGrain)) throw new System.NullReferenceException(nameof(filmGrain));
     }
 
     private void Start()
     {
-        if (!volumeProfile) throw new System.NullReferenceException(nameof(UnityEngine.Rendering.VolumeProfile));
-
-        if (!volumeProfile.TryGet(out filmGrain)) throw new System.NullReferenceException(nameof(filmGrain));
-
-        filmGrain.intensity.Override(0.02f);
+        ResetVolume();
     }
 
     private void Update()
@@ -65,16 +66,25 @@ public class VolumeManager : MonoBehaviour
 
     public void QuickFilmIn()
     {
-        StopAllCoroutines();
+        //StopAllCoroutines();
 
-        StartCoroutine(Fade(0.2f, 1f));
+        //StartCoroutine(Fade(0.2f, 1f));
+        filmGrain.intensity.Override(maxBlur);
     }
 
     public void QuickFilmOut()
     {
-        StopAllCoroutines();
+        //StopAllCoroutines();
 
-        StartCoroutine(Fade(0.2f, 0f));
+        //StartCoroutine(Fade(0.2f, 0f));
+        if (PlayerManager.Instance.PlayerLightEnergy() <= lowValue - 1) return;
+
+        filmGrain.intensity.Override(minBlur);
+    }
+
+    public void ResetVolume()
+    {
+        filmGrain.intensity.Override(minBlur);
     }
 
     private IEnumerator Fade(float switchTime, float targetPercentage = 0, Action after_fade_out = null)
