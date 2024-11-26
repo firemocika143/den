@@ -82,10 +82,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void GroundMovement()
     {
-        if (playerController.state.stop)
+        if (playerController.state.stop || playerController.state.climb)
         {
             // TODO - slow the player down smoothly
-
+            playerController.state.horMoving = false;
             rb.velocity = new Vector2(0, rb.velocity.y);
         }
         else if (!playerController.state.stop && ! playerController.state.hitback)
@@ -179,6 +179,7 @@ public class PlayerMovement : MonoBehaviour
                     currClimbSpeed = climbSpeed;
                 }
                 transform.position = new Vector3(hitInfo.collider.transform.position.x, transform.position.y, 0);
+                rb.velocity = new Vector2(0, 0);
             }
             else if ((Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D)) && !playerController.state.stop)//this would take a long time to be detected too
             {
