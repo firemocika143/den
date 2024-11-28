@@ -55,7 +55,12 @@ public class BossDarkKnight : Enemy
     [SerializeField]
     private float skill3CooldownTime = 20.0f;
     private bool skill3Cooldown = false;
+    [SerializeField]
+    private GameObject bossDarkKnightSkill3trigger;
+    [SerializeField]
+    private int skill3Damage = 5;
 
+    private bool skill3Triggered = false;
 
     private Rigidbody2D rb;
     private PlayerController pc;
@@ -242,6 +247,8 @@ public class BossDarkKnight : Enemy
         cooldown = true;
         skill3Cooldown = true;
 
+        bossDarkKnightSkill3trigger.SetActive(true);
+
         yield return new WaitForSeconds(skill3BlowingTime);
 
         if (lantern1.LightIsOn())
@@ -254,11 +261,19 @@ public class BossDarkKnight : Enemy
             lantern2.TurnOff();
         }
 
+        bossDarkKnightSkill3trigger.SetActive(false);
+
         cooldown = false; // set cooldown to false, can use other skills
 
         // skill 3 cooldown
         yield return new WaitForSeconds(skill3CooldownTime);
         skill3Cooldown = false;
+    }
+
+    public void Skill3Triggered()
+    {
+        skill3Triggered = true;
+        Damage(skill3Damage);
     }
 
     public void BossStart()
