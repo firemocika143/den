@@ -256,7 +256,7 @@ public class BossDarkKnight : Enemy
 
         cooldown = false; // set cooldown to false, can use other skills
 
-        // skill 2 cooldown
+        // skill 3 cooldown
         yield return new WaitForSeconds(skill3CooldownTime);
         skill3Cooldown = false;
     }
