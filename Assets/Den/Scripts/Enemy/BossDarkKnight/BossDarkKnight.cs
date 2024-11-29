@@ -247,7 +247,7 @@ public class BossDarkKnight : Enemy
         cooldown = true;
         skill3Cooldown = true;
 
-        bossDarkKnightSkill3trigger.SetActive(true);
+        //bossDarkKnightSkill3trigger.SetActive(true);
 
         yield return new WaitForSeconds(skill3BlowingTime);
 
@@ -261,7 +261,7 @@ public class BossDarkKnight : Enemy
             lantern2.TurnOff();
         }
 
-        bossDarkKnightSkill3trigger.SetActive(false);
+        //bossDarkKnightSkill3trigger.SetActive(false);
 
         cooldown = false; // set cooldown to false, can use other skills
 
