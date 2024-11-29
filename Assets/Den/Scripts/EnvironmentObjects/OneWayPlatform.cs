@@ -6,40 +6,55 @@ using UnityEngine;
 [DefaultExecutionOrder(10002)]
 public class OneWayPlatform : MonoBehaviour
 {
-
-    [SerializeField]
-    private GameObject currOneWayPlatform;
-
     private BoxCollider2D playerCollider;
+
+    private bool onCollision = false;
 
     private void Start()
     {
         playerCollider = PlayerManager.Instance.PlayerCollider();
     }
 
-    void Update() {
-        if (Input.GetKeyDown(KeyCode.S))
+    void Update() 
+    {
+        if (Input.GetKeyDown(KeyCode.S) && onCollision)
         {
-            if (currOneWayPlatform != null && playerCollider != null)
+            if (playerCollider != null)
             {
                 StartCoroutine(DisableCollision());
             }
         }
     }
 
+    private void OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.gameObject.CompareTag("Player"))
+        {
+            onCollision = true;
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D col)
+    {
+        if (col.gameObject.CompareTag("Player"))
+        {
+            onCollision = false;
+        }
+    }
+
     public void CollideWithCollider()
     {
-        currOneWayPlatform.SetActive(true);
+        this.gameObject.SetActive(true);
     }
 
     public void LeaveCollider()
     {
-        currOneWayPlatform.SetActive(false);
+        this.gameObject.SetActive(false);
     }
 
     private IEnumerator DisableCollision()
     {
-        BoxCollider2D platformCollider = currOneWayPlatform.GetComponent<BoxCollider2D>();
+        BoxCollider2D platformCollider = this.gameObject.GetComponent<BoxCollider2D>();
         Physics2D.IgnoreCollision(playerCollider, platformCollider);
         yield return new WaitForSeconds(0.8f);
         Physics2D.IgnoreCollision(playerCollider, platformCollider, false);
