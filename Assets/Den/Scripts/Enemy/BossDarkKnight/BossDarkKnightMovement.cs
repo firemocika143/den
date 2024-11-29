@@ -38,13 +38,11 @@ public class BossDarkKnightMovement : MonoBehaviour
                 rb.velocity = new Vector2(-speed, rb.velocity.y);
                 Flip(1);
             }
-            Debug.Log(target.position.x - transform.position.x);
         }
     }
 
     private void Flip(float dir)
     {
         transform.localScale = new Vector3(dir * Mathf.Abs(transform.localScale.x), 1 * transform.localScale.y, 1);
-        Debug.Log("EnemyFlip");
     }
 }

@@ -63,7 +63,7 @@ public class BossDarkKnight : Enemy
     private bool skill3Triggered = false;
 
     private Rigidbody2D rb;
-    private PlayerController pc;
+    //private PlayerController pc;
     private Transform targetTRansform;
     private Vector2 orig_pos;
 
@@ -79,7 +79,7 @@ public class BossDarkKnight : Enemy
         orig_pos = transform.position;
 
         rb = GetComponent<Rigidbody2D>();
-        pc = FindFirstObjectByType<PlayerController>();
+        //pc = FindFirstObjectByType<PlayerController>();
         targetTRansform = PlayerManager.Instance.PlayerTransform();
 
         Spawn();

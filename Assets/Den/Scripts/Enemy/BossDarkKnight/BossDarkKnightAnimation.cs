@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BossKnightAnimation : MonoBehaviour
+public class BossDarkKnightAnimation : MonoBehaviour
 {
     [SerializeField]
     private AnimationHandler animHandler;
