@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Unity.VisualScripting;
 
 public class BossDarkKnight : Enemy
 {
@@ -67,6 +68,11 @@ public class BossDarkKnight : Enemy
     [SerializeField]
     private FlashHandler flashHandler;
 
+    // animation states
+    public bool usingAttack1 = false;
+    public bool readyToAttack = false;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -87,21 +93,22 @@ public class BossDarkKnight : Enemy
         // Debug.Log(cooldown);
         if (!cooldown && playerIsInBossDarkKnightArea)
         {
-            if (!skill3Cooldown && (lantern1.LightIsOn() || lantern2.LightIsOn()))
+            //if (!skill3Cooldown && (lantern1.LightIsOn() || lantern2.LightIsOn()))
+            //{
+            //    Skill3();
+            //}
+            if (!skill1Cooldown)//else 
             {
-                Skill3();
-            }
-            else if (!skill1Cooldown)
-            {
-                Skill1();
+                StartCoroutine(UseSkillWait(()=> { Skill1(); }));
             }
             else if (!skill2Cooldown && targetTRansform.position.x - bossDarkKnightAreaTransform.position.x - 9.0f < 0)
             {
-                Skill2();
+                StartCoroutine(UseSkillWait(() => { Skill2(); }));
             }
         }
     }
 
+    //I think maybe we don't need this
     private void OnTriggerEnter2D(Collider2D other)
     {
         // if I touch player
@@ -122,6 +129,20 @@ public class BossDarkKnight : Enemy
         }
     }
 
+    private IEnumerator UseSkillWait(Action after = null, float t = 1f)
+    {
+        if (cooldown)
+        {
+            Debug.LogError("Try run another skill when 1 is still using");
+            yield break;
+        }
+        cooldown = true;
+        readyToAttack = true;
+        yield return new WaitForSeconds(t);
+        readyToAttack = false;
+        after?.Invoke();
+    }
+
     private void Skill1()
     {
         StartCoroutine(EnhanceGravity());
@@ -135,6 +156,7 @@ public class BossDarkKnight : Enemy
         rb.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse); // jump
         yield return new WaitForSeconds(0.1f); // Small delay to allow the jump
 
+        usingAttack1 = true;
         while (rb.velocity.y > 0) // Wait until reaching the jump peak
         {
             yield return null;
@@ -150,6 +172,7 @@ public class BossDarkKnight : Enemy
         }
 
         rb.constraints = RigidbodyConstraints2D.None;
+        usingAttack1 = false;
         // Reset gravity scale
         rb.gravityScale = 1f; // Reset to default gravity scale
 
