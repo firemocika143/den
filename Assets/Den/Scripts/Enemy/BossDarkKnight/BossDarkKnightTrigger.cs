@@ -9,7 +9,7 @@ public class BossDarkKnightDarkTrigger : NonSeqTriggerTrap
 
     protected override void ActivatedAbility()
     {
-        bossDarkKnight.Skill3Triggered();
+        bossDarkKnight.TrapTriggered();
         //TODO - hit boss for 20 damage and let it down for 3 seconds
     }
 }

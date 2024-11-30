@@ -45,7 +45,7 @@ public class BossKnightRightArmMovement : MonoBehaviour
 
     private bool reocvery = false;
     //private float recoveryTime = 1.5f;
-    private float raisingStunTime = 0.5f;
+    //private float raisingStunTime = 0.5f;
 
     void Start()
     {

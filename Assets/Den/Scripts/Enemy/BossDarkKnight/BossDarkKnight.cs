@@ -5,8 +5,8 @@ using System;
 
 public class BossDarkKnight : Enemy
 {
-    [Header("Boss Dark Knight Set")]
-    public GameObject bossDarkKnightSet;
+    //[Header("Boss Dark Knight Set")]
+    //public GameObject bossDarkKnightSet;
 
     //health
     [Header("Health")]
@@ -16,14 +16,10 @@ public class BossDarkKnight : Enemy
     [Header("Attack")]
     public int attack = 1;
 
-    //private float cooldownTime = 1.0f;
     private bool cooldown = false;
 
     [Header("Normal Attack")]
-    public GameObject normalAttack;
-    public float normalAttackTime = 0.5f;
-    public float normalAttackCooldownTime = 1.0f;
-    private bool normalAttackCooldown = false;
+    private int hitDamage = 1;
 
     [Header("Skill 1")]
     public GameObject skill1FireArea;
@@ -39,13 +35,7 @@ public class BossDarkKnight : Enemy
     public float skill2CooldownTime = 20.0f;
     private bool skill2Cooldown = false;
 
-    [Header("Boss Dark Knight Area")]
-    public Transform bossDarkKnightAreaTRansform;
-
-    [Header("Boss Knight Right Arm Movement")]
-    public BossKnightRightArmMovement bossKnightRightArmMovement;
-
-    [Header("Skill3 Lanterns")]
+    [Header("Skill3")]
     [SerializeField]
     private LightOn lantern1;
     [SerializeField]
@@ -55,17 +45,21 @@ public class BossDarkKnight : Enemy
     [SerializeField]
     private float skill3CooldownTime = 20.0f;
     private bool skill3Cooldown = false;
-    [SerializeField]
-    private GameObject bossDarkKnightSkill3trigger;
-    [SerializeField]
-    private int skill3Damage = 5;
 
-    private bool skill3Triggered = false;
+    [Header("Boss Dark Knight Area")]
+    public Transform bossDarkKnightAreaTransform;
+
+    [Header("Boss Knight Right Arm Movement")]
+    public BossKnightRightArmMovement bossKnightRightArmMovement;
+
+    [Header("Trigger Trap Settings")]
+    [SerializeField]
+    private int trapDamage = 5;
 
     private Rigidbody2D rb;
-    //private PlayerController pc;
     private Transform targetTRansform;
     private Vector2 orig_pos;
+    private BossDarkKnightMovement movement;
 
     [HideInInspector]
     public bool playerIsInBossDarkKnightArea = false;
@@ -79,17 +73,13 @@ public class BossDarkKnight : Enemy
         orig_pos = transform.position;
 
         rb = GetComponent<Rigidbody2D>();
+        movement = GetComponent<BossDarkKnightMovement>();
+        movement.enabled = false;
         //pc = FindFirstObjectByType<PlayerController>();
         targetTRansform = PlayerManager.Instance.PlayerTransform();
 
         Spawn();
     }
-
-    //void OnEnable()
-    //{
-    //    health = maxHealth;
-    //    invincible = false;
-    //}
 
     // Update is called once per frame
     void Update()
@@ -105,32 +95,31 @@ public class BossDarkKnight : Enemy
             {
                 Skill1();
             }
-            else if (!skill2Cooldown && targetTRansform.position.x - bossDarkKnightAreaTRansform.position.x - 9.0f < 0)
+            else if (!skill2Cooldown && targetTRansform.position.x - bossDarkKnightAreaTransform.position.x - 9.0f < 0)
             {
                 Skill2();
-            }
-            else if (!normalAttackCooldown)
-            {
-                StartCoroutine(ShowNormalAttackDetector());
             }
         }
     }
 
-    private IEnumerator ShowNormalAttackDetector()
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        cooldown = true;
-        normalAttack.SetActive(true);
-        
-        yield return new WaitForSeconds(normalAttackTime);
-        
-        normalAttack.SetActive(false);
+        // if I touch player
+        if (other.CompareTag("Player"))
+        {
+            PlayerController playerController = other.GetComponent<PlayerController>();
+            playerController.Damage(hitDamage);
+        }
+    }
 
-        normalAttackCooldown = true;
-
-        yield return new WaitForSeconds(normalAttackCooldownTime);
-
-        normalAttackCooldown = false;
-        cooldown = false; // set cooldown to false, can use other skills
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        // if I stay with player
+        if (other.CompareTag("Player"))
+        {
+            PlayerController playerController = other.GetComponent<PlayerController>();
+            playerController.Damage(hitDamage);
+        }
     }
 
     private void Skill1()
@@ -167,10 +156,9 @@ public class BossDarkKnight : Enemy
         // set fire area
         skill1FireArea.transform.position = new Vector3(rb.transform.position.x, skill1FireArea.transform.position.y, skill1FireArea.transform.position.z);
         skill1FireArea.SetActive(true);
-
-        
         yield return new WaitForSeconds(skill1FireAreaTime);
         skill1FireArea.SetActive(false);
+
         cooldown = false; // set cooldown to false, can use other skills
 
         // skill 1 cooldown
@@ -189,7 +177,7 @@ public class BossDarkKnight : Enemy
         cooldown = true;
         skill2Cooldown = true;
 
-        rb.transform.position = new Vector3(bossDarkKnightAreaTRansform.position.x, bossDarkKnightAreaTRansform.transform.position.y, rb.transform.position.z); // set dark knight position
+        rb.transform.position = new Vector3(bossDarkKnightAreaTransform.position.x, bossDarkKnightAreaTransform.transform.position.y, rb.transform.position.z); // set dark knight position
         rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;// freeze dark knight
         yield return new WaitForSeconds(skill2stunningTime); // stunning before summon knight
 
@@ -270,21 +258,22 @@ public class BossDarkKnight : Enemy
         skill3Cooldown = false;
     }
 
-    public void Skill3Triggered()
+    public void TrapTriggered()
     {
-        skill3Triggered = true;
-        Damage(skill3Damage);
+        Damage(trapDamage);
     }
 
     public void BossStart()
     {
         playerIsInBossDarkKnightArea = true;
+        movement.enabled = true;
     }
 
     public override void Damage(int d)
     {
         if (!invincible)
         {
+            Debug.Log(health);
             health = health - d >= 0 ? health - d : 0;
 
             if (health <= 0)
@@ -304,11 +293,19 @@ public class BossDarkKnight : Enemy
     public override void Spawn()
     {
         if (GameManager.Instance.progress.defeatDarkKnight)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+
+        StopAllCoroutines();
+
         health = maxHealth;
         invincible = false;
         transform.position = orig_pos;
+        playerIsInBossDarkKnightArea = false;
+        movement.enabled = false;
 
-        normalAttack.SetActive(false);
         skill1FireArea.SetActive(false);
         skill2Knight.SetActive(false);
     }
@@ -316,7 +313,6 @@ public class BossDarkKnight : Enemy
     public override void Kill()
     {
         StopAllCoroutines();
-        //Destroy(gameObject);
         GameManager.Instance.progress.defeatDarkKnight = true;
         gameObject.SetActive(false);
     }
