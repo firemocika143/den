@@ -14,6 +14,8 @@ public class ItemManager : MonoBehaviour
     [SerializeField]
     private GameObject lanternItemPrefab;
 
+    private List<GameObject> lanternItemList = new List<GameObject>();
+
     void Awake()
     {
         Instance = this;
@@ -40,5 +42,18 @@ public class ItemManager : MonoBehaviour
         GameObject lanternItem = Instantiate(lanternItemPrefab, info.pos.position, Quaternion.identity);
         LanternItem lanternItemScript = lanternItem.GetComponent<LanternItem>();
         lanternItemScript.info = info;
+        lanternItemList.Add(lanternItem);
+    }
+
+    public void ClearLanternItems()
+    {
+        foreach (GameObject item in lanternItemList)
+        {
+            if (item != null)
+            {
+                Destroy(item);
+            }
+        }
+        lanternItemList.Clear();
     }
 }

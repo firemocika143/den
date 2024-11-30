@@ -220,23 +220,26 @@ public class UIManager : MonoBehaviour
     }
 
     // Fade
-    public void FadeIn(Action after = null)
+    public void FadeIn(float waitTime = 0f)
     {
-        fadePanel.SetActive(true);
-        fadePanel.GetComponent<Fade>().FadeIn();
-        if (after != null)
-        {
-            StartCoroutine(FadeWait(2f, after));
-        }
+        StopAllCoroutines();
+        StartCoroutine(WaitToFadeIn(waitTime));
     }
 
-    public void FadeOut(Action after = null)
+    private IEnumerator WaitToFadeIn(float t)
+    {
+        yield return new WaitForSeconds(t);
+        fadePanel.SetActive(true);
+        fadePanel.GetComponent<Fade>().FadeIn();
+    }
+
+    public void FadeOut(Action after = null, float fadeWaitTime = 2f)
     {
         fadePanel.SetActive(true);
         fadePanel.GetComponent<Fade>().FadeOut();
         if (after != null)
         {
-            StartCoroutine(FadeWait(2f, after));
+            StartCoroutine(FadeWait(fadeWaitTime, after));
         }
     }
 

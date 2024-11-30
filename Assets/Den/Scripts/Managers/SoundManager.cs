@@ -23,6 +23,7 @@ public class SoundManager : MonoBehaviour
         public AudioClip LIGHTSOURCE;
         public AudioClip MEMORY;
         public AudioClip HALL;
+        public AudioClip BOSS;
     }
 
     [System.Serializable]
@@ -34,7 +35,8 @@ public class SoundManager : MonoBehaviour
         LIGHTSOURCE,
         NULL,
         MEMORY,
-        HALL
+        HALL,
+        BOSS
     }
 
     public Clips clips;
@@ -151,6 +153,8 @@ public class SoundManager : MonoBehaviour
                 return clips.MEMORY;
             case ClipEnum.HALL:
                 return clips.HALL;
+            case ClipEnum.BOSS:
+                return clips.BOSS;
             case ClipEnum.NULL:
                 return null;
         }

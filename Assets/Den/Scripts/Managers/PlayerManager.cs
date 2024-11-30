@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -46,16 +47,8 @@ public class PlayerManager : MonoBehaviour
         }
 
         player.transform.position = spawnPoint.position;
-
-        if (VolumeManager.Instance == null) Debug.LogError("No VolumeManager");
-        else
-        {
-            VolumeManager.Instance.ResetVolume();
-        }
                 
         StartCoroutine(WaitToStart(1f));
-        //something work weird here
-        if (DataPersistenceManager.instance != null) DataPersistenceManager.instance.LoadGame();
     }
 
     private IEnumerator WaitToStart(float time)
@@ -68,6 +61,7 @@ public class PlayerManager : MonoBehaviour
             pc.StopPlayer();
             yield return new WaitForSeconds(time);
             pc.state.stop = false;
+            pc.ReloadAfterKilled();
         }
     }
 

@@ -1,3 +1,4 @@
+using Cinemachine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -25,6 +26,8 @@ public class LibraryFlow : Flow
     private SoundManager.ClipEnum exploringClip;
     [SerializeField]
     public LibraryItemSettings libraryItemSettings;
+    [SerializeField]
+    private CinemachineVirtualCamera main_v_cam;
 
     private float killTimer;
     private float killTime = 7f;
@@ -75,9 +78,12 @@ public class LibraryFlow : Flow
         PlayerManager.Instance.PlayerRespawn();
         PlayerManager.Instance.ResetPlayerLanternPiece();
         GenerateAllLanternItems();
+        CameraManager.Instance.SwitchVirtualCamera(main_v_cam);
+        VolumeManager.Instance.ResetVolume();
+        //something work weird here
+        DataPersistenceManager.instance.LoadGame();
         // TODO - UI fade in
-        UIManager.Instance.FadeIn();
-        PlayerManager.Instance.PlayerReload();
+        UIManager.Instance.FadeIn(1.5f);// this should wait
     }
 
     private void GenerateAllItems()
@@ -101,12 +107,11 @@ public class LibraryFlow : Flow
 
     private void GenerateAllLanternItems()
     {
+        ItemManager.Instance.ClearLanternItems();
+
         foreach (LanternItemInfo li in libraryItemSettings.lanternItems)
         {
-            if (!li.name.Contains("D"))// what's this?
-            {
-                ItemManager.Instance.GenerateLanternItem(li);
-            }
+            ItemManager.Instance.GenerateLanternItem(li);
         }
     }
 }

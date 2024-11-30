@@ -541,7 +541,6 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     {
         playerAnimation.PlayerRespawnAnimation();
         state.dying = false;
-        state.stop = false;
         state.isHittable = true;
     }
 

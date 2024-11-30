@@ -46,7 +46,10 @@ public class CameraManager : MonoBehaviour
     {
         foreach (var c in vcams)
         {
-            c.enabled = c == vcam;
+            //c.enabled = c == vcam;
+            //if (c == vcam) curr_vcam = c;
+
+            c.gameObject.SetActive(c == vcam);
             if (c == vcam) curr_vcam = c;
         }
     }
