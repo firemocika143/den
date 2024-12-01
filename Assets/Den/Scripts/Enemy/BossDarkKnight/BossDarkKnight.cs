@@ -255,7 +255,7 @@ public class BossDarkKnight : Enemy
     private IEnumerator TurnOffLights()
     {
         cooldown = true;
-        Vector2 knockBackDirection = ((Vector2)transform.position - (Vector2)bossDarkKnightAreaTransform.position).normalized;
+        Vector2 knockBackDirection = ((Vector2)transform.position - orig_pos).normalized;
         movement.Knockback(knockBackDirection);
         yield return new WaitForSeconds(knockbackDurationTime);
 
