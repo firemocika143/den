@@ -36,16 +36,19 @@ public class BossDarkKnight : Enemy
     public float skill2CooldownTime = 20.0f;
     private bool skill2Cooldown = false;
 
-    [Header("Skill3")]
+    [Header("Turn Off Light Triggered")]
     [SerializeField]
     private LightOn lantern1;
     [SerializeField]
     private LightOn lantern2;
     [SerializeField]
-    private float skill3BlowingTime = 1.0f;
+    private float turnOffLightBlowingTime = 1.0f;
     [SerializeField]
-    private float skill3CooldownTime = 20.0f;
-    private bool skill3Cooldown = false;
+    private int turnOffLightDamage = 1;
+    [SerializeField]
+    private float knockbackDurationTime = 0.6f;
+
+    private bool touchLightSource = true;
 
     [Header("Boss Dark Knight Area")]
     public Transform bossDarkKnightAreaTransform;
@@ -53,14 +56,11 @@ public class BossDarkKnight : Enemy
     [Header("Boss Knight Right Arm Movement")]
     public BossKnightRightArmMovement bossKnightRightArmMovement;
 
-    [Header("Trigger Trap Settings")]
-    [SerializeField]
-    private int trapDamage = 5;
-
     private Rigidbody2D rb;
     private Transform targetTRansform;
     private Vector2 orig_pos;
     private BossDarkKnightMovement movement;
+    
 
     [HideInInspector]
     public bool playerIsInBossDarkKnightArea = false;
@@ -81,7 +81,6 @@ public class BossDarkKnight : Enemy
         rb = GetComponent<Rigidbody2D>();
         movement = GetComponent<BossDarkKnightMovement>();
         movement.enabled = false;
-        //pc = FindFirstObjectByType<PlayerController>();
         targetTRansform = PlayerManager.Instance.PlayerTransform();
 
         Spawn();
@@ -93,11 +92,12 @@ public class BossDarkKnight : Enemy
         // Debug.Log(cooldown);
         if (!cooldown && playerIsInBossDarkKnightArea)
         {
-            //if (!skill3Cooldown && (lantern1.LightIsOn() || lantern2.LightIsOn()))
-            //{
-            //    Skill3();
-            //}
-            if (!skill1Cooldown)//else 
+            if (touchLightSource)
+            {
+                //TurnOffLightsTriggered();
+                StartCoroutine(UseSkillWait(() => { TurnOffLightsTriggered(); }));
+            }
+            else if (!skill1Cooldown)//else 
             {
                 StartCoroutine(UseSkillWait(()=> { Skill1(); }));
             }
@@ -117,6 +117,11 @@ public class BossDarkKnight : Enemy
             PlayerController playerController = other.GetComponent<PlayerController>();
             playerController.Damage(hitDamage);
         }
+
+        if (other.CompareTag("LightSource"))
+        {
+            touchLightSource = true;
+        }
     }
 
     private void OnTriggerStay2D(Collider2D other)
@@ -126,6 +131,19 @@ public class BossDarkKnight : Enemy
         {
             PlayerController playerController = other.GetComponent<PlayerController>();
             playerController.Damage(hitDamage);
+        }
+
+        if (other.CompareTag("LightSource"))
+        {
+            touchLightSource = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("LightSource"))
+        {
+            touchLightSource = false;
         }
     }
 
@@ -206,32 +224,12 @@ public class BossDarkKnight : Enemy
 
         skill2Knight.SetActive(true);
         bossKnightRightArmMovement.startMoving();
-        //bool right = false;
-        //if (targetTRansform.position.x - bossDarkKnightAreaTRansform.position.x < 0)
-        //{
-        //    skill2Knight.transform.position = new Vector3(targetTRansform.position.x + 9.0f, rb.transform.position.y - 2.0f, rb.transform.position.z); // set knight position
-        //}
-        //else
-        //{
-        //    skill2Knight.transform.position = new Vector3(targetTRansform.position.x - 9.0f, rb.transform.position.y - 2.0f, rb.transform.position.z); // set knight position
-        //    var localScale = skill2Knight.transform.localScale;
-        //    localScale.x *= -1;
-        //    skill2Knight.transform.localScale = localScale;
-        //    right = true;
-        //}
+
         skill2Knight.transform.position = new Vector3(targetTRansform.position.x + 9.0f, rb.transform.position.y + 1.0f, rb.transform.position.z); // set knight position
         yield return new WaitForSeconds(skill2KnightTime);
         skill2Knight.SetActive(false);
-        //skill2Knight.transform.position = new Vector3(23.15f, 2.327281f, rb.transform.position.z); // set knight
-        //if (right)
-        //{
-        //    var localScale = skill2Knight.transform.localScale;
-        //    localScale.x *= -1;
-        //    skill2Knight.transform.localScale = localScale;
-        //}
 
         // fall
-        //rb.constraints = RigidbodyConstraints2D.None;
         rb.constraints = RigidbodyConstraints2D.FreezePositionX;
 
         while (rb.velocity.y < 0)
@@ -248,42 +246,31 @@ public class BossDarkKnight : Enemy
         skill2Cooldown = false;
     }
 
-    private void Skill3()
+    private void TurnOffLightsTriggered()
     {
+        Damage(turnOffLightDamage);
         StartCoroutine(TurnOffLights());
     }
 
     private IEnumerator TurnOffLights()
     {
         cooldown = true;
-        skill3Cooldown = true;
+        Vector2 knockBackDirection = ((Vector2)transform.position - (Vector2)bossDarkKnightAreaTransform.position).normalized;
+        movement.Knockback(knockBackDirection);
+        yield return new WaitForSeconds(knockbackDurationTime);
 
-        //bossDarkKnightSkill3trigger.SetActive(true);
-
-        yield return new WaitForSeconds(skill3BlowingTime);
-
-        if (lantern1.LightIsOn())
+        yield return new WaitForSeconds(turnOffLightBlowingTime); // for animation
+        Debug.Log(knockBackDirection.x);
+        if (knockBackDirection.x < 0 && lantern1.LightIsOn())
         {
             lantern1.TurnOff();
         }
-
-        if (lantern2.LightIsOn())
+        else if (knockBackDirection.x > 0 && lantern2.LightIsOn())
         {
             lantern2.TurnOff();
         }
 
-        //bossDarkKnightSkill3trigger.SetActive(false);
-
         cooldown = false; // set cooldown to false, can use other skills
-
-        // skill 3 cooldown
-        yield return new WaitForSeconds(skill3CooldownTime);
-        skill3Cooldown = false;
-    }
-
-    public void TrapTriggered()
-    {
-        Damage(trapDamage);
     }
 
     public void BossStart()
