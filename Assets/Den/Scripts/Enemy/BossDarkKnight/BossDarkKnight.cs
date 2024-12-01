@@ -31,7 +31,7 @@ public class BossDarkKnight : Enemy
 
     [Header("Skill 2")]
     public GameObject skill2Knight;
-    public float skill2KnightTime = 0.5f;
+    public float skill2KnightTime = 0.7f;
     public float skill2stunningTime = 0.5f;
     public float skill2CooldownTime = 20.0f;
     private bool skill2Cooldown = false;
@@ -48,7 +48,7 @@ public class BossDarkKnight : Enemy
     [SerializeField]
     private float knockbackDurationTime = 0.6f;
 
-    private bool touchLightSource = true;
+    private bool touchLightSource = false;
 
     [Header("Boss Dark Knight Area")]
     public Transform bossDarkKnightAreaTransform;
@@ -255,19 +255,23 @@ public class BossDarkKnight : Enemy
     private IEnumerator TurnOffLights()
     {
         cooldown = true;
-        Vector2 knockBackDirection = ((Vector2)transform.position - orig_pos).normalized;
+        touchLightSource = false;
+        Vector2 knockBackDirection = (new Vector2((transform.position.x - orig_pos.x) * -1, transform.position.y - orig_pos.y)).normalized;
+        //Debug.Log(knockBackDirection.x);
         movement.Knockback(knockBackDirection);
         yield return new WaitForSeconds(knockbackDurationTime);
 
         yield return new WaitForSeconds(turnOffLightBlowingTime); // for animation
-        Debug.Log(knockBackDirection.x);
-        if (knockBackDirection.x < 0 && lantern1.LightIsOn())
+        //Debug.Log(knockBackDirection.x);
+        if (knockBackDirection.x > 0 && lantern1.LightIsOn())
         {
             lantern1.TurnOff();
+            Debug.Log("turn off light");
         }
-        else if (knockBackDirection.x > 0 && lantern2.LightIsOn())
+        else if (knockBackDirection.x < 0 && lantern2.LightIsOn())
         {
             lantern2.TurnOff();
+            Debug.Log("turn off light");
         }
 
         cooldown = false; // set cooldown to false, can use other skills

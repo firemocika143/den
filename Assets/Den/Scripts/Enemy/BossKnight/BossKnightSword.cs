@@ -7,11 +7,14 @@ public class BossKnightSword : MonoBehaviour
     [Header("Attack")]
     public int attack = 1;
 
+    [Header("Boss Knight Right Arm Movement")]
+    public BossKnightRightArmMovement bossKnightRightArmMovement;
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         //Debug.Log(other.gameObject.name);
         // if I touch player
-        if (other.CompareTag("Player"))
+        if (!bossKnightRightArmMovement.isRaising() && other.CompareTag("Player"))
         {
             PlayerController playerController = other.GetComponent<PlayerController>();
             playerController.Damage(attack);
@@ -21,7 +24,7 @@ public class BossKnightSword : MonoBehaviour
     private void OnTriggerStay2D(Collider2D other)
     {
         // if I stay with player
-        if (other.CompareTag("Player"))
+        if (!bossKnightRightArmMovement.isRaising() && other.CompareTag("Player"))
         {
             PlayerController playerController = other.GetComponent<PlayerController>();
             playerController.Damage(attack);

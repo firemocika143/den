@@ -44,7 +44,7 @@ public class BossKnightRightArmMovement : MonoBehaviour
     private bool raising = true;  // Control whether arm is raising or lowering
 
     private bool reocvery = false;
-    //private float recoveryTime = 1.5f;
+    private float recoveryTime = 0.1f;
     //private float raisingStunTime = 0.5f;
 
     void Start()
@@ -90,8 +90,6 @@ public class BossKnightRightArmMovement : MonoBehaviour
         // Make sure motor is enabled on both joints
         rightUpperArmJoint.useMotor = true;
         rightLowerArmJoint.useMotor = true;
-        //leftUpperArmJoint.useMotor = true;
-        //leftLowerArmJoint.useMotor = true;
         swordJoint.useMotor = true;
     }
 
@@ -108,15 +106,10 @@ public class BossKnightRightArmMovement : MonoBehaviour
         // Get the current angle of both joints
         float rightUpperArmAngle = rightUpperArmJoint.jointAngle;
         float rightLowerArmAngle = rightLowerArmJoint.jointAngle;
-        //float leftUpperArmAngle = leftUpperArmJoint.jointAngle;
-        //float leftLowerArmAngle = leftLowerArmJoint.jointAngle;
         float swordAngle = swordJoint.jointAngle;
-        //bool needRecovery = false;
 
         JointMotor2D rightUpperMotor = rightUpperArmJoint.motor;
         JointMotor2D rightLowerMotor = rightLowerArmJoint.motor;
-        //JointMotor2D leftUpperMotor = leftUpperArmJoint.motor;
-        //JointMotor2D leftLowerMotor = leftLowerArmJoint.motor;
         JointMotor2D swordMotor = swordJoint.motor;
 
         if (raising)
@@ -140,24 +133,6 @@ public class BossKnightRightArmMovement : MonoBehaviour
                 rightLowerMotor.motorSpeed = 0;
             }
 
-            //if (leftUpperArmAngle < leftUpperArmMaxAngle)  // Check positive angle for raising the right arm
-            //{
-            //    leftUpperMotor.motorSpeed = leftUpperArmSpeed;  // Positive speed for clockwise rotation (right hand)
-            //}
-            //else
-            //{
-            //    leftUpperMotor.motorSpeed = 0;  // Stop when max angle reached
-            //}
-
-            //if (leftLowerArmAngle < leftLowerArmMaxAngle)
-            //{
-            //    leftLowerMotor.motorSpeed = leftLowerArmSpeed;
-            //}
-            //else
-            //{
-            //    leftLowerMotor.motorSpeed = 0;
-            //}
-
             if (swordAngle < swordMaxAngle)
             {
                 swordMotor.motorSpeed = swordSpeed;
@@ -170,6 +145,7 @@ public class BossKnightRightArmMovement : MonoBehaviour
             if (rightUpperArmAngle >= rightUpperArmMaxAngle && rightLowerArmAngle >= rightLowerArmMaxAngle && swordAngle >= swordMaxAngle)
             {
                 raising = false;
+                StartCoroutine(recoveryTimeCount());
             }
         }
         else
@@ -198,24 +174,6 @@ public class BossKnightRightArmMovement : MonoBehaviour
                 }
             }
 
-            //if (leftUpperArmAngle > leftUpperArmMinAngle)  // Lowering back to negative angle
-            //{
-            //    leftUpperMotor.motorSpeed = -leftUpperArmSpeed;  // Negative speed for counterclockwise rotation (right hand)
-            //}
-            //else
-            //{
-            //    leftUpperMotor.motorSpeed = 0;
-            //}
-
-            //if (leftLowerArmAngle > leftLowerArmMinAngle)
-            //{
-            //    leftLowerMotor.motorSpeed = -leftLowerArmSpeed;
-            //}
-            //else
-            //{
-            //    leftLowerMotor.motorSpeed = 0;
-            //}
-
             if (swordAngle > swordMinAngle)
             {
                 swordMotor.motorSpeed = -swordSpeed;
@@ -229,61 +187,48 @@ public class BossKnightRightArmMovement : MonoBehaviour
                 }
             }
 
-            // If both arms reach their min angles, switch to raising
-            //if (rightUpperArmAngle <= rightUpperArmMinAngle && rightLowerArmAngle <= rightLowerArmMinAngle && leftUpperArmAngle <= leftUpperArmMinAngle && leftLowerArmAngle <= leftLowerArmMinAngle && swordAngle <= swordMinAngle)
-            //{
-            //    raising = true;
-            //    needRecovery = true;
-            //}
+            // If both arms and the sword reach their min angles, switch to raising
             if (rightUpperArmAngle <= rightUpperArmMinAngle && rightLowerArmAngle <= rightLowerArmMinAngle && swordAngle <= swordMinAngle)
             {
                 raising = true;
-                //needRecovery = true;
-                swordRigidbody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
-                rightUpperArmRigidbody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
-                rightLowerArmRigidbody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+                freezeMoving();
             }
         }
 
         // Apply motor settings back to the joints
         rightUpperArmJoint.motor = rightUpperMotor;
         rightLowerArmJoint.motor = rightLowerMotor;
-        //leftUpperArmJoint.motor = leftUpperMotor;
-        //leftLowerArmJoint.motor = leftLowerMotor;
         swordJoint.motor = swordMotor;
 
-        //if (needRecovery)
-        //{
-        //    StartCoroutine(recoveryTimeCount());
-        //}
     }
 
-    //private IEnumerator recoveryTimeCount()
-    //{
-    //    reocvery = true;
+    private IEnumerator recoveryTimeCount()
+    {
+        reocvery = true;
+        freezeMoving();
 
-    //    swordRigidbody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
-    //    rightUpperArmRigidbody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
-    //    rightLowerArmRigidbody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+        yield return new WaitForSeconds(recoveryTime);
 
-    //    //yield return new WaitForSeconds(recoveryTime);
+        startMoving();
+        reocvery = false;
+    }
 
-    //    reocvery = false;
-    //    rightUpperArmJoint.useLimits = false;
-    //    rightLowerArmJoint.useLimits = false;
-    //    swordJoint.useLimits = false;
-
-    //    swordRigidbody.constraints = RigidbodyConstraints2D.None;
-    //    rightUpperArmRigidbody.constraints = RigidbodyConstraints2D.None;
-    //    rightLowerArmRigidbody.constraints = RigidbodyConstraints2D.None;
-
-    //    yield return null;
-    //}
+    public void freezeMoving()
+    {
+        swordRigidbody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+        rightUpperArmRigidbody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+        rightLowerArmRigidbody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+    }
 
     public void startMoving()
     {
         swordRigidbody.constraints = RigidbodyConstraints2D.None;
         rightUpperArmRigidbody.constraints = RigidbodyConstraints2D.None;
         rightLowerArmRigidbody.constraints = RigidbodyConstraints2D.None;
+    }
+
+    public bool isRaising() 
+    {  
+        return raising; 
     }
 }
