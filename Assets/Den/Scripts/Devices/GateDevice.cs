@@ -7,14 +7,19 @@ public class GateDevice : Device
     public GameObject gate;
     public string openGateAnimationName;
 
-    public override void ActivatedAbility()
+    protected override void ActivatedAbility()
     {
         gate.GetComponent<AnimationHandler>().ChangeAnimationState(openGateAnimationName);
         gate.GetComponent<AudioSource>().Play();
     }
 
-    public override void DeactivatedDevice()
+    protected override void DeactivatedDevice()
     {
 
+    }
+
+    public override void ShutDownDevice()
+    {
+        
     }
 }

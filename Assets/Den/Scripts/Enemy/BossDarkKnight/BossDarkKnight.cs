@@ -38,9 +38,9 @@ public class BossDarkKnight : Enemy
 
     [Header("Turn Off Light Triggered")]
     [SerializeField]
-    private LightOn lantern1;
+    private LightOnDevice lantern1;
     [SerializeField]
-    private LightOn lantern2;
+    private LightOnDevice lantern2;
     [SerializeField]
     private float turnOffLightBlowingTime = 1.0f;
     [SerializeField]
@@ -60,6 +60,7 @@ public class BossDarkKnight : Enemy
     private Transform targetTRansform;
     private Vector2 orig_pos;
     private BossDarkKnightMovement movement;
+    private bool turningOffLights = false;
     
 
     [HideInInspector]
@@ -67,6 +68,8 @@ public class BossDarkKnight : Enemy
 
     [SerializeField]
     private FlashHandler flashHandler;
+    [SerializeField]
+    private Gate gate;
 
     // animation states
     public bool usingAttack1 = false;
@@ -89,15 +92,15 @@ public class BossDarkKnight : Enemy
     // Update is called once per frame
     void Update()
     {
+        if (touchLightSource)
+        {
+            //TurnOffLightsTriggered();
+            TurnOffLightsTriggered();
+        }
         // Debug.Log(cooldown);
         if (!cooldown && playerIsInBossDarkKnightArea)
         {
-            if (touchLightSource)
-            {
-                //TurnOffLightsTriggered();
-                StartCoroutine(UseSkillWait(() => { TurnOffLightsTriggered(); }));
-            }
-            else if (!skill1Cooldown)//else 
+            if (!skill1Cooldown)//else 
             {
                 StartCoroutine(UseSkillWait(()=> { Skill1(); }));
             }
@@ -248,33 +251,36 @@ public class BossDarkKnight : Enemy
 
     private void TurnOffLightsTriggered()
     {
-        Damage(turnOffLightDamage);
+        touchLightSource = false;
         StartCoroutine(TurnOffLights());
     }
 
     private IEnumerator TurnOffLights()
     {
-        cooldown = true;
-        touchLightSource = false;
+        if (turningOffLights) yield break;
+        Damage(turnOffLightDamage);
+
+        turningOffLights = true;
         Vector2 knockBackDirection = (new Vector2((transform.position.x - orig_pos.x) * -1, transform.position.y - orig_pos.y)).normalized;
         //Debug.Log(knockBackDirection.x);
         movement.Knockback(knockBackDirection);
+        movement.enabled = false;
         yield return new WaitForSeconds(knockbackDurationTime);
 
-        yield return new WaitForSeconds(turnOffLightBlowingTime); // for animation
+        //yield return new WaitForSeconds(turnOffLightBlowingTime); // for animation
         //Debug.Log(knockBackDirection.x);
-        if (knockBackDirection.x > 0 && lantern1.LightIsOn())
+        if (knockBackDirection.x > 0 && lantern1.charged)
         {
-            lantern1.TurnOff();
+            lantern1.ShutDownDevice();
             Debug.Log("turn off light");
         }
-        else if (knockBackDirection.x < 0 && lantern2.LightIsOn())
+        else if (knockBackDirection.x < 0 && lantern2.charged)
         {
-            lantern2.TurnOff();
+            lantern2.ShutDownDevice();
             Debug.Log("turn off light");
         }
-
-        cooldown = false; // set cooldown to false, can use other skills
+        movement.enabled = true;
+        turningOffLights = false;
     }
 
     public void BossStart()
@@ -308,17 +314,20 @@ public class BossDarkKnight : Enemy
     {
         if (GameManager.Instance.progress.defeatDarkKnight)
         {
+            skill1FireArea.SetActive(false);
+            skill2Knight.SetActive(false);
             Destroy(this.gameObject);
             return;
         }
-
-        StopAllCoroutines();
 
         health = maxHealth;
         invincible = false;
         transform.position = orig_pos;
         playerIsInBossDarkKnightArea = false;
         movement.enabled = false;
+        usingAttack1 = false;
+        readyToAttack = false;
+        turningOffLights = false;
 
         skill1FireArea.SetActive(false);
         skill2Knight.SetActive(false);
@@ -328,6 +337,10 @@ public class BossDarkKnight : Enemy
     {
         StopAllCoroutines();
         GameManager.Instance.progress.defeatDarkKnight = true;
+        SoundManager.Instance.ChangeClip(SoundManager.ClipEnum.NULL);
+        gate.OpenGate();
+        CameraManager.Instance.SwitchBackToMainCamera();
+        Destroy(bossDarkKnightAreaTransform.gameObject);
         gameObject.SetActive(false);
     }
 

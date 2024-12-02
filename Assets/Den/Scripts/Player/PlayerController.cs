@@ -251,11 +251,6 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         UIManager.Instance.UpdatePlayerHealth(state.health);
     }
 
-    //public void UseLightEnergy(int val)
-    //{
-    //    state.lightEnergy = state.lightEnergy - val >= 0 ? state.lightEnergy - val : 0;
-    //}
-
     //Events functions
     public void StopPlayer()
     {
@@ -294,6 +289,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
                     Debug.LogError("no flow in this scene");
                 }
                 else GameManager.Instance.flow.ReloadFlow();
+                ReloadAfterKilled();
                 // play sfx
             });
         }));

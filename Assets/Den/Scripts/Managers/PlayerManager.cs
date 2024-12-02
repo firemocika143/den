@@ -18,6 +18,9 @@ public class PlayerManager : MonoBehaviour
     private GameObject player;
     public int playerLanternPiece = 0;
 
+    private float killTimer;
+    private float killTime = 7f;
+
     private void Awake()
     {
         Instance = this;
@@ -25,9 +28,23 @@ public class PlayerManager : MonoBehaviour
         PlayerRespawn();
     }
 
-    private void Start()
+    private void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.K) && Time.time - killTimer > killTime)
+        {
+            if (GameManager.Instance.flow.flowName == "Street")
+            {
+
+            }
+            else if (GameManager.Instance.flow.flowName == "Library")
+            {
+                //this should be a normal kill but with dark fade in and out, and a number fade in at the same time displaying how many times the player had killed themselves
+                PlayerManager.Instance.KillPlayer();
+                GameManager.Instance.killTimes++;
+                UIManager.Instance.UpdatePlayerKillTime();
+                killTimer = Time.time;
+            }
+        }
     }
 
     public void PlayerRespawn()//passing in a game object is usually bad, this is a temp solution
@@ -61,7 +78,6 @@ public class PlayerManager : MonoBehaviour
             pc.StopPlayer();
             yield return new WaitForSeconds(time);
             pc.state.stop = false;
-            pc.ReloadAfterKilled();
         }
     }
 

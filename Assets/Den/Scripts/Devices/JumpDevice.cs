@@ -11,17 +11,22 @@ public class JumpDevice : Device
     private float countDown;
     private float deactivateCountDown;
 
-    public override void ActivatedAbility()
+    protected override void ActivatedAbility()
     {
         PlayerManager.Instance.GivePlayerForce(new Vector2(0, force));
         deactivateCountDown = Time.time;
     }
 
-    public override void DeactivatedDevice()
+    protected override void DeactivatedDevice()
     {
         if (Time.time - deactivateCountDown > deactivateDeviceIntervel)
         {
             DeactivateDeviceReset();
         }
+    }
+
+    public override void ShutDownDevice()
+    {
+        
     }
 }

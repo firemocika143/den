@@ -30,8 +30,9 @@ public abstract class Device : MonoBehaviour
     [HideInInspector]
     public bool playerIsInArea = false;
 
-    public abstract void ActivatedAbility();
-    public abstract void DeactivatedDevice();
+    protected abstract void ActivatedAbility();
+    protected abstract void DeactivatedDevice();
+    public abstract void ShutDownDevice();
 
     private void Start()
     {
@@ -44,7 +45,6 @@ public abstract class Device : MonoBehaviour
         {
             playerIsInArea = true;
             pc = col.gameObject.GetComponent<PlayerController>();
-            pc.MatchDevice(this);
         }
     }
 
@@ -79,6 +79,7 @@ public abstract class Device : MonoBehaviour
         StopAllCoroutines();
 
         charging = true;
+        pc.MatchDevice(this);
         pc.ChangePlayerUseLightRate(0.1f);
         ResetDevice();
         StartCoroutine(AdjustLightRadius(extendTime, 1, null));
@@ -202,9 +203,14 @@ public abstract class Device : MonoBehaviour
             }
         }
 
-        if (charged)
+        if (hintArea != null)
         {
-            DeactivatedDevice();
+            if (!hintArea.activeSelf) DeactivatedDevice();
         }
+    }
+
+    public void ResetCharge()
+    {
+        charged = false;
     }
 }

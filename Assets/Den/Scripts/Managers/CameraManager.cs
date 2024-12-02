@@ -70,9 +70,9 @@ public class CameraManager : MonoBehaviour
         }
     }
 
-    public void SwitchBackToCurrentCamera()
+    public void SwitchBackToMainCamera()
     {
-        SwitchVirtualCamera (curr_vcam);
+        SwitchVirtualCamera (fst_vcam);
     }
 
     public void Zoom(float targetRadius, float duration, float smoothness)

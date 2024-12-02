@@ -13,7 +13,7 @@ public class LightOnDevice : Device
     private float deactivateCountDown;
     private bool isTriggered = false;
 
-    public override void ActivatedAbility()
+    protected override void ActivatedAbility()
     {
         isTriggered = !isTriggered;
         if (isTriggered)
@@ -28,11 +28,19 @@ public class LightOnDevice : Device
         deactivateCountDown = Time.time;
     }
 
-    public override void DeactivatedDevice()
+    protected override void DeactivatedDevice()
     {
         if (Time.time - deactivateCountDown > deactivateDeviceIntervel)
         {
             DeactivateDeviceReset();
         }
+    }
+
+    public override void ShutDownDevice()
+    {
+        animator.SetBool("trigger", false);
+        isTriggered = false;
+        lantern.TurnOff();
+        ResetCharge();
     }
 }

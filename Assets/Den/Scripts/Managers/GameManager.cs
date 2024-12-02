@@ -84,6 +84,7 @@ public class GameManager : MonoBehaviour
         [Header("Library")]
         public bool getLightDraw = false;
         public bool defeatDarkKnight = false;
+        public bool getEternalLightEntity = false;
     }
 
     public GameProgress progress;

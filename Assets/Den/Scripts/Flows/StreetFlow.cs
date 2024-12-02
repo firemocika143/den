@@ -46,15 +46,6 @@ public class StreetFlow : Flow //, IDataPersistence
 
     private void Update()
     {
-        if (PlayerManager.Instance.PlayerLightEnergy() <= 0)
-        {
-            //if (isInLightOffEvent)
-            //{
-            //    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-            //}
-            //PlayerManager.Instance.InstantKillPlayer();
-        }
-
         if (Input.GetKeyDown(KeyCode.K) && Time.time - killTimer > killTime)
         {
             // TODO - play a sfx of cancel
