@@ -18,6 +18,15 @@ public class LibraryFlow : Flow
         [Header("Page 5 Settings")]// little map
         public PageItemInfo page5Info;
 
+        [Header("Page 1 Settings")]// little map
+        public PageItemInfo page1Info;
+
+        [Header("Page 2 Settings")]// little map
+        public PageItemInfo page2Info;
+
+        [Header("Page 3 Settings")]// little map
+        public PageItemInfo page3Info;
+
         [Header("Lantern Piece Settings")]
         public List<LanternItemInfo> lanternItems = new List<LanternItemInfo>();
     }
@@ -100,6 +109,27 @@ public class LibraryFlow : Flow
             ItemManager.Instance.GeneratePageItem(libraryItemSettings.page5Info, () =>
             {
                 GameManager.Instance.progress.getPage5 = true;
+            });
+        }
+        if (!GameManager.Instance.progress.getPage3)
+        {
+            ItemManager.Instance.GeneratePageItem(libraryItemSettings.page3Info, () =>
+            {
+                GameManager.Instance.progress.getPage3 = true;
+            });
+        }
+        if (!GameManager.Instance.progress.getPage2)
+        {
+            ItemManager.Instance.GeneratePageItem(libraryItemSettings.page2Info, () =>
+            {
+                GameManager.Instance.progress.getPage2 = true;
+            });
+        }
+        if (!GameManager.Instance.progress.getPage1)
+        {
+            ItemManager.Instance.GeneratePageItem(libraryItemSettings.page1Info, () =>
+            {
+                GameManager.Instance.progress.getPage1 = true;
             });
         }
         GenerateAllLanternItems();

@@ -50,13 +50,14 @@ public class BossDarkKnightMovement : MonoBehaviour
             isKnockedBack = true;
             rb.velocity = Vector2.zero;
             rb.AddForce(direction.normalized * knockbackForce, ForceMode2D.Impulse);
-            StartCoroutine(ResetKnockback());
+            isKnockedBack = false;
+            //StartCoroutine(ResetKnockback());
         }
     }
 
-    private IEnumerator ResetKnockback()
-    {
-        yield return new WaitForSeconds(knockbackDuration);
-        isKnockedBack = false;
-    }
+    //private IEnumerator ResetKnockback()
+    //{
+    //    yield return new WaitForSeconds(knockbackDuration);
+        
+    //}
 }

@@ -316,9 +316,11 @@ public class BossDarkKnight : Enemy
         {
             skill1FireArea.SetActive(false);
             skill2Knight.SetActive(false);
-            Destroy(this.gameObject);
+            Destroy(this.transform.parent.gameObject);// destroy the whole set
             return;
         }
+
+        StopAllCoroutines();
 
         health = maxHealth;
         invincible = false;
@@ -328,9 +330,20 @@ public class BossDarkKnight : Enemy
         usingAttack1 = false;
         readyToAttack = false;
         turningOffLights = false;
+        rb.constraints = RigidbodyConstraints2D.None;
+        rb.velocity = Vector3.zero;
+        skill2Cooldown = false;
+        cooldown = false; // set cooldown to false, can use other skills
+        skill1Cooldown = false;
+        turningOffLights = false;
 
         skill1FireArea.SetActive(false);
         skill2Knight.SetActive(false);
+
+        //Debug.Log("Spawn Boss");
+        //Debug.Log(movement.enabled);
+        //Debug.Log(transform.position);
+        //Debug.Log(orig_pos);
     }
 
     public override void Kill()
@@ -341,6 +354,8 @@ public class BossDarkKnight : Enemy
         gate.OpenGate();
         CameraManager.Instance.SwitchBackToMainCamera();
         Destroy(bossDarkKnightAreaTransform.gameObject);
+        Destroy(skill1FireArea);// destroy the whole set
+        Destroy(skill2Knight);// destroy the whole set
         gameObject.SetActive(false);
     }
 
