@@ -4,7 +4,8 @@ using UnityEngine;
 
 public abstract class SequencingTriggerTrap : TriggerTrap
 {
-    private List<int> triggeredSeq;
+    [SerializeField]
+    private List<int> triggeredSeq = new List<int>();
 
     protected override void CheckSolve()
     {
@@ -15,6 +16,13 @@ public abstract class SequencingTriggerTrap : TriggerTrap
                 if (!triggeredSeq.Contains(i))
                 {
                     triggeredSeq.Add(i);
+                }
+            }
+            else if (!lightTriggers[i].IsTriggered())
+            {
+                if (triggeredSeq.Contains(i))
+                {
+                    triggeredSeq.Remove(i);
                 }
             }
         }

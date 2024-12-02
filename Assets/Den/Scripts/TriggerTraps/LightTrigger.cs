@@ -20,6 +20,8 @@ public class LightTrigger : MonoBehaviour
     [SerializeField]
     private string shakeAnimationName;
     [SerializeField]
+    private string waitAnimationName;
+    [SerializeField]
     private float shakeAnimationDuration;
 
     private float timer;
@@ -38,23 +40,10 @@ public class LightTrigger : MonoBehaviour
     private IEnumerator ShakeCoroutine(Action after = null)
     {
         isShaking = true;
-
-        // animation
-        //Vector3 formerPos = transform.parent.position;
-        //float amplitude = 0.1f;
-        //int sign = -1;
-        //float shakeTimer = Time.time;
-        //transform.parent.position = new Vector3(formerPos.x - amplitude*sign/2, transform.parent.position.y, 0);
-        //while(Time.time - shakeTimer < 0.5f)// I don't think the timer is working correctly
-        //{
-        //    transform.parent.position = new Vector3(formerPos.x + sign * amplitude, transform.parent.position.y, 0);
-        //    sign *= -1;
-        //    yield return new WaitForSeconds(0.02f);
-        //}
-        //transform.parent.position = formerPos;
         animHandler.ChangeAnimationState(shakeAnimationName);
         yield return new WaitForSeconds(shakeAnimationDuration);
         //animation
+        animHandler.ChangeAnimationState(waitAnimationName);
 
         isShaking = false;
 
