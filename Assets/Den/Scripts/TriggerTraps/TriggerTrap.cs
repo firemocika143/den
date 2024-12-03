@@ -5,7 +5,7 @@ using UnityEngine;
 public abstract class TriggerTrap : MonoBehaviour
 {
     protected bool solved = false;
-    private bool returning = false;
+    protected bool returning = false;
 
     [SerializeField]
     protected List<LightTrigger> lightTriggers = new List<LightTrigger>();
@@ -45,8 +45,8 @@ public abstract class TriggerTrap : MonoBehaviour
         if (AllWaiting() && returning)
         {
             // handle after fail shake end
-            returning = false;
             ResetTrap();
+            returning = false;
         }
     }
 

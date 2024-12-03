@@ -6,11 +6,14 @@ public abstract class SequencingTriggerTrap : TriggerTrap
 {
     [SerializeField]
     private List<int> triggeredSeq = new List<int>();
+    [SerializeField]
+    private int[] triggeredSeq2 = new int[5];
 
     protected override void CheckSolve()
     {
         for (int i = 0; i < lightTriggers.Count; i++)
         {
+            if (returning) return;
             if (lightTriggers[i].IsTriggered())
             {
                 if (!triggeredSeq.Contains(i))
@@ -38,6 +41,11 @@ public abstract class SequencingTriggerTrap : TriggerTrap
             {
                 solved = false;
                 triggeredSeq.Clear();
+                for (int j = 0; j < triggeredSeq.Count; j++)
+                {
+                    Debug.Log(triggeredSeq[j]);
+                }
+                Debug.Log("Failed");
                 return;
             }
         }
