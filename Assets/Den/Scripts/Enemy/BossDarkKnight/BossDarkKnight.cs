@@ -70,6 +70,8 @@ public class BossDarkKnight : Enemy
     private FlashHandler flashHandler;
     [SerializeField]
     private Gate gate;
+    [SerializeField]
+    private Transform mid_pos;
 
     // animation states
     public bool usingAttack1 = false;
@@ -261,7 +263,7 @@ public class BossDarkKnight : Enemy
         Damage(turnOffLightDamage);
 
         turningOffLights = true;
-        Vector2 knockBackDirection = (new Vector2((transform.position.x - orig_pos.x) * -1, transform.position.y - orig_pos.y)).normalized;
+        Vector2 knockBackDirection = (new Vector2((transform.position.x - mid_pos.position.x) * -1, transform.position.y - mid_pos.position.y)).normalized;
         //Debug.Log(knockBackDirection.x);
         movement.Knockback(knockBackDirection);
         movement.enabled = false;

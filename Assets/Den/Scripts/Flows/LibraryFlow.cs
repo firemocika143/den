@@ -31,15 +31,29 @@ public class LibraryFlow : Flow
         public List<LanternItemInfo> lanternItems = new List<LanternItemInfo>();
     }
 
+    [Serializable]
+    public class LibraryShortCuts
+    {
+        [Header("Light Draw")]
+        public Transform shortCut_LD;
+
+        [Header("Boss Room")]
+        public Transform shortCut_Boss;
+    }
+
     [SerializeField]
     private SoundManager.ClipEnum exploringClip;
     [SerializeField]
     public LibraryItemSettings libraryItemSettings;
     [SerializeField]
     private CinemachineVirtualCamera main_v_cam;
+    [SerializeField]
+    private LibraryShortCuts lsc;
 
     private float killTimer;
     private float killTime = 7f;
+
+    
 
     public void Awake()
     {
@@ -61,6 +75,16 @@ public class LibraryFlow : Flow
             GameManager.Instance.killTimes++;
             UIManager.Instance.UpdatePlayerKillTime();
             killTimer = Time.time;
+        }
+
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            PlayerManager.Instance.TPPlayerTo(lsc.shortCut_Boss.position);
+        }
+
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            PlayerManager.Instance.TPPlayerTo(lsc.shortCut_LD.position);
         }
     }
 

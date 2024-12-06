@@ -213,4 +213,9 @@ public class PlayerManager : MonoBehaviour
     {
         player.GetComponent<PlayerController>().AllRecover();
     }
+
+    public void TPPlayerTo(Vector2 pos)
+    {
+        player.transform.position = pos;
+    }
 }
